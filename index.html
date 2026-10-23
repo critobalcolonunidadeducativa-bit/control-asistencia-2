@@ -10,11 +10,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SheetJS (Excel) -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.min.js"></script>
+    <!-- jsPDF & AutoTable (PDF Horizontal) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar Izquierda -->
-        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col justify-between shadow-xl">
+        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col justify-between shadow-xl flex-shrink-0">
             <div>
                 <div class="p-6 border-b border-slate-800">
                     <h1 class="text-white font-bold text-lg tracking-wide">U.E. CRISTÓBAL COLÓN</h1>
@@ -22,7 +27,7 @@
                 </div>
                 <nav class="p-4 space-y-1">
                     <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-600 text-white font-medium transition shadow-sm">
-                        <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
+                        <i class="fa-solid fa-chart-pie w-5"></i> Dashboard / Panel
                     </a>
                     <a href="#" onclick="switchTab('resumen')" id="nav-resumen" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition">
                         <i class="fa-solid fa-users-rectangle w-5"></i> Nómina y Resumen
@@ -31,7 +36,7 @@
                         <i class="fa-solid fa-calendar-xmark w-5"></i> Salidas y Faltas
                     </a>
                     <a href="#" onclick="switchTab('individual')" id="nav-individual" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition">
-                        <i class="fa-solid fa-user-pen w-5"></i> Ficha & Gestión
+                        <i class="fa-solid fa-user-pen w-5"></i> Ficha & Reporte Ind.
                     </a>
                     <a href="#" onclick="switchTab('biometrico')" id="nav-biometrico" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition">
                         <i class="fa-solid fa-fingerprint w-5"></i> Módulo Biométrico
@@ -39,8 +44,8 @@
                 </nav>
             </div>
             <div class="p-4 border-t border-slate-800 text-xs text-slate-500">
-                <p>Inspectoría General v7.0 - Live Sync</p>
-                <p class="mt-1">Sistema Limpio (Listo para registros)</p>
+                <p>Inspectoría General v8.0</p>
+                <p class="mt-1">Sistema Interactivo y Reportes</p>
             </div>
         </aside>
 
@@ -56,12 +61,12 @@
                 <div class="flex flex-wrap items-center gap-3 bg-slate-50 p-2 rounded-xl border border-slate-200">
                     <div class="flex items-center gap-1">
                         <span class="text-xs font-semibold text-slate-500">Desde:</span>
-                        <input type="date" id="filterDateFrom" value="2026-10-23" class="bg-white border border-slate-300 rounded-lg px-2 py-1 text-xs font-medium text-slate-700">
+                        <input type="date" id="filterDateFrom" class="bg-white border border-slate-300 rounded-lg px-2 py-1 text-xs font-medium text-slate-700">
                     </div>
 
                     <div class="flex items-center gap-1">
                         <span class="text-xs font-semibold text-slate-500">Hasta:</span>
-                        <input type="date" id="filterDateTo" value="2026-10-23" class="bg-white border border-slate-300 rounded-lg px-2 py-1 text-xs font-medium text-slate-700">
+                        <input type="date" id="filterDateTo" class="bg-white border border-slate-300 rounded-lg px-2 py-1 text-xs font-medium text-slate-700">
                     </div>
 
                     <button onclick="applyDateFilter()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition shadow-sm flex items-center gap-1.5">
@@ -77,7 +82,7 @@
             <!-- Content Body -->
             <div class="p-8 max-w-7xl mx-auto w-full space-y-8">
 
-                <!-- TAB 1: DASHBOARD -->
+                <!-- TAB 1: DASHBOARD CON MÓDULO DE EXPORTACIÓN CONSOLIDADA E INDIVIDUAL -->
                 <section id="tab-dashboard" class="space-y-8">
                     <!-- Metric Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -85,7 +90,7 @@
                             <div>
                                 <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Docentes</p>
                                 <h3 id="statTotalDoc" class="text-3xl font-extrabold text-slate-800 mt-1">28</h3>
-                                <span class="text-xs text-emerald-600 font-medium mt-2 inline-block"><i class="fa-solid fa-check"></i> Nómina Oficial Creada</span>
+                                <span class="text-xs text-emerald-600 font-medium mt-2 inline-block"><i class="fa-solid fa-check"></i> Nómina Registrada</span>
                             </div>
                             <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-chalkboard-user"></i>
@@ -94,9 +99,9 @@
 
                         <div onclick="openMetricModal('atrasos')" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-amber-400 transition">
                             <div>
-                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Atrasos (Rango)</p>
-                                <h3 id="statAtrasos" class="text-3xl font-extrabold text-slate-400 mt-1">0</h3>
-                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Sin atrasos registrados</span>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Novedades</p>
+                                <h3 id="statAtrasos" class="text-3xl font-extrabold text-amber-600 mt-1">0</h3>
+                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Permisos y faltas en rango</span>
                             </div>
                             <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-business-time"></i>
@@ -105,9 +110,9 @@
 
                         <div onclick="openMetricModal('cumplimiento')" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-emerald-400 transition">
                             <div>
-                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Cumplimiento (Meta 100%)</p>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Puntualidad General</p>
                                 <h3 id="statCumplimiento" class="text-3xl font-extrabold text-emerald-600 mt-1">100%</h3>
-                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Puntualidad perfecta inicial</span>
+                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Proporción sin novedad</span>
                             </div>
                             <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-bullseye"></i>
@@ -116,9 +121,9 @@
 
                         <div onclick="openMetricModal('registros')" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-purple-400 transition">
                             <div>
-                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Registros Biométricos</p>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Marcaciones Biométricas</p>
                                 <h3 id="statRegistros" class="text-3xl font-extrabold text-purple-600 mt-1">0</h3>
-                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Listo para cargar nuevos datos</span>
+                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Registros en el periodo</span>
                             </div>
                             <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-fingerprint"></i>
@@ -126,16 +131,65 @@
                         </div>
                     </div>
 
+                    <!-- MÓDULO ESPECIAL DE EXPORTACIÓN EN PANEL -->
+                    <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-6 rounded-2xl text-white shadow-md space-y-4 border border-slate-700">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-file-export text-emerald-400"></i> Centro de Exportación de Informes
+                                </h3>
+                                <p class="text-xs text-slate-300 mt-1">Genere reportes descargables en Excel o PDF horizontal con la nómina, atrasos, permisos y descripción de novedades.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                            <!-- Exportación Consolidada (General) -->
+                            <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700 space-y-3">
+                                <h4 class="font-semibold text-sm text-emerald-300 flex items-center gap-2">
+                                    <i class="fa-solid fa-layer-group"></i> Reporte Consolidado General (Toda la Nómina)
+                                </h4>
+                                <p class="text-xs text-slate-400">Incluye los 28 docentes con su desglose total de atrasos, permisos registrados y detalle de descripciones.</p>
+                                <div class="flex flex-wrap gap-2 pt-1">
+                                    <button onclick="exportConsolidatedPDF()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition shadow-sm flex items-center gap-2">
+                                        <i class="fa-solid fa-file-pdf"></i> Exportar Consolidado PDF (Horizontal)
+                                    </button>
+                                    <button onclick="exportConsolidatedExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition shadow-sm flex items-center gap-2">
+                                        <i class="fa-solid fa-file-excel"></i> Exportar Consolidado Excel
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Exportación Individual -->
+                            <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700 space-y-3">
+                                <h4 class="font-semibold text-sm text-blue-300 flex items-center gap-2">
+                                    <i class="fa-solid fa-user-check"></i> Reporte Individual por Docente
+                                </h4>
+                                <div class="flex items-center gap-2">
+                                    <select id="exportSelectDocente" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-1.5 text-xs text-white">
+                                    </select>
+                                </div>
+                                <div class="flex flex-wrap gap-2 pt-1">
+                                    <button onclick="exportIndividualPDF()" class="bg-red-600 hover:bg-red-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition shadow-sm flex items-center gap-2">
+                                        <i class="fa-solid fa-file-pdf"></i> PDF Individual
+                                    </button>
+                                    <button onclick="exportIndividualExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition shadow-sm flex items-center gap-2">
+                                        <i class="fa-solid fa-file-excel"></i> Excel Individual
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Charts Grid -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm lg:col-span-2">
-                            <h3 class="font-bold text-slate-800 text-lg mb-4">Atrasos por Docente (Sin datos aún)</h3>
+                            <h3 class="font-bold text-slate-800 text-lg mb-4">Atrasos y Permisos por Docente</h3>
                             <div class="h-80"><canvas id="barChart"></canvas></div>
                         </div>
                         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                            <h3 class="font-bold text-slate-800 text-lg mb-4">Distribución de Asistencia</h3>
+                            <h3 class="font-bold text-slate-800 text-lg mb-4">Distribución de Novedades</h3>
                             <div class="h-64 relative flex items-center justify-center"><canvas id="donutChart"></canvas></div>
-                            <p id="chartSubtext" class="text-xs text-slate-400 text-center mt-4">El sistema está limpio esperando registros.</p>
+                            <p id="chartSubtext" class="text-xs text-slate-400 text-center mt-4">Proporción general en el periodo seleccionado.</p>
                         </div>
                     </div>
                 </section>
@@ -148,9 +202,14 @@
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><i class="fa-solid fa-search"></i></span>
                                 <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Buscar docente por nombre o código..." class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
-                            <button onclick="exportDetailedCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-sm flex items-center gap-2">
-                                <i class="fa-solid fa-file-excel"></i> Exportar Consolidado CSV
-                            </button>
+                            <div class="flex gap-2">
+                                <button onclick="exportConsolidatedExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-file-excel"></i> Excel Consolidado
+                                </button>
+                                <button onclick="exportConsolidatedPDF()" class="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-file-pdf"></i> PDF Consolidado (Horizontal)
+                                </button>
+                            </div>
                         </div>
 
                         <div class="overflow-x-auto border border-slate-100 rounded-xl">
@@ -161,8 +220,8 @@
                                         <th class="p-4 font-semibold">ID Biométrico</th>
                                         <th class="p-4 font-semibold">Apellidos y Nombres del Docente</th>
                                         <th class="p-4 font-semibold text-center">Régimen</th>
-                                        <th class="p-4 font-semibold text-center">Jornada</th>
                                         <th class="p-4 font-semibold text-center">Atrasos</th>
+                                        <th class="p-4 font-semibold text-center">Permisos/Faltas</th>
                                         <th class="p-4 font-semibold text-center">Acciones</th>
                                     </tr>
                                 </thead>
@@ -172,20 +231,22 @@
                     </div>
                 </section>
 
-                <!-- TAB 3: REGISTRO SALIDAS Y FALTAS -->
+                <!-- TAB 3: REGISTRO SALIDAS Y FALTAS (CON EDICIÓN Y ELIMINACIÓN DESTACADAS) -->
                 <section id="tab-salidas" class="space-y-6 hidden">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div class="border-b border-slate-100 pb-4 flex justify-between items-center">
                             <div>
-                                <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-calendar-xmark text-blue-600 mr-2"></i> Registro de Salidas, Permisos y Faltas</h3>
-                                <p class="text-xs text-slate-500 mt-1">Ingrese novedades del personal docente a partir de hoy.</p>
+                                <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-calendar-xmark text-blue-600 mr-2"></i> Gestión de Salidas, Permisos y Faltas</h3>
+                                <p class="text-xs text-slate-500 mt-1">Registre, edite o elimine las novedades del personal docente en tiempo real.</p>
                             </div>
-                            <div id="editModeIndicator" class="hidden bg-amber-50 text-amber-800 px-3 py-1 rounded-lg text-xs font-bold border border-amber-200 flex items-center gap-2">
-                                <span>Editando Registro #<span id="editIndexDisplay"></span></span>
-                                <button onclick="cancelEdit()" class="text-amber-900 hover:text-red-600"><i class="fa-solid fa-xmark"></i></button>
+                            <div id="editModeIndicator" class="hidden bg-amber-50 text-amber-800 px-3 py-1.5 rounded-lg text-xs font-bold border border-amber-200 flex items-center gap-2 shadow-sm">
+                                <i class="fa-solid fa-pen-to-square text-amber-600"></i>
+                                <span>Editando Novedad #<span id="editIndexDisplay"></span></span>
+                                <button onclick="cancelEdit()" class="ml-2 text-amber-900 hover:text-red-600 font-bold"><i class="fa-solid fa-xmark"></i> Cancelar</button>
                             </div>
                         </div>
 
+                        <!-- Formulario de Registro / Edición -->
                         <form onsubmit="handleSalidaSubmit(event)" class="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-200">
                             <input type="hidden" id="editRecordIndex" value="-1">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -196,9 +257,10 @@
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Tipo de Novedad</label>
                                     <select id="tipoNovedad" onchange="togglePermisoFields()" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <option value="Falta Injustificada">Falta Injustificada</option>
-                                        <option value="Falta Justificada">Falta Justificada</option>
+                                        <option value="Atraso">Atraso</option>
                                         <option value="Salida por Permiso" selected>Salida por Permiso</option>
+                                        <option value="Falta Justificada">Falta Justificada</option>
+                                        <option value="Falta Injustificada">Falta Injustificada</option>
                                         <option value="Comisión de Servicios">Comisión de Servicios</option>
                                     </select>
                                 </div>
@@ -218,8 +280,8 @@
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-semibold text-blue-900 uppercase mb-1">Motivo del Permiso / Caso</label>
-                                        <input type="text" id="permisoMotivo" placeholder="Ej. Cita médica IESS..." class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800">
+                                        <label class="block text-xs font-semibold text-blue-900 uppercase mb-1">Motivo / Descripción de la Novedad</label>
+                                        <input type="text" id="permisoMotivo" placeholder="Ej. Cita médica IESS, trámite personal, calamidad doméstica..." class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800">
                                     </div>
                                     <div>
                                         <label class="block text-xs font-semibold text-blue-900 uppercase mb-1">Estado del Caso</label>
@@ -232,31 +294,35 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Observación General</label>
-                                <textarea id="salidaObservacion" rows="2" placeholder="Ingrese notas adicionales..." class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm text-slate-800"></textarea>
+                                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Observaciones Adicionales</label>
+                                <textarea id="salidaObservacion" rows="2" placeholder="Ingrese notas adicionales si lo requiere..." class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm text-slate-800"></textarea>
                             </div>
 
                             <div class="flex justify-end gap-3">
                                 <button type="button" id="btnCancelEdit" onclick="cancelEdit()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-4 py-2.5 rounded-xl text-sm transition">Cancelar</button>
                                 <button type="submit" id="btnSubmitSalida" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition shadow-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-floppy-disk"></i> Registrar Novedad
+                                    <i class="fa-solid fa-floppy-disk"></i> Guardar Novedad
                                 </button>
                             </div>
                         </form>
 
+                        <!-- Tabla del Historial con Botones Claros de Editar y Eliminar -->
                         <div class="space-y-3">
-                            <h4 class="font-bold text-slate-800 text-sm">Historial de Salidas y Faltas Registradas</h4>
-                            <div class="overflow-x-auto border border-slate-100 rounded-xl">
+                            <h4 class="font-bold text-slate-800 text-sm flex items-center justify-between">
+                                <span>Historial de Registros</span>
+                                <span class="text-xs font-normal text-slate-500">Utilice los botones a la derecha para modificar o borrar</span>
+                            </h4>
+                            <div class="overflow-x-auto border border-slate-200 rounded-xl">
                                 <table class="w-full text-left border-collapse text-sm">
                                     <thead>
-                                        <tr class="bg-slate-100 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
+                                        <tr class="bg-slate-100 text-slate-700 uppercase text-xs tracking-wider border-b border-slate-200">
                                             <th class="p-3">Docente</th>
                                             <th class="p-3">Novedad</th>
                                             <th class="p-3">Desde / Hasta</th>
-                                            <th class="p-3">Motivo / Caso</th>
+                                            <th class="p-3">Motivo / Descripción</th>
                                             <th class="p-3 text-center">Estado</th>
                                             <th class="p-3">Observación</th>
-                                            <th class="p-3 text-center">Acciones</th>
+                                            <th class="p-3 text-center">Acciones (Editar / Eliminar)</th>
                                         </tr>
                                     </thead>
                                     <tbody id="historialSalidasBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
@@ -266,7 +332,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 4: FICHA INDIVIDUAL -->
+                <!-- TAB 4: FICHA INDIVIDUAL CON OPCIÓN DE EXPORTAR PDF / EXCEL -->
                 <section id="tab-individual" class="space-y-6 hidden">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
@@ -274,14 +340,38 @@
                                 <label class="block text-xs font-semibold text-slate-500 uppercase">Seleccionar Docente de la Nómina</label>
                                 <select id="selectDocente" onchange="loadDocenteSheet()" class="mt-1 bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm font-semibold text-slate-800 w-80"></select>
                             </div>
-                            <button onclick="alert('Cambios guardados con éxito.')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-sm flex items-center gap-2">
-                                <i class="fa-solid fa-floppy-disk"></i> Guardar Ficha
-                            </button>
+                            <div class="flex gap-2">
+                                <button onclick="exportIndividualPDF()" class="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-file-pdf"></i> PDF Individual (Horizontal)
+                                </button>
+                                <button onclick="exportIndividualExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-file-excel"></i> Excel Individual
+                                </button>
+                            </div>
                         </div>
+
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm bg-blue-50 p-4 rounded-xl border border-blue-100">
                             <div><strong class="text-blue-900">Docente:</strong> <span id="lblDocenteName" class="text-blue-800 font-bold">-</span></div>
                             <div><strong class="text-blue-900">Régimen:</strong> <span class="text-blue-800 font-bold">LOEI</span></div>
-                            <div><strong class="text-blue-900">Horario Oficial:</strong> <span class="text-blue-800 font-bold">Matutino (07:00 AM)</span></div>
+                            <div><strong class="text-blue-900">Total Novedades:</strong> <span id="lblDocenteNovedades" class="text-blue-800 font-bold">0</span></div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-slate-800 text-sm">Detalle de Novedades del Docente</h4>
+                            <div class="overflow-x-auto border border-slate-100 rounded-xl">
+                                <table class="w-full text-left border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-slate-100 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
+                                            <th class="p-3">Tipo</th>
+                                            <th class="p-3">Fecha y Hora</th>
+                                            <th class="p-3">Motivo / Descripción</th>
+                                            <th class="p-3 text-center">Estado</th>
+                                            <th class="p-3">Observaciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="indvDocenteTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -291,7 +381,7 @@
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div class="border-b border-slate-100 pb-4">
                             <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-fingerprint text-blue-600 mr-2"></i> Módulo Biométrico</h3>
-                            <p id="biometricSubtext" class="text-xs text-slate-500 mt-1">Sube o registra datos biométricos actualizados desde hoy.</p>
+                            <p id="biometricSubtext" class="text-xs text-slate-500 mt-1">Visualización de marcas biométricas cargadas en el sistema.</p>
                         </div>
                         <div class="overflow-x-auto border border-slate-100 rounded-xl">
                             <table class="w-full text-left border-collapse text-sm">
@@ -314,7 +404,7 @@
         </main>
     </div>
 
-    <!-- MODAL -->
+    <!-- MODAL INFORMATIVO -->
     <div id="metricModal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
@@ -326,61 +416,63 @@
     </div>
 
     <script>
-        // NÓMINA COMPLETA DE LOS 28 DOCENTES DE LA U.E. CRISTÓBAL COLÓN
+        // NÓMINA OFICIAL DE LOS 28 DOCENTES
         let docentesList = [
-            { id: "DOC-001", bioId: 3, name: "ALMEIDA ROMERO JHONNY PATRICIO", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-002", bioId: 31, name: "ANDINO POZO MODESTO ABSALON", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-003", bioId: 25, name: "BECERRA VIZCAÍNO JUAN BOSCO", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-004", bioId: 4, name: "CAICEDO ENRIQUEZ BRENDA ELIZABETH", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-005", bioId: 26, name: "CANGAS MORILLO MARLENE SOLEDAD", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-006", bioId: 44, name: "CEVALLOS GUERRERO BYRON WILFRIDO", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-007", bioId: 5, name: "CUASAPAZ CUASAPAZ GLADYS LUCIA", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-008", bioId: 46, name: "DE LA VEGA REYES JENNY ESTEFANIA", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-009", bioId: 7, name: "ERAZO BENAVIDES LILIA ROCIO", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-010", bioId: 23, name: "ESTRADA PEREZ LIDIA NARCIZA", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-011", bioId: 14, name: "FUELAGAN CUASES LIVIA CECILIA", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-012", bioId: 8, name: "GUACHAN CHULDE EDWIN ULPIANO", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-013", bioId: 45, name: "HERNANDEZ BENAVIDES YADIRA LIZETH", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-014", bioId: 20, name: "LANDAZURI RAMIREZ ERNESTO PATRICIO", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-015", bioId: 22, name: "LLORE GUERRERO FREDDY GERMAN", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-016", bioId: 9, name: "MEJIA CHAMORRO ROSA EDILMA", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-017", bioId: 36, name: "MIER JUAN CARLOS", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-018", bioId: 10, name: "MORENO RUANO MARIA FILOMENA", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-019", bioId: 16, name: "PADILLA ESCOBAR JUAN VLADIMIR", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-020", bioId: 11, name: "PANTOJA JIMENEZ SARA JANETH", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-021", bioId: 30, name: "PANTOJA SUAREZ LILIA CARMELINA", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-022", bioId: 19, name: "PASPUEL ORMAZA NARCISA EDDY", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-023", bioId: 34, name: "PORTILLA RUEDA MARIANA DE JESUS", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-024", bioId: 12, name: "RODRIGUEZ TAIMAL RITHA ESPERANZA", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-025", bioId: 32, name: "ROSERO LANDAZURI ELSA MARIELA", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-026", bioId: 13, name: "TAIMAL JIMENEZ ELINA OLIVA", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-027", bioId: 27, name: "TAPIA NOLIVOS VIVIANA GEOCONDA", regimen: "LOEI", jornada: "Matutina", atrasos: 0 },
-            { id: "DOC-028", bioId: 18, name: "YACELGA CORONEL MAYRA DE LOS ANGELES", regimen: "LOEI", jornada: "Matutina", atrasos: 0 }
+            { id: "DOC-001", bioId: 3, name: "ALMEIDA ROMERO JHONNY PATRICIO", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-002", bioId: 31, name: "ANDINO POZO MODESTO ABSALON", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-003", bioId: 25, name: "BECERRA VIZCAÍNO JUAN BOSCO", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-004", bioId: 4, name: "CAICEDO ENRIQUEZ BRENDA ELIZABETH", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-005", bioId: 26, name: "CANGAS MORILLO MARLENE SOLEDAD", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-006", bioId: 44, name: "CEVALLOS GUERRERO BYRON WILFRIDO", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-007", bioId: 5, name: "CUASAPAZ CUASAPAZ GLADYS LUCIA", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-008", bioId: 46, name: "DE LA VEGA REYES JENNY ESTEFANIA", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-009", bioId: 7, name: "ERAZO BENAVIDES LILIA ROCIO", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-010", bioId: 23, name: "ESTRADA PEREZ LIDIA NARCIZA", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-011", bioId: 14, name: "FUELAGAN CUASES LIVIA CECILIA", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-012", bioId: 8, name: "GUACHAN CHULDE EDWIN ULPIANO", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-013", bioId: 45, name: "HERNANDEZ BENAVIDES YADIRA LIZETH", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-014", bioId: 20, name: "LANDAZURI RAMIREZ ERNESTO PATRICIO", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-015", bioId: 22, name: "LLORE GUERRERO FREDDY GERMAN", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-016", bioId: 9, name: "MEJIA CHAMORRO ROSA EDILMA", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-017", bioId: 36, name: "MIER JUAN CARLOS", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-018", bioId: 10, name: "MORENO RUANO MARIA FILOMENA", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-019", bioId: 16, name: "PADILLA ESCOBAR JUAN VLADIMIR", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-020", bioId: 11, name: "PANTOJA JIMENEZ SARA JANETH", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-021", bioId: 30, name: "PANTOJA SUAREZ LILIA CARMELINA", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-022", bioId: 19, name: "PASPUEL ORMAZA NARCISA EDDY", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-023", bioId: 34, name: "PORTILLA RUEDA MARIANA DE JESUS", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-024", bioId: 12, name: "RODRIGUEZ TAIMAL RITHA ESPERANZA", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-025", bioId: 32, name: "ROSERO LANDAZURI ELSA MARIELA", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-026", bioId: 13, name: "TAIMAL JIMENEZ ELINA OLIVA", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-027", bioId: 27, name: "TAPIA NOLIVOS VIVIANA GEOCONDA", regimen: "LOEI", jornada: "Matutina" },
+            { id: "DOC-028", bioId: 18, name: "YACELGA CORONEL MAYRA DE LOS ANGELES", regimen: "LOEI", jornada: "Matutina" }
         ];
 
-        // DATOS LIMPIOS PARA INICIAR DESDE HOY
-        let salidasList = [];
+        // PERSISTENCIA LOCAL DE SALIDAS Y RECURSOS
+        let salidasList = JSON.parse(localStorage.getItem('salidasList_v8')) || [];
         let biometricLogs = [];
 
         let barChartInstance = null;
         let donutChartInstance = null;
 
         window.onload = function() {
-            // Ajustar fechas a hoy
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('filterDateFrom').value = today;
             document.getElementById('filterDateTo').value = today;
             document.getElementById('permisoDesde').value = today + "T08:00";
             document.getElementById('permisoHasta').value = today + "T12:00";
 
-            renderTable();
             populateSelects();
             renderSalidasHistorial();
-            renderBiometricTable();
+            renderTable();
             initCharts();
             loadDocenteSheet();
             applyDateFilter();
         };
+
+        function saveData() {
+            localStorage.setItem('salidasList_v8', JSON.stringify(salidasList));
+        }
 
         function switchTab(tabId) {
             ['dashboard', 'resumen', 'salidas', 'individual', 'biometrico'].forEach(t => {
@@ -404,10 +496,10 @@
         function togglePermisoFields() {
             const tipo = document.getElementById('tipoNovedad').value;
             const collapse = document.getElementById('permisoCollapseSection');
-            if(tipo.includes('Permiso') || tipo.includes('Comisión')) {
+            if(tipo === 'Atraso') {
                 collapse.style.display = 'block';
             } else {
-                collapse.style.display = 'none';
+                collapse.style.display = 'block';
             }
         }
 
@@ -416,17 +508,8 @@
             const to = document.getElementById('filterDateTo').value;
             document.getElementById('activeDateBadge').innerText = `Periodo: ${from} al ${to}`;
 
-            const filteredSalidas = salidasList.filter(s => {
-                const sDate = s.desde.split('T')[0];
-                return sDate >= from && sDate <= to;
-            });
-
-            document.getElementById('statAtrasos').innerText = filteredSalidas.length;
-            document.getElementById('statRegistros').innerText = biometricLogs.filter(l => {
-                const dStr = l.datetime.split(' ')[0];
-                return dStr >= from && dStr <= to;
-            }).length;
-            
+            renderSalidasHistorial();
+            renderTable();
             updateCharts();
             renderBiometricTableFiltered(from, to);
         }
@@ -438,20 +521,37 @@
             applyDateFilter();
         }
 
+        function getFilteredSalidas() {
+            const from = document.getElementById('filterDateFrom').value;
+            const to = document.getElementById('filterDateTo').value;
+            return salidasList.filter(s => {
+                const sDate = s.desde ? s.desde.split('T')[0] : '';
+                return sDate >= from && sDate <= to;
+            });
+        }
+
         function renderTable(data = docentesList) {
             const tbody = document.getElementById('tableBody');
+            if(!tbody) return;
             tbody.innerHTML = '';
+
+            const currentSalidas = getFilteredSalidas();
+
             data.forEach(d => {
+                const docSalidas = currentSalidas.filter(s => s.docId === d.id);
+                const atrasosCount = docSalidas.filter(s => s.tipo === 'Atraso').length;
+                const permisosCount = docSalidas.filter(s => s.tipo !== 'Atraso').length;
+
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition border-b border-slate-100">
                         <td class="p-4 font-bold text-blue-600">${d.id}</td>
                         <td class="p-4 text-slate-500">${d.bioId}</td>
                         <td class="p-4">${d.name}</td>
                         <td class="p-4 text-center"><span class="px-2.5 py-1 bg-slate-100 rounded-md text-xs font-semibold">${d.regimen}</span></td>
-                        <td class="p-4 text-center">${d.jornada}</td>
-                        <td class="p-4 text-center font-bold ${d.atrasos > 0 ? 'text-amber-600' : 'text-slate-400'}">${d.atrasos}</td>
+                        <td class="p-4 text-center font-bold ${atrasosCount > 0 ? 'text-amber-600' : 'text-slate-400'}">${atrasosCount}</td>
+                        <td class="p-4 text-center font-bold ${permisosCount > 0 ? 'text-blue-600' : 'text-slate-400'}">${permisosCount}</td>
                         <td class="p-4 text-center">
-                            <button onclick="goToDocente('${d.id}')" class="px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg text-xs font-semibold transition">Ver</button>
+                            <button onclick="goToDocente('${d.id}')" class="px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg text-xs font-semibold transition">Ver Ficha</button>
                         </td>
                     </tr>
                 `;
@@ -467,16 +567,23 @@
         function populateSelects() {
             const selectDoc = document.getElementById('selectDocente');
             const salidaDoc = document.getElementById('salidaDocente');
+            const exportDoc = document.getElementById('exportSelectDocente');
+
             if(selectDoc) selectDoc.innerHTML = '';
             if(salidaDoc) salidaDoc.innerHTML = '';
+            if(exportDoc) exportDoc.innerHTML = '';
+
             docentesList.forEach(d => {
-                if(selectDoc) selectDoc.innerHTML += `<option value="${d.id}">${d.id} - ${d.name}</option>`;
-                if(salidaDoc) salidaDoc.innerHTML += `<option value="${d.id}">${d.id} - ${d.name}</option>`;
+                const optionStr = `<option value="${d.id}">${d.id} - ${d.name}</option>`;
+                if(selectDoc) selectDoc.innerHTML += optionStr;
+                if(salidaDoc) salidaDoc.innerHTML += optionStr;
+                if(exportDoc) exportDoc.innerHTML += optionStr;
             });
         }
 
         function goToDocente(id) {
             document.getElementById('selectDocente').value = id;
+            document.getElementById('exportSelectDocente').value = id;
             switchTab('individual');
             loadDocenteSheet();
         }
@@ -486,8 +593,32 @@
             const docente = docentesList.find(d => d.id === docId);
             if(!docente) return;
             document.getElementById('lblDocenteName').innerText = `${docente.id} - ${docente.name}`;
+
+            const docSalidas = salidasList.filter(s => s.docId === docId);
+            document.getElementById('lblDocenteNovedades').innerText = docSalidas.length;
+
+            const tbody = document.getElementById('indvDocenteTableBody');
+            tbody.innerHTML = '';
+            if(docSalidas.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No hay registradas novedades para este docente.</td></tr>`;
+                return;
+            }
+
+            docSalidas.forEach(item => {
+                const badgeColor = item.estado === 'Justificado' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="p-3 font-semibold text-blue-600">${item.tipo}</td>
+                        <td class="p-3 text-xs">${item.desde.replace('T', ' ')} <br>al ${item.hasta.replace('T', ' ')}</td>
+                        <td class="p-3">${item.motivo || 'N/A'}</td>
+                        <td class="p-3 text-center"><span class="px-2 py-0.5 ${badgeColor} rounded font-semibold text-xs">${item.estado}</span></td>
+                        <td class="p-3 text-xs text-slate-500">${item.obs || 'N/A'}</td>
+                    </tr>
+                `;
+            });
         }
 
+        // GUARDAR / EDITAR REGISTRO DE SALIDA O PERMISO
         function handleSalidaSubmit(event) {
             event.preventDefault();
             const editIndex = parseInt(document.getElementById('editRecordIndex').value);
@@ -495,54 +626,71 @@
             const tipo = document.getElementById('tipoNovedad').value;
             const desde = document.getElementById('permisoDesde').value;
             const hasta = document.getElementById('permisoHasta').value;
-            const motivo = document.getElementById('permisoMotivo').value || 'Sin motivo';
+            const motivo = document.getElementById('permisoMotivo').value || 'Sin descripción';
             const estado = document.getElementById('permisoEstadoCaso').value;
             const obs = document.getElementById('salidaObservacion').value || 'Ninguna';
 
             if(editIndex === -1) {
+                // Nuevo Registro
                 const newRecord = { id: Date.now(), docId, tipo, desde, hasta, motivo, estado, obs };
                 salidasList.unshift(newRecord);
-                alert('Novedad registrada con éxito.');
+                alert('✅ Novedad registrada con éxito.');
             } else {
+                // Actualizar Registro
                 salidasList[editIndex] = { ...salidasList[editIndex], docId, tipo, desde, hasta, motivo, estado, obs };
-                alert('Registro actualizado con éxito.');
+                alert('✅ Registro actualizado con éxito.');
                 cancelEdit();
             }
 
-            renderSalidasHistorial();
+            saveData();
             applyDateFilter();
+            loadDocenteSheet();
         }
 
+        // RENDERIZAR TABLA CON BOTONES CLAROS DE EDITAR Y ELIMINAR
         function renderSalidasHistorial() {
             const tbody = document.getElementById('historialSalidasBody');
+            if(!tbody) return;
             tbody.innerHTML = '';
-            if(salidasList.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-400">No hay registros de salidas o faltas. Ingrese una novedad arriba.</td></tr>`;
+
+            const currentSalidas = getFilteredSalidas();
+
+            if(currentSalidas.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-400">No hay registros en este rango de fechas. Complete el formulario arriba para agregar uno nuevo.</td></tr>`;
                 return;
             }
-            salidasList.forEach((item, index) => {
+
+            currentSalidas.forEach((item) => {
+                const realIndex = salidasList.findIndex(s => s.id === item.id);
                 const docente = docentesList.find(d => d.id === item.docId) || { id: item.docId, name: 'Docente' };
                 const badgeColor = item.estado === 'Justificado' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
 
                 tbody.innerHTML += `
-                    <tr>
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
                         <td class="p-3 font-semibold text-blue-600">${docente.id} - ${docente.name}</td>
-                        <td class="p-3">${item.tipo}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded text-xs font-bold">${item.tipo}</span></td>
                         <td class="p-3 text-xs">${item.desde.replace('T', ' ')} <br>al ${item.hasta.replace('T', ' ')}</td>
-                        <td class="p-3">${item.motivo}</td>
+                        <td class="p-3 font-medium text-slate-800">${item.motivo}</td>
                         <td class="p-3 text-center"><span class="px-2 py-0.5 ${badgeColor} rounded font-semibold text-xs">${item.estado}</span></td>
                         <td class="p-3 text-xs text-slate-500">${item.obs}</td>
-                        <td class="p-3 text-center space-x-2">
-                            <button onclick="editSalida(${index})" class="px-2 py-1 bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white rounded text-xs font-semibold transition" title="Editar"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteSalida(${index})" class="px-2 py-1 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded text-xs font-semibold transition" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                        <td class="p-3 text-center space-x-2 whitespace-nowrap">
+                            <button onclick="editSalida(${realIndex})" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition shadow-sm inline-flex items-center gap-1" title="Editar Registro">
+                                <i class="fa-solid fa-pen"></i> Editar
+                            </button>
+                            <button onclick="deleteSalida(${realIndex})" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-bold transition shadow-sm inline-flex items-center gap-1" title="Eliminar Registro">
+                                <i class="fa-solid fa-trash"></i> Eliminar
+                            </button>
                         </td>
                     </tr>
                 `;
             });
         }
 
+        // EDITAR REGISTRO
         function editSalida(index) {
             const item = salidasList[index];
+            if(!item) return;
+
             document.getElementById('editRecordIndex').value = index;
             document.getElementById('salidaDocente').value = item.docId;
             document.getElementById('tipoNovedad').value = item.tipo;
@@ -555,31 +703,32 @@
             document.getElementById('editModeIndicator').classList.remove('hidden');
             document.getElementById('editIndexDisplay').innerText = index + 1;
             document.getElementById('btnCancelEdit').classList.remove('hidden');
+            document.getElementById('btnSubmitSalida').className = "bg-amber-600 hover:bg-amber-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition shadow-sm flex items-center gap-2";
             document.getElementById('btnSubmitSalida').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Actualizar Novedad`;
-            togglePermisoFields();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // CANCELAR EDICIÓN
         function cancelEdit() {
             document.getElementById('editRecordIndex').value = -1;
             document.getElementById('editModeIndicator').classList.add('hidden');
             document.getElementById('btnCancelEdit').classList.add('hidden');
-            document.getElementById('btnSubmitSalida').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Registrar Novedad`;
+            document.getElementById('btnSubmitSalida').className = "bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition shadow-sm flex items-center gap-2";
+            document.getElementById('btnSubmitSalida').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Guardar Novedad`;
             document.getElementById('salidaObservacion').value = '';
             document.getElementById('permisoMotivo').value = '';
         }
 
+        // ELIMINAR REGISTRO
         function deleteSalida(index) {
-            if(confirm('¿Está seguro de eliminar este registro?')) {
+            if(confirm('⚠️ ¿Está completamente seguro de eliminar este registro de la lista?')) {
                 salidasList.splice(index, 1);
-                renderSalidasHistorial();
+                saveData();
                 applyDateFilter();
+                loadDocenteSheet();
+                alert('🗑️ Registro eliminado correctamente.');
             }
-        }
-
-        function renderBiometricTable() {
-            const from = document.getElementById('filterDateFrom').value;
-            const to = document.getElementById('filterDateTo').value;
-            renderBiometricTableFiltered(from, to);
         }
 
         function renderBiometricTableFiltered(from, to) {
@@ -591,7 +740,7 @@
                 return dStr >= from && dStr <= to;
             });
             if(filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Sin marcas biométricas en este rango. Listo para registrar.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Sin marcas biométricas registradas en este periodo.</td></tr>`;
                 return;
             }
             filtered.forEach(l => {
@@ -619,8 +768,8 @@
                     content.innerHTML += `<div class="p-2 border-b flex justify-between"><span class="font-bold text-blue-600">${d.id}</span><span>${d.name}</span></div>`;
                 });
             } else {
-                title.innerText = 'Detalle de Registros';
-                content.innerHTML = `<p class="text-slate-500">Sin novedades registradas para el periodo actual.</p>`;
+                title.innerText = 'Resumen de Novedades';
+                content.innerHTML = `<p class="text-slate-500">Módulo actualizado de Inspectoría General.</p>`;
             }
             modal.classList.remove('hidden');
         }
@@ -629,26 +778,13 @@
             document.getElementById('metricModal').classList.add('hidden');
         }
 
-        function exportDetailedCSV() {
-            let csv = 'Codigo,Nombre,Atrasos\n';
-            docentesList.forEach(d => {
-                csv += `"${d.id}","${d.name}",${d.atrasos}\n`;
-            });
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Consolidado_Asistencia.csv';
-            a.click();
-        }
-
         function initCharts() {
             const ctxBar = document.getElementById('barChart').getContext('2d');
             barChartInstance = new Chart(ctxBar, {
                 type: 'bar',
                 data: {
                     labels: docentesList.slice(0, 10).map(d => d.id),
-                    datasets: [{ data: Array(10).fill(0), backgroundColor: '#3b82f6', borderRadius: 8 }]
+                    datasets: [{ label: 'Novedades', data: Array(10).fill(0), backgroundColor: '#3b82f6', borderRadius: 8 }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
@@ -657,7 +793,7 @@
             donutChartInstance = new Chart(ctxDonut, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Atrasos', 'A Tiempo'],
+                    labels: ['Con Novedad', 'Sin Novedad'],
                     datasets: [{ data: [0, 28], backgroundColor: ['#f59e0b', '#10b981'] }]
                 },
                 options: { responsive: true, maintainAspectRatio: false }
@@ -665,14 +801,191 @@
         }
 
         function updateCharts() {
-            if(barChartInstance && donutChartInstance) {
-                barChartInstance.data.datasets[0].data = docentesList.slice(0, 10).map(d => d.atrasos);
-                barChartInstance.update();
+            if(!barChartInstance || !donutChartInstance) return;
 
-                const totalAtrasos = salidasList.length;
-                donutChartInstance.data.datasets[0].data = [totalAtrasos, Math.max(0, 28 - totalAtrasos)];
-                donutChartInstance.update();
+            const filteredSalidas = getFilteredSalidas();
+            const counts = docentesList.map(d => filteredSalidas.filter(s => s.docId === d.id).length);
+
+            barChartInstance.data.datasets[0].data = counts.slice(0, 10);
+            barChartInstance.update();
+
+            const docentesConNovedad = counts.filter(c => c > 0).length;
+            document.getElementById('statAtrasos').innerText = filteredSalidas.length;
+            
+            const cumplimiento = Math.round(((28 - docentesConNovedad) / 28) * 100);
+            document.getElementById('statCumplimiento').innerText = `${cumplimiento}%`;
+
+            donutChartInstance.data.datasets[0].data = [docentesConNovedad, 28 - docentesConNovedad];
+            donutChartInstance.update();
+        }
+
+        // ==========================================
+        // FUNCIONES DE EXPORTACIÓN (PDF / EXCEL)
+        // ==========================================
+
+        // 1. EXPORTAR CONSOLIDADO GENERAL EN EXCEL
+        function exportConsolidatedExcel() {
+            const from = document.getElementById('filterDateFrom').value;
+            const to = document.getElementById('filterDateTo').value;
+            const filteredSalidas = getFilteredSalidas();
+
+            const excelData = docentesList.map(d => {
+                const docSalidas = filteredSalidas.filter(s => s.docId === d.id);
+                const atrasos = docSalidas.filter(s => s.tipo === 'Atraso').length;
+                const permisos = docSalidas.filter(s => s.tipo !== 'Atraso').length;
+                const descripciones = docSalidas.map(s => `[${s.tipo}] ${s.motivo} (${s.desde.replace('T',' ')} a ${s.hasta.replace('T',' ')})`).join('; ') || 'Sin novedad';
+
+                return {
+                    "Código": d.id,
+                    "ID Biométrico": d.bioId,
+                    "Apellidos y Nombres": d.name,
+                    "Régimen": d.regimen,
+                    "Total Atrasos": atrasos,
+                    "Total Permisos / Faltas": permisos,
+                    "Descripción de Novedades": descripciones
+                };
+            });
+
+            const worksheet = XLSX.utils.json_to_sheet(excelData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Consolidado");
+            XLSX.writeFile(workbook, `Consolidado_Asistencia_${from}_al_${to}.xlsx`);
+        }
+
+        // 2. EXPORTAR CONSOLIDADO GENERAL EN PDF (HORIZONTAL / LANDSCAPE)
+        function exportConsolidatedPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+            const from = document.getElementById('filterDateFrom').value;
+            const to = document.getElementById('filterDateTo').value;
+            const filteredSalidas = getFilteredSalidas();
+
+            // Encabezado
+            doc.setFontSize(16);
+            doc.setTextColor(15, 23, 42); // slate-900
+            doc.text("UNIDAD EDUCATIVA CRISTÓBAL COLÓN", 14, 15);
+            
+            doc.setFontSize(11);
+            doc.setTextColor(71, 85, 105); // slate-600
+            doc.text(`REPORTE CONSOLIDADO DE ASISTENCIA Y PERMISOS DOCENTES`, 14, 22);
+            doc.text(`Periodo: ${from} al ${to} | Total Docentes: 28`, 14, 28);
+
+            // Preparar datos de la tabla
+            const tableRows = docentesList.map(d => {
+                const docSalidas = filteredSalidas.filter(s => s.docId === d.id);
+                const atrasos = docSalidas.filter(s => s.tipo === 'Atraso').length;
+                const permisos = docSalidas.filter(s => s.tipo !== 'Atraso').length;
+                const descripciones = docSalidas.map(s => `• [${s.tipo}] ${s.motivo} (${s.desde.replace('T',' ')})`).join('
+') || 'Sin novedades';
+
+                return [d.id, d.bioId, d.name, d.regimen, atrasos, permisos, descripciones];
+            });
+
+            doc.autoTable({
+                startY: 34,
+                head: [['Código', 'ID Bio', 'Apellidos y Nombres', 'Régimen', 'Atrasos', 'Permisos', 'Descripción de Novedades']],
+                body: tableRows,
+                theme: 'grid',
+                styles: { fontSize: 8, cellPadding: 2.5 },
+                headStyles: { fillColor: [15, 23, 42], textColor: [255, 255, 255], fontStyle: 'bold' },
+                columnStyles: {
+                    0: { cellWidth: 22 },
+                    1: { cellWidth: 16 },
+                    2: { cellWidth: 65 },
+                    3: { cellWidth: 20 },
+                    4: { cellWidth: 18, halign: 'center' },
+                    5: { cellWidth: 18, halign: 'center' },
+                    6: { cellWidth: 'auto' }
+                }
+            });
+
+            doc.save(`Consolidado_Asistencia_${from}_al_${to}.pdf`);
+        }
+
+        // 3. EXPORTAR REPORTE INDIVIDUAL EN EXCEL
+        function exportIndividualExcel() {
+            const docId = document.getElementById('exportSelectDocente').value || document.getElementById('selectDocente').value;
+            const docente = docentesList.find(d => d.id === docId);
+            if(!docente) return alert("Seleccione un docente válido.");
+
+            const docSalidas = salidasList.filter(s => s.docId === docId);
+
+            const excelData = docSalidas.map(s => ({
+                "Código Docente": docente.id,
+                "Nombre Docente": docente.name,
+                "Tipo Novedad": s.tipo,
+                "Desde": s.desde.replace('T', ' '),
+                "Hasta": s.hasta.replace('T', ' '),
+                "Motivo / Descripción": s.motivo,
+                "Estado": s.estado,
+                "Observaciones": s.obs
+            }));
+
+            if(excelData.length === 0) {
+                excelData.push({
+                    "Código Docente": docente.id,
+                    "Nombre Docente": docente.name,
+                    "Tipo Novedad": "Sin registros",
+                    "Motivo / Descripción": "Sin novedades registradas"
+                });
             }
+
+            const worksheet = XLSX.utils.json_to_sheet(excelData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Ficha Individual");
+            XLSX.writeFile(workbook, `Reporte_Individual_${docente.id}_${docente.name.replace(/ /g,'_')}.xlsx`);
+        }
+
+        // 4. EXPORTAR REPORTE INDIVIDUAL EN PDF (HORIZONTAL / LANDSCAPE)
+        function exportIndividualPDF() {
+            const docId = document.getElementById('exportSelectDocente').value || document.getElementById('selectDocente').value;
+            const docente = docentesList.find(d => d.id === docId);
+            if(!docente) return alert("Seleccione un docente válido.");
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+            const docSalidas = salidasList.filter(s => s.docId === docId);
+
+            // Encabezado
+            doc.setFontSize(16);
+            doc.setTextColor(15, 23, 42);
+            doc.text("UNIDAD EDUCATIVA CRISTÓBAL COLÓN", 14, 15);
+
+            doc.setFontSize(11);
+            doc.setTextColor(71, 85, 105);
+            doc.text(`FICHA INDIVIDUAL DE CONTROL DE ASISTENCIA Y PERMISOS`, 14, 22);
+            
+            // Recuadro Informativo del Docente
+            doc.setFontSize(10);
+            doc.setTextColor(15, 23, 42);
+            doc.text(`Docente: ${docente.id} - ${docente.name}`, 14, 30);
+            doc.text(`Régimen: ${docente.regimen} | ID Biométrico: ${docente.bioId} | Total Novedades Registradas: ${docSalidas.length}`, 14, 36);
+
+            const tableRows = docSalidas.map(s => [
+                s.tipo,
+                s.desde.replace('T', ' '),
+                s.hasta.replace('T', ' '),
+                s.motivo || 'N/A',
+                s.estado,
+                s.obs || 'N/A'
+            ]);
+
+            if(tableRows.length === 0) {
+                tableRows.push(['Sin registros', '-', '-', 'No presenta novedades registradas', '-', '-']);
+            }
+
+            doc.autoTable({
+                startY: 42,
+                head: [['Tipo Novedad', 'Desde', 'Hasta', 'Motivo / Descripción', 'Estado', 'Observaciones']],
+                body: tableRows,
+                theme: 'grid',
+                styles: { fontSize: 9, cellPadding: 3 },
+                headStyles: { fillColor: [37, 99, 235], textColor: [255, 255, 255], fontStyle: 'bold' }
+            });
+
+            doc.save(`Ficha_Individual_${docente.id}_${docente.name.replace(/ /g,'_')}.pdf`);
         }
     </script>
 </body>
