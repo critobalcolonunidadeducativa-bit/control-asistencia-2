@@ -44,8 +44,8 @@
                 </nav>
             </div>
             <div class="p-4 border-t border-slate-800 text-xs text-slate-500 space-y-1">
-                <p>Inspectoría General v15.0</p>
-                <p class="text-emerald-400 font-semibold"><i class="fa-solid fa-sparkles mr-1"></i> Gestor de Carpetas Biométricas</p>
+                <p>Inspectoría General v16.0</p>
+                <p class="text-emerald-400 font-semibold"><i class="fa-solid fa-sparkles mr-1"></i> Mini Gemini Integrado</p>
             </div>
         </aside>
 
@@ -55,7 +55,7 @@
             <header class="bg-white border-b border-slate-200 px-8 py-4 flex flex-col xl:flex-row justify-between items-center gap-4 shadow-sm sticky top-0 z-20">
                 <div class="flex items-center gap-4">
                     <h2 id="header-title" class="text-xl font-bold text-slate-800">Dashboard General de Asistencia</h2>
-                    <span id="activeDateBadge" class="text-xs bg-blue-50 text-blue-700 font-semibold px-3 py-1 rounded-full border border-blue-200">Periodo Activo</span>
+                    <span id="activeDateBadge" class="text-xs bg-blue-50 text-blue-700 font-semibold px-3 py-1 rounded-full border border-blue-200">Periodo Activo (Mes Actual)</span>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3 bg-slate-50 p-2 rounded-xl border border-slate-200">
@@ -74,7 +74,7 @@
                     </button>
 
                     <button type="button" onclick="resetDateFilter()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold transition">
-                        <i class="fa-solid fa-rotate-left"></i> Restablecer
+                        <i class="fa-solid fa-rotate-left"></i> Mes Actual
                     </button>
                 </div>
             </header>
@@ -90,7 +90,7 @@
                             <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-lg font-bold"><i class="fa-solid fa-clock"></i></div>
                             <div>
                                 <h3 class="font-bold text-sm text-blue-200">Horario Oficial de Asistencia</h3>
-                                <p class="text-xs text-slate-300">Entrada: <strong>07:00 AM</strong> (Atraso después de las 07:05 AM) | Salida: <strong>13:00 PM</strong> (Miércoles: <strong>15:00 PM</strong>)</p>
+                                <p class="text-xs text-slate-300">Entrada: <strong>07:00 AM</strong> (Atraso desde las <strong>07:01 AM</strong>) | Salida: <strong>13:00 PM</strong> (Miércoles: <strong>15:00 PM</strong>)</p>
                             </div>
                         </div>
                         <button type="button" onclick="triggerGlobalSave('Dashboard')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
@@ -115,7 +115,7 @@
                             <div>
                                 <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Atrasos Detectados</p>
                                 <h3 id="statAtrasos" class="text-3xl font-extrabold text-amber-600 mt-1">0</h3>
-                                <span class="text-xs text-amber-600 font-medium mt-2 inline-block"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Después de 07:05 AM</span>
+                                <span class="text-xs text-amber-600 font-medium mt-2 inline-block"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Desde 07:01 AM</span>
                             </div>
                             <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-business-time"></i>
@@ -154,23 +154,23 @@
                                 </div>
                                 <div>
                                     <h3 class="font-bold text-slate-800 text-base">Asistente IA - Mini Gemini Inspectoría</h3>
-                                    <p class="text-xs text-slate-500">Escriba sus dudas, consultas de atrasos o genere borradores de reportes al instante.</p>
+                                    <p class="text-xs text-slate-500">Pregúntale sobre cualquier docente, atrasos del mes, carpetas o pínchale consultas directas.</p>
                                 </div>
                             </div>
-                            <span class="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-bold">Activo</span>
+                            <span class="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-bold">Conectado a Datos</span>
                         </div>
 
                         <!-- Chat Display -->
                         <div id="geminiChatBox" class="h-48 overflow-y-auto bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3 text-xs">
                             <div class="bg-purple-100/70 border border-purple-200 text-purple-950 p-3 rounded-xl max-w-xl">
                                 <strong><i class="fa-solid fa-robot mr-1 text-purple-600"></i> Mini Gemini:</strong>
-                                ¡Hola! Estoy listo para ayudarte. Puedes pedirme que revise quiénes son los docentes con más atrasos, o redactar un resumen para la junta de profesores. ¿En qué te ayudo hoy?
+                                ¡Hola! Estoy conectado directamente con las carpetas, la nómina y los registros. Pregúntame por ejemplo: <em>"¿Cuántos atrasos tiene Almeida?"</em> o <em>"¿Qué docentes llegaron tarde este mes?"</em>.
                             </div>
                         </div>
 
                         <!-- Input Area -->
                         <form onsubmit="handleGeminiQuery(event)" class="flex gap-2">
-                            <input type="text" id="geminiPromptInput" placeholder="Escriba aquí su consulta o requerimiento (ej: ¿Quién tiene más atrasos hoy?)..." class="flex-1 bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-purple-500">
+                            <input type="text" id="geminiPromptInput" placeholder="Escriba su consulta por docente o sobre los reportes..." class="flex-1 bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-purple-500">
                             <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
                                 <i class="fa-solid fa-paper-plane"></i> Consultar
                             </button>
@@ -221,7 +221,7 @@
                     <!-- Charts Grid -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm lg:col-span-2">
-                            <h3 class="font-bold text-slate-800 text-lg mb-4">Atrasos por Docente (Mayor a 07:05 AM)</h3>
+                            <h3 class="font-bold text-slate-800 text-lg mb-4">Atrasos por Docente (Mayor a 07:00 AM)</h3>
                             <div class="h-80"><canvas id="barChart"></canvas></div>
                         </div>
                         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
@@ -238,7 +238,7 @@
                         <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-100 pb-4">
                             <div>
                                 <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-users-rectangle text-blue-600 mr-2"></i> Nómina Oficial y Atrasos Reflejados</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">Entrada esperada: 07:00 AM. Atraso contabilizado desde las 07:05:01 AM.</p>
+                                <p class="text-xs text-slate-500 mt-0.5">Entrada esperada: 07:00 AM. Atraso contabilizado desde las 07:01 AM.</p>
                             </div>
                             <div class="flex gap-2">
                                 <button type="button" onclick="openAddTeacherModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
@@ -402,7 +402,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm bg-blue-50 p-4 rounded-xl border border-blue-100">
                             <div><strong class="text-blue-900">Docente:</strong> <span id="lblDocenteName" class="text-blue-800 font-bold">-</span></div>
                             <div><strong class="text-blue-900">ID N° Asignado:</strong> <span id="lblDocenteBioId" class="text-blue-800 font-bold">-</span></div>
-                            <div><strong class="text-blue-900">Atrasos (> 07:05 AM):</strong> <span id="lblDocenteAtrasos" class="text-amber-700 font-bold">0</span></div>
+                            <div><strong class="text-blue-900">Atrasos (> 07:00 AM):</strong> <span id="lblDocenteAtrasos" class="text-amber-700 font-bold">0</span></div>
                             <div><strong class="text-blue-900">Entradas a Tiempo:</strong> <span id="lblDocenteNormi" class="text-emerald-700 font-bold">0</span></div>
                         </div>
 
@@ -567,7 +567,6 @@
     </div>
 
     <script>
-        // NÓMINA OFICIAL CON ID N° ASIGNADO (Ej: Almeida = 3)
         let defaultDocentes = [
             { id: "DOC-001", bioId: 3, name: "ALMEIDA ROMERO JHONNY PATRICIO", regimen: "LOEI" },
             { id: "DOC-002", bioId: 31, name: "ANDINO POZO MODESTO ABSALON", regimen: "LOEI" },
@@ -599,20 +598,26 @@
             { id: "DOC-028", bioId: 18, name: "YACELGA CORONEL MAYRA DE LOS ANGELES", regimen: "LOEI" }
         ];
 
-        let docentesList = JSON.parse(localStorage.getItem('docentesList_v15')) || defaultDocentes;
-        let salidasList = JSON.parse(localStorage.getItem('salidasList_v15')) || [];
-        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v15')) || [];
-        let uploadedFilesList = JSON.parse(localStorage.getItem('uploadedFilesList_v15')) || [];
+        let docentesList = JSON.parse(localStorage.getItem('docentesList_v16')) || defaultDocentes;
+        let salidasList = JSON.parse(localStorage.getItem('salidasList_v16')) || [];
+        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v16')) || [];
+        let uploadedFilesList = JSON.parse(localStorage.getItem('uploadedFilesList_v16')) || [];
 
         let barChartInstance = null;
         let donutChartInstance = null;
 
         window.onload = function() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('filterDateFrom').value = "2026-01-01";
-            document.getElementById('filterDateTo').value = today;
-            document.getElementById('permisoDesde').value = today + "T08:00";
-            document.getElementById('permisoHasta').value = today + "T12:00";
+            // Establecer por defecto desde el 1er día del mes actual hasta el día de hoy
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const todayStr = now.toISOString().split('T')[0];
+            const firstDayMonthStr = `${year}-${month}-01`;
+
+            document.getElementById('filterDateFrom').value = firstDayMonthStr;
+            document.getElementById('filterDateTo').value = todayStr;
+            document.getElementById('permisoDesde').value = todayStr + "T08:00";
+            document.getElementById('permisoHasta').value = todayStr + "T12:00";
 
             populateSelects();
             renderSalidasHistorial();
@@ -624,18 +629,18 @@
         };
 
         function saveData() {
-            localStorage.setItem('docentesList_v15', JSON.stringify(docentesList));
-            localStorage.setItem('salidasList_v15', JSON.stringify(salidasList));
-            localStorage.setItem('biometricLogs_v15', JSON.stringify(biometricLogs));
-            localStorage.setItem('uploadedFilesList_v15', JSON.stringify(uploadedFilesList));
+            localStorage.setItem('docentesList_v16', JSON.stringify(docentesList));
+            localStorage.setItem('salidasList_v16', JSON.stringify(salidasList));
+            localStorage.setItem('biometricLogs_v16', JSON.stringify(biometricLogs));
+            localStorage.setItem('uploadedFilesList_v16', JSON.stringify(uploadedFilesList));
         }
 
         function triggerGlobalSave(sectionName) {
             saveData();
-            alert(`💾 ¡Éxito! Todos los datos de [${sectionName}] han sido guardados sin borrar nada.`);
+            alert(`💾 ¡Éxito! Todos los datos de [${sectionName}] han sido guardados sin perder nada.`);
         }
 
-        // LECTOR ULTRA-FLEXIBLE DEL EXCEL Y GESTOR DE CARPETAS
+        // LECTOR DE EXCEL Y DETECCIÓN DE ATRASOS DESDE LAS 07:01 AM
         function processBiometricExcel(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -709,7 +714,8 @@
                                     }
                                 }
 
-                                let esAtraso = cleanTime > "07:05:00";
+                                // REGLA: Atraso desde las 07:01 AM (cualquier hora mayor a 07:00:00)
+                                let esAtraso = cleanTime > "07:00:00";
                                 let estadoEntrada = esAtraso ? "Atraso" : "A Tiempo";
 
                                 const logItem = {
@@ -746,7 +752,6 @@
                         }
                     });
 
-                    // Registrar la carpeta en uploadedFilesList
                     uploadedFilesList.unshift({
                         id: fileId,
                         name: fileName,
@@ -761,7 +766,7 @@
                     loadDocenteSheet();
 
                     if (fileLogsCount > 0) {
-                        statusMsg.innerHTML = `✅ ¡Carpeta creada con éxito! Se leyeron ${fileLogsCount} registros (${atrasosCount} atrasos).`;
+                        statusMsg.innerHTML = `✅ ¡Carpeta creada con éxito! Se leyeron ${fileLogsCount} registros (${atrasosCount} atrasos desde las 07:01 AM).`;
                     } else {
                         statusMsg.innerHTML = `⚠️ Carpeta creada, pero no se detectaron marcaciones válidas con los IDs de la nómina.`;
                     }
@@ -773,7 +778,6 @@
             reader.readAsArrayBuffer(file);
         }
 
-        // RENDERIZAR CARPETAS / CARDS
         function renderFoldersContainer() {
             const container = document.getElementById('foldersContainer');
             const countBadge = document.getElementById('folderCountBadge');
@@ -781,7 +785,6 @@
 
             container.innerHTML = '';
             countBadge.innerText = uploadedFilesList.length;
-
             document.getElementById('statRegistros').innerText = biometricLogs.length;
 
             if (uploadedFilesList.length === 0) {
@@ -832,7 +835,6 @@
             });
         }
 
-        // EDITAR CARPETA
         function openEditFolderModal(id, currentName) {
             document.getElementById('editFolderId').value = id;
             document.getElementById('editFolderNameInput').value = currentName;
@@ -858,7 +860,6 @@
             }
         }
 
-        // BORRAR CARPETA Y SUS REGISTROS ASOCIADOS
         function deleteFolder(id) {
             if(confirm("⚠️ ¿Desea eliminar esta carpeta de biométrico? Se borrarán las marcaciones y atrasos asociados a este archivo Excel.")) {
                 uploadedFilesList = uploadedFilesList.filter(f => f.id !== id);
@@ -873,7 +874,6 @@
             }
         }
 
-        // INSPECCIONAR CONTENIDO DE CARPETA
         function inspectFolder(id) {
             const folder = uploadedFilesList.find(f => f.id === id);
             if(!folder) return;
@@ -907,7 +907,7 @@
             document.getElementById('inspectFolderModal').classList.add('hidden');
         }
 
-        // MINI GEMINI IA LOGIC
+        // MINI GEMINI IA LOGIC - 100% CONECTADO A DOCENTES, ATRASOS Y CARPETAS
         function handleGeminiQuery(e) {
             e.preventDefault();
             const input = document.getElementById('geminiPromptInput');
@@ -929,28 +929,44 @@
                 let responseText = "";
                 const qLower = query.toLowerCase();
 
+                const from = document.getElementById('filterDateFrom').value;
+                const to = document.getElementById('filterDateTo').value;
+
                 const totalDocs = docentesList.length;
-                const totalAtrasos = biometricLogs.filter(b => b.estado === 'Atraso').length;
+                const filteredAtrasos = biometricLogs.filter(b => b.estado === 'Atraso' && b.datePart >= from && b.datePart <= to);
                 const totalCarpetas = uploadedFilesList.length;
 
-                if (qLower.includes('atraso') || qLower.includes('quien') || qLower.includes('quién')) {
+                // Buscar si preguntan por un docente específico en la consulta
+                let docenteMencionado = docentesList.find(d => qLower.includes(d.name.toLowerCase()) || qLower.includes(d.id.toLowerCase()) || (d.bioId && qLower.includes(String(d.bioId))));
+
+                if (docenteMencionado) {
+                    const docLogs = biometricLogs.filter(b => b.docId === docenteMencionado.id && b.datePart >= from && b.datePart <= to);
+                    const docAtrasos = docLogs.filter(b => b.estado === 'Atraso').length;
+                    const docATiempo = docLogs.filter(b => b.estado === 'A Tiempo').length;
+
+                    responseText = `Información para <strong>${docenteMencionado.name}</strong> (N° ${docenteMencionado.bioId}) en el periodo (${from} a ${to}):<br>` +
+                        `• <strong>Atrasos (> 07:00 AM):</strong> ${docAtrasos}<br>` +
+                        `• <strong>Entradas a tiempo:</strong> ${docATiempo}<br>` +
+                        `• <strong>Total marcaciones:</strong> ${docLogs.length}`;
+                } else if (qLower.includes('atraso') || qLower.includes('tarde') || qLower.includes('quien') || qLower.includes('quién')) {
                     const docentesConAtrasos = docentesList.map(d => {
-                        const count = biometricLogs.filter(b => b.docId === d.id && b.estado === 'Atraso').length;
+                        const count = biometricLogs.filter(b => b.docId === d.id && b.estado === 'Atraso' && b.datePart >= from && b.datePart <= to).length;
                         return { name: d.name, count };
                     }).filter(d => d.count > 0).sort((a,b) => b.count - a.count);
 
                     if (docentesConAtrasos.length > 0) {
-                        responseText = `Hay un total de <strong>${totalAtrasos} atrasos</strong> registrados en las ${totalCarpetas} carpetas del biométrico (posteriores a las 07:05 AM).<br>Docentes con más atrasos:<br>• ` +
+                        responseText = `En el periodo (${from} al ${to}) hay <strong>${filteredAtrasos.length} atrasos</strong> (desde las 07:01 AM).<br>Docentes con más atrasos:<br>• ` +
                             docentesConAtrasos.map(d => `<strong>${d.name}</strong>: ${d.count} atraso(s)`).join('<br>• ');
                     } else {
-                        responseText = `Actualmente no hay atrasos registrados en el sistema. ¡Excelente puntualidad!`;
+                        responseText = `No se registran atrasos entre ${from} y ${to}. ¡Excelente asistencia!`;
                     }
-                } else if (qLower.includes('carpeta') || qLower.includes('archivo')) {
-                    responseText = `Actualmente tienes <strong>${totalCarpetas} carpeta(s)</strong> biométrica(s) cargada(s) en el sistema, sumando ${biometricLogs.length} marcaciones totales. Puedes gestionarlas en la pestaña "Archivos Biométricos".`;
+                } else if (qLower.includes('carpeta') || qLower.includes('archivo') || qLower.includes('excel')) {
+                    responseText = `Actualmente hay <strong>${totalCarpetas} carpeta(s)</strong> de biométrico subidas, con un total de ${biometricLogs.length} marcaciones registradas en el sistema.`;
                 } else if (qLower.includes('horario') || qLower.includes('hora')) {
-                    responseText = `El horario configurado es:<br>• <strong>Entrada:</strong> 07:00 AM (Tolerancia hasta las 07:05 AM).<br>• <strong>Salida Normal:</strong> 13:00 PM.<br>• <strong>Salida Miércoles:</strong> 15:00 PM.`;
+                    responseText = `El horario oficial es:<br>• <strong>Entrada:</strong> 07:00 AM (Atraso desde las 07:01 AM).<br>• <strong>Salida Normal:</strong> 13:00 PM.<br>• <strong>Salida Miércoles:</strong> 15:00 PM.`;
                 } else {
-                    responseText = `Entendido. Tenemos <strong>${totalDocs} docentes</strong> y <strong>${totalCarpetas} carpeta(s) de biométrico</strong> activas. ¿En qué más te puedo ayudar?`;
+                    // Respuesta general inteligente
+                    responseText = `He revisado los registros (${from} al ${to}). Tenemos <strong>${totalDocs} docentes</strong> en la nómina, <strong>${totalCarpetas} carpetas</strong> de biométrico y <strong>${filteredAtrasos.length} atrasos</strong> en este periodo. ¿Quieres consultar sobre algún docente en particular?`;
                 }
 
                 chatBox.innerHTML += `
@@ -989,8 +1005,14 @@
         }
 
         function resetDateFilter() {
-            document.getElementById('filterDateFrom').value = "2026-01-01";
-            document.getElementById('filterDateTo').value = new Date().toISOString().split('T')[0];
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const todayStr = now.toISOString().split('T')[0];
+            const firstDayMonthStr = `${year}-${month}-01`;
+
+            document.getElementById('filterDateFrom').value = firstDayMonthStr;
+            document.getElementById('filterDateTo').value = todayStr;
             applyDateFilter();
         }
 
@@ -1266,7 +1288,7 @@
                 type: 'bar',
                 data: {
                     labels: docentesList.slice(0, 10).map(d => d.id),
-                    datasets: [{ label: 'Atrasos (> 07:05 AM)', data: Array(10).fill(0), backgroundColor: '#f59e0b', borderRadius: 8 }]
+                    datasets: [{ label: 'Atrasos (> 07:00 AM)', data: Array(10).fill(0), backgroundColor: '#f59e0b', borderRadius: 8 }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
@@ -1323,7 +1345,7 @@
                     "Docente": d.name,
                     "Régimen": d.regimen,
                     "Entradas A Tiempo": aTiempo,
-                    "Atrasos (> 07:05 AM)": atrasos
+                    "Atrasos (> 07:00 AM)": atrasos
                 };
             });
 
@@ -1355,7 +1377,7 @@
 
             doc.autoTable({
                 startY: 30,
-                head: [['Código', 'N° Asignado', 'Apellidos y Nombres', 'Régimen', 'A Tiempo', 'Atrasos (> 07:05 AM)']],
+                head: [['Código', 'N° Asignado', 'Apellidos y Nombres', 'Régimen', 'A Tiempo', 'Atrasos (> 07:00 AM)']],
                 body: tableRows,
                 theme: 'grid'
             });
