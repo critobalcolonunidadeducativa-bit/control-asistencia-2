@@ -33,19 +33,19 @@
                         <i class="fa-solid fa-users-rectangle w-5"></i> Nómina y Resumen
                     </button>
                     <button type="button" onclick="switchTab('salidas')" id="nav-salidas" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition text-left">
-                        <i class="fa-solid fa-calendar-xmark w-5"></i> Salidas y Faltas
+                        <i class="fa-solid fa-calendar-xmark w-5"></i> Salidas y Permisos
                     </button>
                     <button type="button" onclick="switchTab('individual')" id="nav-individual" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition text-left">
                         <i class="fa-solid fa-user-pen w-5"></i> Ficha & Reporte Ind.
                     </button>
                     <button type="button" onclick="switchTab('biometrico')" id="nav-biometrico" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition text-left">
-                        <i class="fa-solid fa-fingerprint w-5"></i> Cargar Excel Biométrico
+                        <i class="fa-solid fa-fingerprint w-5"></i> Subir Biométrico Excel
                     </button>
                 </nav>
             </div>
             <div class="p-4 border-t border-slate-800 text-xs text-slate-500">
-                <p>Inspectoría General v12.0</p>
-                <p class="mt-1">Lector Automático Excel</p>
+                <p>Inspectoría General v13.0</p>
+                <p class="mt-1">Integración Total Diaria</p>
             </div>
         </aside>
 
@@ -85,18 +85,19 @@
                 <!-- TAB 1: DASHBOARD -->
                 <section id="tab-dashboard" class="space-y-8">
                     <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                        <span class="text-sm font-semibold text-slate-700"><i class="fa-solid fa-shield-halved text-emerald-600 mr-2"></i> Estado: Datos Sincronizados y Seguros</span>
+                        <span class="text-sm font-semibold text-slate-700"><i class="fa-solid fa-shield-halved text-emerald-600 mr-2"></i> Estado: Datos Biométricos Integrados</span>
                         <button type="button" onclick="triggerGlobalSave('Dashboard')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
-                            <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar Todo
                         </button>
                     </div>
 
+                    <!-- Tarjetas Métrica -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                         <div onclick="openMetricModal('docentes')" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-blue-400 transition">
                             <div>
                                 <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Docentes</p>
                                 <h3 id="statTotalDoc" class="text-3xl font-extrabold text-slate-800 mt-1">28</h3>
-                                <span class="text-xs text-emerald-600 font-medium mt-2 inline-block"><i class="fa-solid fa-check"></i> Nómina Activa</span>
+                                <span class="text-xs text-emerald-600 font-medium mt-2 inline-block"><i class="fa-solid fa-check"></i> Nómina Registrada</span>
                             </div>
                             <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-chalkboard-user"></i>
@@ -105,9 +106,9 @@
 
                         <div onclick="openMetricModal('atrasos')" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-amber-400 transition">
                             <div>
-                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Novedades</p>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Atrasos + Inasistencias</p>
                                 <h3 id="statAtrasos" class="text-3xl font-extrabold text-amber-600 mt-1">0</h3>
-                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Atrasos / Faltas / Permisos</span>
+                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Detectados en periodo</span>
                             </div>
                             <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-business-time"></i>
@@ -118,7 +119,7 @@
                             <div>
                                 <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Puntualidad General</p>
                                 <h3 id="statCumplimiento" class="text-3xl font-extrabold text-emerald-600 mt-1">100%</h3>
-                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Sin novedad</span>
+                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Proporción de asistencia a tiempo</span>
                             </div>
                             <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-bullseye"></i>
@@ -127,9 +128,9 @@
 
                         <div onclick="openMetricModal('registros')" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-purple-400 transition">
                             <div>
-                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Marcaciones Biométricas</p>
+                                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Lecturas Biométricas</p>
                                 <h3 id="statRegistros" class="text-3xl font-extrabold text-purple-600 mt-1">0</h3>
-                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Registros leídos</span>
+                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Marcaciones cargadas</span>
                             </div>
                             <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-fingerprint"></i>
@@ -137,21 +138,21 @@
                         </div>
                     </div>
 
-                    <!-- MÓDULO EXPORTACIÓN -->
+                    <!-- MÓDULO ESPECIAL DE EXPORTACIÓN -->
                     <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-6 rounded-2xl text-white shadow-md space-y-4 border border-slate-700">
                         <div>
                             <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-file-export text-emerald-400"></i> Centro de Exportación de Informes
+                                <i class="fa-solid fa-file-export text-emerald-400"></i> Centro de Exportación de Informes Consolidados
                             </h3>
-                            <p class="text-xs text-slate-300 mt-1">Genere reportes descargables en Excel o PDF horizontal con la nómina, atrasos, permisos y descripción de novedades.</p>
+                            <p class="text-xs text-slate-300 mt-1">Descargue reportes oficiales en Excel o PDF horizontal incluyendo atrasos, inasistencias y marcaciones diarias del biométrico.</p>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                             <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700 space-y-3">
                                 <h4 class="font-semibold text-sm text-emerald-300 flex items-center gap-2">
-                                    <i class="fa-solid fa-layer-group"></i> Reporte Consolidado General
+                                    <i class="fa-solid fa-layer-group"></i> Consolidado General (Toda la Nómina)
                                 </h4>
-                                <p class="text-xs text-slate-400">Desglose total de la nómina con atrasos y permisos.</p>
+                                <p class="text-xs text-slate-400">Desglose completo de los docentes con atrasos, inasistencias y permisos.</p>
                                 <div class="flex flex-wrap gap-2 pt-1">
                                     <button type="button" onclick="exportConsolidatedPDF()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition shadow-sm flex items-center gap-2">
                                         <i class="fa-solid fa-file-pdf"></i> PDF Consolidado (Horizontal)
@@ -182,13 +183,13 @@
                     <!-- Charts Grid -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm lg:col-span-2">
-                            <h3 class="font-bold text-slate-800 text-lg mb-4">Atrasos y Permisos por Docente</h3>
+                            <h3 class="font-bold text-slate-800 text-lg mb-4">Atrasos e Inasistencias por Docente</h3>
                             <div class="h-80"><canvas id="barChart"></canvas></div>
                         </div>
                         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                            <h3 class="font-bold text-slate-800 text-lg mb-4">Distribución de Novedades</h3>
+                            <h3 class="font-bold text-slate-800 text-lg mb-4">Distribución Diaria</h3>
                             <div class="h-64 relative flex items-center justify-center"><canvas id="donutChart"></canvas></div>
-                            <p id="chartSubtext" class="text-xs text-slate-400 text-center mt-4">Proporción general en el periodo.</p>
+                            <p id="chartSubtext" class="text-xs text-slate-400 text-center mt-4">Proporción general en el periodo seleccionado.</p>
                         </div>
                     </div>
                 </section>
@@ -198,8 +199,8 @@
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-100 pb-4">
                             <div>
-                                <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-users-rectangle text-blue-600 mr-2"></i> Nómina Oficial y Gestión de Docentes</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">Gestione docentes sin perder información.</p>
+                                <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-users-rectangle text-blue-600 mr-2"></i> Resumen de Nómina y Novedades del Biométrico</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Conteo exacto diario de atrasos, inasistencias y permisos.</p>
                             </div>
                             <div class="flex gap-2">
                                 <button type="button" onclick="openAddTeacherModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
@@ -214,14 +215,14 @@
                         <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                             <div class="relative w-full md:w-96">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><i class="fa-solid fa-search"></i></span>
-                                <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Buscar docente por nombre o código..." class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Buscar docente por nombre o ID biométrico..." class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="flex gap-2">
                                 <button type="button" onclick="exportConsolidatedExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-sm flex items-center gap-2">
                                     <i class="fa-solid fa-file-excel"></i> Excel Consolidado
                                 </button>
                                 <button type="button" onclick="exportConsolidatedPDF()" class="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-file-pdf"></i> PDF Consolidado (Horizontal)
+                                    <i class="fa-solid fa-file-pdf"></i> PDF Consolidado
                                 </button>
                             </div>
                         </div>
@@ -232,11 +233,12 @@
                                     <tr class="bg-slate-100 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
                                         <th class="p-4 font-semibold">N° Asignado</th>
                                         <th class="p-4 font-semibold">ID Biométrico</th>
-                                        <th class="p-4 font-semibold">Apellidos y Nombres del Docente</th>
+                                        <th class="p-4 font-semibold">Apellidos y Nombres</th>
                                         <th class="p-4 font-semibold text-center">Régimen</th>
-                                        <th class="p-4 font-semibold text-center">Atrasos</th>
-                                        <th class="p-4 font-semibold text-center">Permisos/Faltas</th>
-                                        <th class="p-4 font-semibold text-center">Acciones</th>
+                                        <th class="p-4 font-semibold text-center">Atrasos (Biométrico)</th>
+                                        <th class="p-4 font-semibold text-center">Inasistencias</th>
+                                        <th class="p-4 font-semibold text-center">Permisos</th>
+                                        <th class="p-4 font-semibold text-center">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-100 text-slate-700 font-medium" id="tableBody"></tbody>
@@ -245,24 +247,17 @@
                     </div>
                 </section>
 
-                <!-- TAB 3: REGISTRO SALIDAS Y FALTAS -->
+                <!-- TAB 3: REGISTRO SALIDAS Y PERMISOS -->
                 <section id="tab-salidas" class="space-y-6 hidden">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div class="border-b border-slate-100 pb-4 flex justify-between items-center">
                             <div>
-                                <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-calendar-xmark text-blue-600 mr-2"></i> Gestión de Salidas, Permisos y Faltas</h3>
-                                <p class="text-xs text-slate-500 mt-1">Registre, edite o elimine las novedades del personal docente en tiempo real.</p>
+                                <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-calendar-xmark text-blue-600 mr-2"></i> Gestión de Permisos y Novedades Manuales</h3>
+                                <p class="text-xs text-slate-500 mt-1">Registre o modifique manualmente justificativos o comisiones de servicio.</p>
                             </div>
-                            <div class="flex items-center gap-3">
-                                <div id="editModeIndicator" class="hidden bg-amber-50 text-amber-800 px-3 py-1.5 rounded-lg text-xs font-bold border border-amber-200 flex items-center gap-2 shadow-sm">
-                                    <i class="fa-solid fa-pen-to-square text-amber-600"></i>
-                                    <span>Editando Novedad #<span id="editIndexDisplay"></span></span>
-                                    <button type="button" onclick="cancelEdit()" class="ml-2 text-amber-900 hover:text-red-600 font-bold"><i class="fa-solid fa-xmark"></i> Cancelar</button>
-                                </div>
-                                <button type="button" onclick="triggerGlobalSave('Salidas y Faltas')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios en Registro
-                                </button>
-                            </div>
+                            <button type="button" onclick="triggerGlobalSave('Salidas y Permisos')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
+                                <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+                            </button>
                         </div>
 
                         <form onsubmit="handleSalidaSubmit(event)" class="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-200">
@@ -284,7 +279,7 @@
                                 </div>
                             </div>
 
-                            <div id="permisoCollapseSection" class="space-y-4 bg-blue-50/50 p-4 rounded-xl border border-blue-200">
+                            <div class="space-y-4 bg-blue-50/50 p-4 rounded-xl border border-blue-200">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-xs font-semibold text-blue-900 uppercase mb-1">Desde (Fecha y Hora)</label>
@@ -299,7 +294,7 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-xs font-semibold text-blue-900 uppercase mb-1">Motivo / Descripción</label>
-                                        <input type="text" id="permisoMotivo" placeholder="Ej. Cita médica IESS, trámite personal..." class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800">
+                                        <input type="text" id="permisoMotivo" placeholder="Ej. Cita médica IESS, calamidad doméstica..." class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800">
                                     </div>
                                     <div>
                                         <label class="block text-xs font-semibold text-blue-900 uppercase mb-1">Estado del Caso</label>
@@ -312,23 +307,20 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Observaciones Adicionales</label>
-                                <textarea id="salidaObservacion" rows="2" placeholder="Notas opcionales..." class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm text-slate-800"></textarea>
+                                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Observaciones</label>
+                                <textarea id="salidaObservacion" rows="2" placeholder="Notas adicionales..." class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm text-slate-800"></textarea>
                             </div>
 
                             <div class="flex justify-end gap-3">
                                 <button type="button" id="btnCancelEdit" onclick="cancelEdit()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-4 py-2.5 rounded-xl text-sm transition">Cancelar</button>
                                 <button type="submit" id="btnSubmitSalida" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition shadow-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-floppy-disk"></i> Registrar y Guardar Novedad
+                                    <i class="fa-solid fa-floppy-disk"></i> Registrar y Guardar
                                 </button>
                             </div>
                         </form>
 
                         <div class="space-y-3">
-                            <h4 class="font-bold text-slate-800 text-sm flex items-center justify-between">
-                                <span>Historial de Registros</span>
-                                <span class="text-xs font-normal text-slate-500">Modifique o elimine según necesite</span>
-                            </h4>
+                            <h4 class="font-bold text-slate-800 text-sm">Historial General de Novedades y Marcaciones</h4>
                             <div class="overflow-x-auto border border-slate-200 rounded-xl">
                                 <table class="w-full text-left border-collapse text-sm">
                                     <thead>
@@ -349,7 +341,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 4: FICHA INDIVIDUAL -->
+                <!-- TAB 4: FICHA INDIVIDUAL (MUESTRA CADA DÍA, ATRASO E INASISTENCIA DEL BIOMÉTRICO) -->
                 <section id="tab-individual" class="space-y-6 hidden">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
@@ -370,23 +362,27 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm bg-blue-50 p-4 rounded-xl border border-blue-100">
                             <div><strong class="text-blue-900">Docente:</strong> <span id="lblDocenteName" class="text-blue-800 font-bold">-</span></div>
-                            <div><strong class="text-blue-900">Régimen:</strong> <span class="text-blue-800 font-bold">LOEI</span></div>
-                            <div><strong class="text-blue-900">Total Novedades:</strong> <span id="lblDocenteNovedades" class="text-blue-800 font-bold">0</span></div>
+                            <div><strong class="text-blue-900">ID Biométrico:</strong> <span id="lblDocenteBioId" class="text-blue-800 font-bold">-</span></div>
+                            <div><strong class="text-blue-900">Atrasos Biométrico:</strong> <span id="lblDocenteAtrasos" class="text-amber-700 font-bold">0</span></div>
+                            <div><strong class="text-blue-900">Inasistencias:</strong> <span id="lblDocenteInasistencias" class="text-red-700 font-bold">0</span></div>
                         </div>
 
+                        <!-- Ficha Diaria Detallada -->
                         <div class="space-y-3">
-                            <h4 class="font-bold text-slate-800 text-sm">Detalle de Novedades del Docente</h4>
+                            <h4 class="font-bold text-slate-800 text-sm flex justify-between items-center">
+                                <span><i class="fa-solid fa-calendar-days text-blue-600 mr-2"></i> Reporte Diario de Marcaciones Biométricas y Novedades</span>
+                                <span class="text-xs text-slate-400 font-normal">Muestra cada día leído del biométrico con su hora y estado</span>
+                            </h4>
                             <div class="overflow-x-auto border border-slate-100 rounded-xl">
                                 <table class="w-full text-left border-collapse text-sm">
                                     <thead>
                                         <tr class="bg-slate-100 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
-                                            <th class="p-3">Tipo</th>
-                                            <th class="p-3">Fecha y Hora</th>
-                                            <th class="p-3">Motivo / Descripción</th>
-                                            <th class="p-3 text-center">Estado</th>
-                                            <th class="p-3">Observaciones</th>
+                                            <th class="p-3">Fecha</th>
+                                            <th class="p-3">Marcación Biométrico (Hora)</th>
+                                            <th class="p-3 text-center">Estado del Día</th>
+                                            <th class="p-3">Detalle / Permiso Asociado</th>
                                         </tr>
                                     </thead>
                                     <tbody id="indvDocenteTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
@@ -396,38 +392,39 @@
                     </div>
                 </section>
 
-                <!-- TAB 5: CARGAR EXCEL BIOMÉTRICO (NUEVA IMPLEMENTACIÓN COMPLETA) -->
+                <!-- TAB 5: SUBIR EXCEL BIOMÉTRICO CON MAPPING COMPLETO DIARIO -->
                 <section id="tab-biometrico" class="space-y-6 hidden">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div class="border-b border-slate-100 pb-4 flex justify-between items-center">
                             <div>
                                 <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-file-excel text-emerald-600 mr-2"></i> Subir Documento Excel del Biométrico</h3>
-                                <p class="text-xs text-slate-500 mt-1">Cargue el archivo Excel del biométrico para detectar automáticamente Atrasos e Inasistencias cruzando con el ID Asignado (Ej: Almeida = 3).</p>
+                                <p class="text-xs text-slate-500 mt-1">Cargue su archivo Excel del biométrico para reflejar instantáneamente los atrasos e inasistencias en el Dashboard, Nómina y Ficha de cada profesor.</p>
                             </div>
-                            <button type="button" onclick="triggerGlobalSave('Módulo Biométrico')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
+                            <button type="button" onclick="triggerGlobalSave('Subir Biométrico Excel')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
                                 <i class="fa-solid fa-floppy-disk"></i> Guardar Registros Biométricos
                             </button>
                         </div>
 
-                        <!-- Zona de Carga de Archivo Excel -->
+                        <!-- Subida de Archivo -->
                         <div class="bg-slate-50 p-6 rounded-2xl border-2 border-dashed border-slate-300 space-y-4 text-center">
                             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-2xl shadow-inner">
                                 <i class="fa-solid fa-cloud-arrow-up"></i>
                             </div>
                             <div>
                                 <label class="cursor-pointer bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition inline-flex items-center gap-2 shadow-sm">
-                                    <i class="fa-solid fa-file-excel"></i> Seleccionar Archivo Excel del Biométrico
+                                    <i class="fa-solid fa-file-excel"></i> Seleccionar Archivo Excel del Biométrico (.xlsx / .xls)
                                     <input type="file" id="excelFileInput" accept=".xlsx, .xls" onchange="processBiometricExcel(event)" class="hidden">
                                 </label>
-                                <p class="text-xs text-slate-400 mt-2">Formatos aceptados: .xlsx, .xls (El archivo se procesa de manera segura en su navegador)</p>
+                                <p class="text-xs text-slate-400 mt-2">Identifica automáticamente el ID asignado (Ejemplo: Almeida = 3) y calcula atrasos e inasistencias.</p>
                             </div>
                         </div>
 
-                        <!-- Estado del procesamiento -->
-                        <div id="excelProcessStatus" class="hidden bg-blue-50 p-4 rounded-xl border border-blue-200 text-xs font-medium text-blue-900 flex items-center justify-between">
-                            <span id="excelStatusMsg"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Procesando registros del Excel...</span>
+                        <!-- Status Box -->
+                        <div id="excelProcessStatus" class="hidden bg-blue-50 p-4 rounded-xl border border-blue-200 text-xs font-medium text-blue-900">
+                            <span id="excelStatusMsg"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Procesando archivo Excel...</span>
                         </div>
 
+                        <!-- Tabla de Registros Leídos -->
                         <div class="overflow-x-auto border border-slate-100 rounded-xl">
                             <table class="w-full text-left border-collapse text-sm">
                                 <thead>
@@ -435,13 +432,13 @@
                                         <th class="p-3">ID Bio Asignado</th>
                                         <th class="p-3">Docente Vinculado</th>
                                         <th class="p-3">Fecha y Hora Marcada</th>
-                                        <th class="p-3 text-center">Tipo Novedad Detectada</th>
+                                        <th class="p-3 text-center">Estado Detectado</th>
                                         <th class="p-3 text-center">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody id="biometricTableBody" class="divide-y divide-slate-100 text-slate-700">
                                     <tr>
-                                        <td colspan="5" class="p-4 text-center text-slate-400">Seleccione su archivo de Excel arriba para cargar y visualizar los registros.</td>
+                                        <td colspan="5" class="p-4 text-center text-slate-400">Seleccione su archivo de Excel arriba para procesar la lectura.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -453,7 +450,7 @@
         </main>
     </div>
 
-    <!-- MODAL: AGREGAR NUEVO DOCENTE -->
+    <!-- MODAL AGREGAR DOCENTE -->
     <div id="addTeacherModal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
@@ -467,7 +464,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">ID Biométrico (N° Asignado)</label>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">ID Biométrico (Ej: Almeida = 3)</label>
                         <input type="number" id="newDocBioId" required placeholder="Ej. 47" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800">
                     </div>
                     <div>
@@ -490,7 +487,7 @@
     <div id="metricModal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 id="modalTitle" class="font-bold text-lg text-slate-800">Detalle de Novedades</h3>
+                <h3 id="modalTitle" class="font-bold text-lg text-slate-800">Detalle Informativo</h3>
                 <button type="button" onclick="closeMetricModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div id="modalContent" class="max-h-96 overflow-y-auto space-y-3 text-sm"></div>
@@ -498,7 +495,7 @@
     </div>
 
     <script>
-        // NÓMINA OFICIAL CON ID BIOMÉTRICO (Ej: Almeida = 3)
+        // NÓMINA BASE CON ID BIOMÉTRICO (Ej: Almeida = 3)
         let defaultDocentes = [
             { id: "DOC-001", bioId: 3, name: "ALMEIDA ROMERO JHONNY PATRICIO", regimen: "LOEI", jornada: "Matutina" },
             { id: "DOC-002", bioId: 31, name: "ANDINO POZO MODESTO ABSALON", regimen: "LOEI", jornada: "Matutina" },
@@ -530,9 +527,9 @@
             { id: "DOC-028", bioId: 18, name: "YACELGA CORONEL MAYRA DE LOS ANGELES", regimen: "LOEI", jornada: "Matutina" }
         ];
 
-        let docentesList = JSON.parse(localStorage.getItem('docentesList_v12')) || defaultDocentes;
-        let salidasList = JSON.parse(localStorage.getItem('salidasList_v12')) || [];
-        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v12')) || [];
+        let docentesList = JSON.parse(localStorage.getItem('docentesList_v13')) || defaultDocentes;
+        let salidasList = JSON.parse(localStorage.getItem('salidasList_v13')) || [];
+        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v13')) || [];
 
         let barChartInstance = null;
         let donutChartInstance = null;
@@ -554,17 +551,17 @@
         };
 
         function saveData() {
-            localStorage.setItem('docentesList_v12', JSON.stringify(docentesList));
-            localStorage.setItem('salidasList_v12', JSON.stringify(salidasList));
-            localStorage.setItem('biometricLogs_v12', JSON.stringify(biometricLogs));
+            localStorage.setItem('docentesList_v13', JSON.stringify(docentesList));
+            localStorage.setItem('salidasList_v13', JSON.stringify(salidasList));
+            localStorage.setItem('biometricLogs_v13', JSON.stringify(biometricLogs));
         }
 
         function triggerGlobalSave(sectionName) {
             saveData();
-            alert(`💾 ¡Éxito! Todos los datos de [${sectionName}] y del sistema han sido guardados de manera permanente.`);
+            alert(`💾 ¡Éxito! Datos guardados de [${sectionName}] y del sistema completo de forma segura.`);
         }
 
-        // FUNCIÓN CLAVE: PROCESAR EL EXCEL DEL BIOMÉTRICO
+        // LECTURA DEL EXCEL DEL BIOMÉTRICO CON MAPEO DÍA A DÍA
         function processBiometricExcel(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -572,7 +569,7 @@
             const statusBox = document.getElementById('excelProcessStatus');
             const statusMsg = document.getElementById('excelStatusMsg');
             statusBox.classList.remove('hidden');
-            statusMsg.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Leyendo archivo Excel: ${file.name}...`;
+            statusMsg.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Leyendo marcas del archivo Excel...`;
 
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -583,141 +580,104 @@
                     const worksheet = workbook.Sheets[firstSheetName];
                     const jsonRows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-                    let registrosNuevos = 0;
+                    let totalLeidos = 0;
+                    let totalAtrasosCount = 0;
 
-                    // Escaneo inteligente de filas
                     jsonRows.forEach((row) => {
                         if (!row || row.length < 2) return;
 
-                        // Buscar ID Asignado en la primera o segunda columna
+                        // Buscar ID Asignado (Ejemplo Almeida = 3)
                         let extractedBioId = parseInt(row[0]) || parseInt(row[1]) || null;
                         let rawDateTime = row[1] || row[2] || '';
 
                         if (extractedBioId && rawDateTime) {
                             const docente = docentesList.find(d => d.bioId === extractedBioId);
                             if (docente) {
-                                // Determinar si es Atraso (hora posterior a 07:05:00)
-                                let horaStr = String(rawDateTime).split(' ')[1] || "07:00:00";
-                                let esAtraso = horaStr > "07:05:00";
-                                let tipoDetected = esAtraso ? "Atraso" : "Entrada Normal";
+                                let dateTimeStr = String(rawDateTime).trim();
+                                let parts = dateTimeStr.split(' ');
+                                let datePart = parts[0] || new Date().toISOString().split('T')[0];
+                                let timePart = parts[1] || "07:00:00";
 
-                                const newLog = {
-                                    id: Date.now() + Math.random(),
-                                    bioId: extractedBioId,
-                                    docId: docente.id,
-                                    name: docente.name,
-                                    datetime: String(rawDateTime),
-                                    tipo: tipoDetected
-                                };
+                                // Evaluar Atraso (Entrada posterior a las 07:05:00)
+                                let esAtraso = timePart > "07:05:00";
+                                let estado = esAtraso ? "Atraso" : "A Tiempo";
 
-                                biometricLogs.unshift(newLog);
-
-                                // Si es atraso, registrar como novedad en el historial automáticamente sin borrar nada
-                                if (esAtraso) {
-                                    const fechaSolo = String(rawDateTime).split(' ')[0] || new Date().toISOString().split('T')[0];
-                                    salidasList.unshift({
+                                // Evitar duplicar la misma marca exacta
+                                const duplicate = biometricLogs.some(l => l.bioId === extractedBioId && l.datetime === dateTimeStr);
+                                if (!duplicate) {
+                                    biometricLogs.unshift({
                                         id: Date.now() + Math.random(),
+                                        bioId: extractedBioId,
                                         docId: docente.id,
-                                        tipo: "Atraso",
-                                        desde: `${fechaSolo}T${horaStr.substring(0,5)}`,
-                                        hasta: `${fechaSolo}T13:00`,
-                                        motivo: `Atraso detectado por biométrico (${horaStr})`,
-                                        estado: "Injustificado",
-                                        obs: "Cargado automáticamente desde Excel del Biométrico"
+                                        name: docente.name,
+                                        datetime: dateTimeStr,
+                                        datePart: datePart,
+                                        timePart: timePart,
+                                        estado: estado
                                     });
+
+                                    // Si es atraso, se vincula a la lista general de novedades
+                                    if (esAtraso) {
+                                        salidasList.unshift({
+                                            id: Date.now() + Math.random(),
+                                            docId: docente.id,
+                                            tipo: "Atraso",
+                                            desde: `${datePart}T${timePart.substring(0,5)}`,
+                                            hasta: `${datePart}T13:00`,
+                                            motivo: `Atraso Biométrico detectado a las ${timePart}`,
+                                            estado: "Injustificado",
+                                            obs: "Registrado desde lectura Excel"
+                                        });
+                                        totalAtrasosCount++;
+                                    }
+                                    totalLeidos++;
                                 }
-                                registrosNuevos++;
                             }
                         }
                     });
 
                     saveData();
                     renderBiometricTable();
-                    renderSalidasHistorial();
-                    renderTable();
-                    updateCharts();
+                    applyDateFilter();
+                    loadDocenteSheet();
 
-                    statusMsg.innerHTML = `✅ ¡Procesamiento completado! Se registraron ${registrosNuevos} marcas biométricas vinculadas a la nómina de docentes.`;
+                    statusMsg.innerHTML = `✅ ¡Éxito! Se procesaron ${totalLeidos} marcaciones diarias del biométrico (${totalAtrasosCount} atrasos detectados).`;
                 } catch (err) {
-                    alert("⚠️ Ocurrió un inconveniente al leer el archivo. Asegúrese de subir un Excel válido.");
-                    statusMsg.innerText = "Error al procesar el archivo Excel.";
+                    alert("⚠️ Error al leer el Excel. Verifique que sea un archivo de reporte válido.");
+                    statusMsg.innerText = "Error en el formato del archivo.";
                 }
             };
-
             reader.readAsArrayBuffer(file);
         }
 
         function renderBiometricTable() {
             const tbody = document.getElementById('biometricTableBody');
-            if(!tbody) return;
+            if (!tbody) return;
             tbody.innerHTML = '';
 
             if (biometricLogs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Sin marcas biométricas registradas. Suba un archivo Excel arriba.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Sin marcas biométricas registradas. Cargue un Excel arriba.</td></tr>`;
                 return;
             }
 
             document.getElementById('statRegistros').innerText = biometricLogs.length;
 
             biometricLogs.slice(0, 50).forEach(log => {
-                const isAtraso = log.tipo === 'Atraso';
+                const isAtraso = log.estado === 'Atraso';
                 const badgeClass = isAtraso ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800';
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition border-b border-slate-100">
                         <td class="p-3 font-bold text-blue-600">#${log.bioId}</td>
                         <td class="p-3 font-medium">${log.docId} - ${log.name}</td>
-                        <td class="p-3 text-xs">${log.datetime}</td>
-                        <td class="p-3 text-center"><span class="px-2.5 py-1 ${badgeClass} rounded-full text-xs font-bold">${log.tipo}</span></td>
+                        <td class="p-3 text-xs font-mono">${log.datetime}</td>
+                        <td class="p-3 text-center"><span class="px-2.5 py-1 ${badgeClass} rounded-full text-xs font-bold">${log.estado}</span></td>
                         <td class="p-3 text-center">
                             <button type="button" onclick="goToDocente('${log.docId}')" class="px-2.5 py-1 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg text-xs font-semibold transition">Ver Ficha</button>
                         </td>
                     </tr>
                 `;
             });
-        }
-
-        // FUNCIONES MODAL AGREGAR DOCENTE
-        function openAddTeacherModal() {
-            document.getElementById('addTeacherModal').classList.remove('hidden');
-        }
-
-        function closeAddTeacherModal() {
-            document.getElementById('addTeacherModal').classList.add('hidden');
-            document.getElementById('newDocName').value = '';
-            document.getElementById('newDocBioId').value = '';
-        }
-
-        function handleAddNewTeacher(event) {
-            event.preventDefault();
-            const name = document.getElementById('newDocName').value.trim().toUpperCase();
-            const bioId = parseInt(document.getElementById('newDocBioId').value);
-            const regimen = document.getElementById('newDocRegimen').value;
-
-            const nextNum = docentesList.length + 1;
-            const id = "DOC-" + String(nextNum).padStart(3, '0');
-
-            docentesList.push({ id, bioId, name, regimen, jornada: "Matutina" });
-            saveData();
-            populateSelects();
-            renderTable();
-            updateCharts();
-            closeAddTeacherModal();
-            alert(`✅ Docente ${name} agregado con éxito a la nómina con ID Biométrico #${bioId}.`);
-        }
-
-        function deleteTeacher(docId) {
-            const docente = docentesList.find(d => d.id === docId);
-            if(!docente) return;
-
-            if(confirm(`⚠️ ¿Está seguro de eliminar al docente ${docente.name} de la nómina? Se mantendrán sus registros históricos.`)) {
-                docentesList = docentesList.filter(d => d.id !== docId);
-                saveData();
-                populateSelects();
-                renderTable();
-                updateCharts();
-                alert(`🗑️ Docente eliminado de la nómina.`);
-            }
         }
 
         function switchTab(tabId) {
@@ -765,30 +725,37 @@
             });
         }
 
+        // RENDER DE NÓMINA CON DETALLE DE ATRASOS E INASISTENCIAS
         function renderTable(data = docentesList) {
             const tbody = document.getElementById('tableBody');
             if(!tbody) return;
             tbody.innerHTML = '';
 
+            const from = document.getElementById('filterDateFrom').value;
+            const to = document.getElementById('filterDateTo').value;
             const currentSalidas = getFilteredSalidas();
             document.getElementById('statTotalDoc').innerText = docentesList.length;
 
             data.forEach(d => {
+                const docBioLogs = biometricLogs.filter(b => b.docId === d.id && b.datePart >= from && b.datePart <= to);
                 const docSalidas = currentSalidas.filter(s => s.docId === d.id);
-                const atrasosCount = docSalidas.filter(s => s.tipo === 'Atraso').length;
-                const permisosCount = docSalidas.filter(s => s.tipo !== 'Atraso').length;
+
+                const atrasosBioCount = docBioLogs.filter(b => b.estado === 'Atraso').length;
+                const inasistenciasCount = docSalidas.filter(s => s.tipo.includes('Falta')).length;
+                const permisosCount = docSalidas.filter(s => s.tipo.includes('Permiso')).length;
 
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition border-b border-slate-100">
                         <td class="p-4 font-bold text-blue-600">${d.id}</td>
-                        <td class="p-4 text-slate-500">${d.bioId}</td>
+                        <td class="p-4 text-slate-500">#${d.bioId}</td>
                         <td class="p-4">${d.name}</td>
                         <td class="p-4 text-center"><span class="px-2.5 py-1 bg-slate-100 rounded-md text-xs font-semibold">${d.regimen}</span></td>
-                        <td class="p-4 text-center font-bold ${atrasosCount > 0 ? 'text-amber-600' : 'text-slate-400'}">${atrasosCount}</td>
+                        <td class="p-4 text-center font-bold ${atrasosBioCount > 0 ? 'text-amber-600' : 'text-slate-400'}">${atrasosBioCount}</td>
+                        <td class="p-4 text-center font-bold ${inasistenciasCount > 0 ? 'text-red-600' : 'text-slate-400'}">${inasistenciasCount}</td>
                         <td class="p-4 text-center font-bold ${permisosCount > 0 ? 'text-blue-600' : 'text-slate-400'}">${permisosCount}</td>
                         <td class="p-4 text-center space-x-2 whitespace-nowrap">
-                            <button type="button" onclick="goToDocente('${d.id}')" class="px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg text-xs font-semibold transition">Ver</button>
-                            <button type="button" onclick="deleteTeacher('${d.id}')" class="px-2.5 py-1 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg text-xs font-semibold transition" title="Eliminar Docente"><i class="fa-solid fa-trash"></i></button>
+                            <button type="button" onclick="goToDocente('${d.id}')" class="px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg text-xs font-semibold transition">Ficha</button>
+                            <button type="button" onclick="deleteTeacher('${d.id}')" class="px-2.5 py-1 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg text-xs font-semibold transition" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
@@ -797,7 +764,7 @@
 
         function filterTable() {
             const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = docentesList.filter(d => d.name.toLowerCase().includes(query) || d.id.toLowerCase().includes(query));
+            const filtered = docentesList.filter(d => d.name.toLowerCase().includes(query) || d.id.toLowerCase().includes(query) || String(d.bioId).includes(query));
             renderTable(filtered);
         }
 
@@ -811,7 +778,7 @@
             if(exportDoc) exportDoc.innerHTML = '';
 
             docentesList.forEach(d => {
-                const optionStr = `<option value="${d.id}">${d.id} - ${d.name}</option>`;
+                const optionStr = `<option value="${d.id}">${d.id} - ${d.name} (Bio #${d.bioId})</option>`;
                 if(selectDoc) selectDoc.innerHTML += optionStr;
                 if(salidaDoc) salidaDoc.innerHTML += optionStr;
                 if(exportDoc) exportDoc.innerHTML += optionStr;
@@ -825,31 +792,59 @@
             loadDocenteSheet();
         }
 
+        // CARGA FICHA INDIVIDUAL DÍA A DÍA PONDERANDO EL BIOMÉTRICO Y LAS NOVEDADES
         function loadDocenteSheet() {
             const docId = document.getElementById('selectDocente').value;
             const docente = docentesList.find(d => d.id === docId);
             if(!docente) return;
-            document.getElementById('lblDocenteName').innerText = `${docente.id} - ${docente.name}`;
 
+            document.getElementById('lblDocenteName').innerText = `${docente.id} - ${docente.name}`;
+            document.getElementById('lblDocenteBioId').innerText = `#${docente.bioId}`;
+
+            const from = document.getElementById('filterDateFrom').value;
+            const to = document.getElementById('filterDateTo').value;
+
+            const docBioLogs = biometricLogs.filter(b => b.docId === docId && b.datePart >= from && b.datePart <= to);
             const docSalidas = salidasList.filter(s => s.docId === docId);
-            document.getElementById('lblDocenteNovedades').innerText = docSalidas.length;
+
+            const atrasosBio = docBioLogs.filter(b => b.estado === 'Atraso').length;
+            const inasistencias = docSalidas.filter(s => s.tipo.includes('Falta')).length;
+
+            document.getElementById('lblDocenteAtrasos').innerText = atrasosBio;
+            document.getElementById('lblDocenteInasistencias').innerText = inasistencias;
 
             const tbody = document.getElementById('indvDocenteTableBody');
             tbody.innerHTML = '';
-            if(docSalidas.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No hay registradas novedades para este docente.</td></tr>`;
+
+            if (docBioLogs.length === 0 && docSalidas.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">No hay registros diarios ni marcaciones para este docente en el rango de fechas.</td></tr>`;
                 return;
             }
 
+            // Mostrar marcas del biométrico día por día
+            docBioLogs.forEach(log => {
+                const isAtraso = log.estado === 'Atraso';
+                const badgeColor = isAtraso ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800';
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="p-3 font-semibold">${log.datePart}</td>
+                        <td class="p-3 font-mono">${log.timePart}</td>
+                        <td class="p-3 text-center"><span class="px-2 py-0.5 ${badgeColor} rounded font-semibold text-xs">${log.estado}</span></td>
+                        <td class="p-3 text-xs text-slate-500">Marcación detectada por Biométrico</td>
+                    </tr>
+                `;
+            });
+
+            // Mostrar novedades adicionales (Permisos / Faltas)
             docSalidas.forEach(item => {
                 const badgeColor = item.estado === 'Justificado' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
                 tbody.innerHTML += `
-                    <tr>
-                        <td class="p-3 font-semibold text-blue-600">${item.tipo}</td>
-                        <td class="p-3 text-xs">${item.desde.replace('T', ' ')} <br>al ${item.hasta.replace('T', ' ')}</td>
-                        <td class="p-3">${item.motivo || 'N/A'}</td>
-                        <td class="p-3 text-center"><span class="px-2 py-0.5 ${badgeColor} rounded font-semibold text-xs">${item.estado}</span></td>
-                        <td class="p-3 text-xs text-slate-500">${item.obs || 'N/A'}</td>
+                    <tr class="bg-blue-50/30">
+                        <td class="p-3 font-semibold text-blue-700">${item.desde.split('T')[0]}</td>
+                        <td class="p-3 text-xs">${item.desde.replace('T', ' ')} a ${item.hasta.replace('T', ' ')}</td>
+                        <td class="p-3 text-center"><span class="px-2 py-0.5 ${badgeColor} rounded font-semibold text-xs">${item.tipo}</span></td>
+                        <td class="p-3 text-xs text-slate-700">${item.motivo || 'N/A'} - ${item.obs || ''}</td>
                     </tr>
                 `;
             });
@@ -867,8 +862,7 @@
             const obs = document.getElementById('salidaObservacion').value || 'Ninguna';
 
             if(editIndex === -1) {
-                const newRecord = { id: Date.now(), docId, tipo, desde, hasta, motivo, estado, obs };
-                salidasList.unshift(newRecord);
+                salidasList.unshift({ id: Date.now(), docId, tipo, desde, hasta, motivo, estado, obs });
                 alert('✅ Novedad registrada con éxito.');
             } else {
                 salidasList[editIndex] = { ...salidasList[editIndex], docId, tipo, desde, hasta, motivo, estado, obs };
@@ -889,7 +883,7 @@
             const currentSalidas = getFilteredSalidas();
 
             if(currentSalidas.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-400">No hay registros en este rango de fechas. Complete el formulario arriba para agregar uno nuevo.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-400">No hay novedades registradas manualmente en este rango.</td></tr>`;
                 return;
             }
 
@@ -932,32 +926,59 @@
             document.getElementById('permisoEstadoCaso').value = item.estado;
             document.getElementById('salidaObservacion').value = item.obs;
 
-            document.getElementById('editModeIndicator').classList.remove('hidden');
-            document.getElementById('editIndexDisplay').innerText = index + 1;
-            document.getElementById('btnCancelEdit').classList.remove('hidden');
-            document.getElementById('btnSubmitSalida').className = "bg-amber-600 hover:bg-amber-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition shadow-sm flex items-center gap-2";
-            document.getElementById('btnSubmitSalida').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Actualizar Novedad`;
-
+            document.getElementById('btnSubmitSalida').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Actualizar`;
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function cancelEdit() {
             document.getElementById('editRecordIndex').value = -1;
-            document.getElementById('editModeIndicator').classList.add('hidden');
-            document.getElementById('btnCancelEdit').classList.add('hidden');
-            document.getElementById('btnSubmitSalida').className = "bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition shadow-sm flex items-center gap-2";
-            document.getElementById('btnSubmitSalida').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Registrar y Guardar Novedad`;
+            document.getElementById('btnSubmitSalida').innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Registrar y Guardar`;
             document.getElementById('salidaObservacion').value = '';
             document.getElementById('permisoMotivo').value = '';
         }
 
         function deleteSalida(index) {
-            if(confirm('⚠️ ¿Está completamente seguro de eliminar este registro de la lista?')) {
+            if(confirm('⚠️ ¿Desea eliminar esta novedad del historial?')) {
                 salidasList.splice(index, 1);
                 saveData();
                 applyDateFilter();
                 loadDocenteSheet();
-                alert('🗑️ Registro eliminado correctamente.');
+            }
+        }
+
+        function openAddTeacherModal() {
+            document.getElementById('addTeacherModal').classList.remove('hidden');
+        }
+
+        function closeAddTeacherModal() {
+            document.getElementById('addTeacherModal').classList.add('hidden');
+        }
+
+        function handleAddNewTeacher(event) {
+            event.preventDefault();
+            const name = document.getElementById('newDocName').value.trim().toUpperCase();
+            const bioId = parseInt(document.getElementById('newDocBioId').value);
+            const regimen = document.getElementById('newDocRegimen').value;
+
+            const nextNum = docentesList.length + 1;
+            const id = "DOC-" + String(nextNum).padStart(3, '0');
+
+            docentesList.push({ id, bioId, name, regimen, jornada: "Matutina" });
+            saveData();
+            populateSelects();
+            renderTable();
+            updateCharts();
+            closeAddTeacherModal();
+            alert(`✅ Docente ${name} agregado con ID Biométrico #${bioId}.`);
+        }
+
+        function deleteTeacher(docId) {
+            if(confirm(`⚠️ ¿Desea eliminar este docente de la nómina?`)) {
+                docentesList = docentesList.filter(d => d.id !== docId);
+                saveData();
+                populateSelects();
+                renderTable();
+                updateCharts();
             }
         }
 
@@ -967,13 +988,13 @@
             const content = document.getElementById('modalContent');
             content.innerHTML = '';
             if(type === 'docentes') {
-                title.innerText = `Nómina Actual de Docentes (${docentesList.length})`;
+                title.innerText = `Nómina Activa (${docentesList.length})`;
                 docentesList.forEach(d => {
-                    content.innerHTML += `<div class="p-2 border-b flex justify-between"><span class="font-bold text-blue-600">${d.id}</span><span>${d.name}</span></div>`;
+                    content.innerHTML += `<div class="p-2 border-b flex justify-between"><span class="font-bold text-blue-600">${d.id} (Bio #${d.bioId})</span><span>${d.name}</span></div>`;
                 });
             } else {
-                title.innerText = 'Resumen de Novedades';
-                content.innerHTML = `<p class="text-slate-500">Módulo actualizado de Inspectoría General.</p>`;
+                title.innerText = 'Detalle de Registros Biométricos';
+                content.innerHTML = `<p class="text-slate-500">Módulo de Inspectoría General sincronizado.</p>`;
             }
             modal.classList.remove('hidden');
         }
@@ -997,7 +1018,7 @@
             donutChartInstance = new Chart(ctxDonut, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Con Novedad', 'Sin Novedad'],
+                    labels: ['Atrasos / Faltas', 'Sin Novedad'],
                     datasets: [{ data: [0, docentesList.length], backgroundColor: ['#f59e0b', '#10b981'] }]
                 },
                 options: { responsive: true, maintainAspectRatio: false }
@@ -1007,16 +1028,23 @@
         function updateCharts() {
             if(!barChartInstance || !donutChartInstance) return;
 
-            const filteredSalidas = getFilteredSalidas();
-            const counts = docentesList.map(d => filteredSalidas.filter(s => s.docId === d.id).length);
+            const from = document.getElementById('filterDateFrom').value;
+            const to = document.getElementById('filterDateTo').value;
+
+            const totalAtrasosInasistencias = biometricLogs.filter(b => b.estado === 'Atraso' && b.datePart >= from && b.datePart <= to).length + getFilteredSalidas().length;
+            document.getElementById('statAtrasos').innerText = totalAtrasosInasistencias;
+
+            const counts = docentesList.map(d => {
+                const bCount = biometricLogs.filter(b => b.docId === d.id && b.estado === 'Atraso' && b.datePart >= from && b.datePart <= to).length;
+                const sCount = salidasList.filter(s => s.docId === d.id).length;
+                return bCount + sCount;
+            });
 
             barChartInstance.data.labels = docentesList.slice(0, 10).map(d => d.id);
             barChartInstance.data.datasets[0].data = counts.slice(0, 10);
             barChartInstance.update();
 
             const docentesConNovedad = counts.filter(c => c > 0).length;
-            document.getElementById('statAtrasos').innerText = filteredSalidas.length;
-            
             const totalDocs = docentesList.length || 1;
             const cumplimiento = Math.round(((totalDocs - docentesConNovedad) / totalDocs) * 100);
             document.getElementById('statCumplimiento').innerText = `${cumplimiento}%`;
@@ -1025,164 +1053,110 @@
             donutChartInstance.update();
         }
 
-        // EXPORTAR EXCEL CONSOLIDADO
         function exportConsolidatedExcel() {
             const from = document.getElementById('filterDateFrom').value;
             const to = document.getElementById('filterDateTo').value;
-            const filteredSalidas = getFilteredSalidas();
 
             const excelData = docentesList.map(d => {
-                const docSalidas = filteredSalidas.filter(s => s.docId === d.id);
-                const atrasos = docSalidas.filter(s => s.tipo === 'Atraso').length;
-                const permisos = docSalidas.filter(s => s.tipo !== 'Atraso').length;
-                const descripciones = docSalidas.map(s => `[${s.tipo}] ${s.motivo} (${s.desde.replace('T',' ')} a ${s.hasta.replace('T',' ')})`).join('; ') || 'Sin novedad';
+                const docBioLogs = biometricLogs.filter(b => b.docId === d.id && b.datePart >= from && b.datePart <= to);
+                const atrasosBio = docBioLogs.filter(b => b.estado === 'Atraso').length;
+                const docSalidas = salidasList.filter(s => s.docId === d.id);
+                const inasistencias = docSalidas.filter(s => s.tipo.includes('Falta')).length;
 
                 return {
                     "Código": d.id,
                     "ID Biométrico": d.bioId,
-                    "Apellidos y Nombres": d.name,
+                    "Docente": d.name,
                     "Régimen": d.regimen,
-                    "Total Atrasos": atrasos,
-                    "Total Permisos / Faltas": permisos,
-                    "Descripción de Novedades": descripciones
+                    "Atrasos Biométrico": atrasosBio,
+                    "Inasistencias / Faltas": inasistencias,
+                    "Permisos Manuales": docSalidas.length
                 };
             });
 
             const worksheet = XLSX.utils.json_to_sheet(excelData);
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Consolidado");
-            XLSX.writeFile(workbook, `Consolidado_Asistencia_${from}_al_${to}.xlsx`);
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Consolidado Biométrico");
+            XLSX.writeFile(workbook, `Consolidado_Asistencia_Biometrico_${from}_al_${to}.xlsx`);
         }
 
-        // EXPORTAR PDF CONSOLIDADO (HORIZONTAL)
         function exportConsolidatedPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
 
             const from = document.getElementById('filterDateFrom').value;
             const to = document.getElementById('filterDateTo').value;
-            const filteredSalidas = getFilteredSalidas();
 
             doc.setFontSize(16);
-            doc.setTextColor(15, 23, 42);
             doc.text("UNIDAD EDUCATIVA CRISTÓBAL COLÓN", 14, 15);
-            
             doc.setFontSize(11);
-            doc.setTextColor(71, 85, 105);
-            doc.text(`REPORTE CONSOLIDADO DE ASISTENCIA Y PERMISOS DOCENTES`, 14, 22);
-            doc.text(`Periodo: ${from} al ${to} | Total Docentes: ${docentesList.length}`, 14, 28);
+            doc.text(`REPORTE CONSOLIDADO DIARIO Y BIOMÉTRICO (${from} al ${to})`, 14, 22);
 
             const tableRows = docentesList.map(d => {
-                const docSalidas = filteredSalidas.filter(s => s.docId === d.id);
-                const atrasos = docSalidas.filter(s => s.tipo === 'Atraso').length;
-                const permisos = docSalidas.filter(s => s.tipo !== 'Atraso').length;
-                const descripciones = docSalidas.map(s => `• [${s.tipo}] ${s.motivo} (${s.desde.replace('T',' ')})`).join('\n') || 'Sin novedades';
+                const docBioLogs = biometricLogs.filter(b => b.docId === d.id && b.datePart >= from && b.datePart <= to);
+                const atrasosBio = docBioLogs.filter(b => b.estado === 'Atraso').length;
+                const docSalidas = salidasList.filter(s => s.docId === d.id);
+                const inasistencias = docSalidas.filter(s => s.tipo.includes('Falta')).length;
 
-                return [d.id, d.bioId, d.name, d.regimen, atrasos, permisos, descripciones];
+                return [d.id, `#${d.bioId}`, d.name, d.regimen, atrasosBio, inasistencias, docSalidas.length];
             });
 
             doc.autoTable({
-                startY: 34,
-                head: [['Código', 'ID Bio', 'Apellidos y Nombres', 'Régimen', 'Atrasos', 'Permisos', 'Descripción de Novedades']],
+                startY: 30,
+                head: [['Código', 'ID Bio', 'Apellidos y Nombres', 'Régimen', 'Atrasos Biométrico', 'Inasistencias', 'Permisos']],
                 body: tableRows,
-                theme: 'grid',
-                styles: { fontSize: 8, cellPadding: 2.5 },
-                headStyles: { fillColor: [15, 23, 42], textColor: [255, 255, 255], fontStyle: 'bold' },
-                columnStyles: {
-                    0: { cellWidth: 22 },
-                    1: { cellWidth: 16 },
-                    2: { cellWidth: 65 },
-                    3: { cellWidth: 20 },
-                    4: { cellWidth: 18, halign: 'center' },
-                    5: { cellWidth: 18, halign: 'center' },
-                    6: { cellWidth: 'auto' }
-                }
+                theme: 'grid'
             });
 
-            doc.save(`Consolidado_Asistencia_${from}_al_${to}.pdf`);
+            doc.save(`Consolidado_Biometrico_${from}_al_${to}.pdf`);
         }
 
-        // EXPORTAR EXCEL INDIVIDUAL
         function exportIndividualExcel() {
             const docId = document.getElementById('exportSelectDocente').value || document.getElementById('selectDocente').value;
             const docente = docentesList.find(d => d.id === docId);
-            if(!docente) return alert("Seleccione un docente válido.");
+            if(!docente) return alert("Seleccione un docente.");
 
-            const docSalidas = salidasList.filter(s => s.docId === docId);
+            const docBioLogs = biometricLogs.filter(b => b.docId === docId);
 
-            const excelData = docSalidas.map(s => ({
-                "Código Docente": docente.id,
-                "Nombre Docente": docente.name,
-                "Tipo Novedad": s.tipo,
-                "Desde": s.desde.replace('T', ' '),
-                "Hasta": s.hasta.replace('T', ' '),
-                "Motivo / Descripción": s.motivo,
-                "Estado": s.estado,
-                "Observaciones": s.obs
+            const excelData = docBioLogs.map(l => ({
+                "ID Biométrico": `#${l.bioId}`,
+                "Docente": docente.name,
+                "Fecha": l.datePart,
+                "Hora Marcación": l.timePart,
+                "Estado del Día": l.estado
             }));
 
-            if(excelData.length === 0) {
-                excelData.push({
-                    "Código Docente": docente.id,
-                    "Nombre Docente": docente.name,
-                    "Tipo Novedad": "Sin registros",
-                    "Motivo / Descripción": "Sin novedades registradas"
-                });
-            }
-
-            const worksheet = XLSX.utils.json_to_sheet(excelData);
+            const worksheet = XLSX.utils.json_to_sheet(excelData.length ? excelData : [{ Docente: docente.name, Detalle: "Sin registros" }]);
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Ficha Individual");
-            XLSX.writeFile(workbook, `Reporte_Individual_${docente.id}_${docente.name.replace(/ /g,'_')}.xlsx`);
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Ficha Diaria");
+            XLSX.writeFile(workbook, `Ficha_Biometrica_${docente.id}_${docente.name.replace(/ /g,'_')}.xlsx`);
         }
 
-        // EXPORTAR PDF INDIVIDUAL (HORIZONTAL)
         function exportIndividualPDF() {
             const docId = document.getElementById('exportSelectDocente').value || document.getElementById('selectDocente').value;
             const docente = docentesList.find(d => d.id === docId);
-            if(!docente) return alert("Seleccione un docente válido.");
+            if(!docente) return alert("Seleccione un docente.");
 
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
 
-            const docSalidas = salidasList.filter(s => s.docId === docId);
+            const docBioLogs = biometricLogs.filter(b => b.docId === docId);
 
             doc.setFontSize(16);
-            doc.setTextColor(15, 23, 42);
             doc.text("UNIDAD EDUCATIVA CRISTÓBAL COLÓN", 14, 15);
-
             doc.setFontSize(11);
-            doc.setTextColor(71, 85, 105);
-            doc.text(`FICHA INDIVIDUAL DE CONTROL DE ASISTENCIA Y PERMISOS`, 14, 22);
-            
-            doc.setFontSize(10);
-            doc.setTextColor(15, 23, 42);
-            doc.text(`Docente: ${docente.id} - ${docente.name}`, 14, 30);
-            doc.text(`Régimen: ${docente.regimen} | ID Biométrico: ${docente.bioId} | Total Novedades Registradas: ${docSalidas.length}`, 14, 36);
+            doc.text(`FICHA INDIVIDUAL DIARIA DE BIOMÉTRICO: ${docente.id} - ${docente.name} (Bio #${docente.bioId})`, 14, 22);
 
-            const tableRows = docSalidas.map(s => [
-                s.tipo,
-                s.desde.replace('T', ' '),
-                s.hasta.replace('T', ' '),
-                s.motivo || 'N/A',
-                s.estado,
-                s.obs || 'N/A'
-            ]);
-
-            if(tableRows.length === 0) {
-                tableRows.push(['Sin registros', '-', '-', 'No presenta novedades registradas', '-', '-']);
-            }
+            const tableRows = docBioLogs.map(l => [l.datePart, l.timePart, l.estado, "Marcación Biométrica Registrada"]);
 
             doc.autoTable({
-                startY: 42,
-                head: [['Tipo Novedad', 'Desde', 'Hasta', 'Motivo / Descripción', 'Estado', 'Observaciones']],
-                body: tableRows,
-                theme: 'grid',
-                styles: { fontSize: 9, cellPadding: 3 },
-                headStyles: { fillColor: [37, 99, 235], textColor: [255, 255, 255], fontStyle: 'bold' }
+                startY: 30,
+                head: [['Fecha', 'Hora Marcada', 'Estado del Día', 'Detalle']],
+                body: tableRows.length ? tableRows : [['-', '-', 'Sin Marcaciones', '-']],
+                theme: 'grid'
             });
 
-            doc.save(`Ficha_Individual_${docente.id}_${docente.name.replace(/ /g,'_')}.pdf`);
+            doc.save(`Ficha_Individual_${docente.id}.pdf`);
         }
     </script>
 </body>
