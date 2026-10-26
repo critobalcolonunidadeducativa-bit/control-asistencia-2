@@ -32,6 +32,9 @@
                     <button type="button" onclick="switchTab('resumen')" id="nav-resumen" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition text-left">
                         <i class="fa-solid fa-users-rectangle w-5"></i> Nómina y Resumen
                     </button>
+                    <button type="button" onclick="switchTab('atrasos-manuales')" id="nav-atrasos-manuales" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition text-left text-amber-400 font-semibold">
+                        <i class="fa-solid fa-clock-rotate-left w-5"></i> Atrasos Manuales
+                    </button>
                     <button type="button" onclick="switchTab('salidas')" id="nav-salidas" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition text-left">
                         <i class="fa-solid fa-calendar-xmark w-5"></i> Salidas y Permisos
                     </button>
@@ -44,8 +47,8 @@
                 </nav>
             </div>
             <div class="p-4 border-t border-slate-800 text-xs text-slate-500 space-y-1">
-                <p>Inspectoría General v16.0</p>
-                <p class="text-emerald-400 font-semibold"><i class="fa-solid fa-sparkles mr-1"></i> Mini Gemini Integrado</p>
+                <p>Inspectoría General v17.0</p>
+                <p class="text-emerald-400 font-semibold"><i class="fa-solid fa-sparkles mr-1"></i> Mini Gemini Conectado</p>
             </div>
         </aside>
 
@@ -90,7 +93,7 @@
                             <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-lg font-bold"><i class="fa-solid fa-clock"></i></div>
                             <div>
                                 <h3 class="font-bold text-sm text-blue-200">Horario Oficial de Asistencia</h3>
-                                <p class="text-xs text-slate-300">Entrada: <strong>07:00 AM</strong> (Atraso desde las <strong>07:01 AM</strong>) | Salida: <strong>13:00 PM</strong> (Miércoles: <strong>15:00 PM</strong>)</p>
+                                <p class="text-xs text-slate-300">Entrada: <strong>07:00 AM</strong> (Atraso contabilizado desde las <strong>07:01 AM</strong>) | Salida: <strong>13:00 PM</strong> (Miércoles: <strong>15:00 PM</strong>)</p>
                             </div>
                         </div>
                         <button type="button" onclick="triggerGlobalSave('Dashboard')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
@@ -164,7 +167,7 @@
                         <div id="geminiChatBox" class="h-48 overflow-y-auto bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3 text-xs">
                             <div class="bg-purple-100/70 border border-purple-200 text-purple-950 p-3 rounded-xl max-w-xl">
                                 <strong><i class="fa-solid fa-robot mr-1 text-purple-600"></i> Mini Gemini:</strong>
-                                ¡Hola! Estoy conectado directamente con las carpetas, la nómina y los registros. Pregúntame por ejemplo: <em>"¿Cuántos atrasos tiene Almeida?"</em> o <em>"¿Qué docentes llegaron tarde este mes?"</em>.
+                                ¡Hola! Estoy conectado directamente con las carpetas, la nómina, los atrasos manuales y biométricos. Pregúntame por ejemplo: <em>"¿Cuántos atrasos tiene Almeida?"</em> o <em>"¿Qué docentes llegaron tarde este mes?"</em>.
                             </div>
                         </div>
 
@@ -273,7 +276,7 @@
                                         <th class="p-4 font-semibold">N° Asignado (Biométrico)</th>
                                         <th class="p-4 font-semibold">Apellidos y Nombres</th>
                                         <th class="p-4 font-semibold text-center">Régimen</th>
-                                        <th class="p-4 font-semibold text-center">Atrasos (Biométrico)</th>
+                                        <th class="p-4 font-semibold text-center">Atrasos Totales</th>
                                         <th class="p-4 font-semibold text-center">Faltas / Permisos</th>
                                         <th class="p-4 font-semibold text-center">Acción</th>
                                     </tr>
@@ -284,12 +287,85 @@
                     </div>
                 </section>
 
-                <!-- TAB 3: REGISTRO SALIDAS Y PERMISOS -->
+                <!-- NUEVA SECCIÓN: ATRASOS MANUALES -->
+                <section id="tab-atrasos-manuales" class="space-y-6 hidden">
+                    <div class="bg-white p-6 rounded-2xl border border-amber-200 shadow-sm space-y-6">
+                        <div class="border-b border-amber-100 pb-4 flex justify-between items-center">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                    <i class="fa-solid fa-clock-rotate-left text-amber-500"></i> Registro de Atrasos Manuales
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1">Registra atrasos manualmente para docentes cuando no usen el biométrico o lleguen tarde por cualquier eventualidad.</p>
+                            </div>
+                            <button type="button" onclick="triggerGlobalSave('Atrasos Manuales')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
+                                <i class="fa-solid fa-floppy-disk"></i> Guardar Atrasos
+                            </button>
+                        </div>
+
+                        <form onsubmit="handleAtrasoManualSubmit(event)" class="space-y-4 bg-amber-50/50 p-6 rounded-xl border border-amber-200">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-amber-900 uppercase mb-1">Docente</label>
+                                    <select id="atrasoManualDocente" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500"></select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-amber-900 uppercase mb-1">Fecha del Atraso</label>
+                                    <input type="date" id="atrasoManualFecha" required class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-amber-900 uppercase mb-1">Hora de Llegada (ej. 07:15)</label>
+                                    <input type="time" id="atrasoManualHora" required class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-amber-900 uppercase mb-1">Motivo / Justificación</label>
+                                    <input type="text" id="atrasoManualMotivo" placeholder="Ej. Tráfico, imprevisto personal..." class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-amber-900 uppercase mb-1">Estado</label>
+                                    <select id="atrasoManualEstado" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800">
+                                        <option value="Injustificado">Injustificado</option>
+                                        <option value="Justificado">Justificado</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end gap-3 pt-2">
+                                <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition shadow-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-plus-circle"></i> Registrar Atraso Manual
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-slate-800 text-sm">Lista de Atrasos Registrados Manualmente</h4>
+                            <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                                <table class="w-full text-left border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-amber-100/50 text-slate-700 uppercase text-xs tracking-wider border-b border-amber-200">
+                                            <th class="p-3">Docente</th>
+                                            <th class="p-3">Fecha</th>
+                                            <th class="p-3">Hora Llegada</th>
+                                            <th class="p-3">Motivo</th>
+                                            <th class="p-3 text-center">Estado</th>
+                                            <th class="p-3 text-center">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="historialAtrasosManualesBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 4: REGISTRO SALIDAS Y PERMISOS -->
                 <section id="tab-salidas" class="space-y-6 hidden">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div class="border-b border-slate-100 pb-4 flex justify-between items-center">
                             <div>
-                                <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-calendar-xmark text-blue-600 mr-2"></i> Gestión de Permisos y Novedades Manuales</h3>
+                                <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-calendar-xmark text-blue-600 mr-2"></i> Gestión de Permisos y Novedades</h3>
                                 <p class="text-xs text-slate-500 mt-1">Registre o modifique manualmente justificativos o permisos institucionales.</p>
                             </div>
                             <button type="button" onclick="triggerGlobalSave('Salidas y Permisos')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
@@ -307,7 +383,6 @@
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Tipo de Novedad</label>
                                     <select id="tipoNovedad" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                        <option value="Atraso">Atraso Manual</option>
                                         <option value="Salida por Permiso" selected>Salida por Permiso</option>
                                         <option value="Falta Justificada">Falta Justificada</option>
                                         <option value="Falta Injustificada">Falta Injustificada</option>
@@ -351,7 +426,7 @@
                             <div class="flex justify-end gap-3">
                                 <button type="button" id="btnCancelEdit" onclick="cancelEdit()" class="hidden bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-4 py-2.5 rounded-xl text-sm transition">Cancelar</button>
                                 <button type="submit" id="btnSubmitSalida" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition shadow-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-floppy-disk"></i> Registrar Novedad
+                                    <i class="fa-solid fa-floppy-disk"></i> Registrar Permiso
                                 </button>
                             </div>
                         </form>
@@ -378,7 +453,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 4: FICHA INDIVIDUAL DIARIA -->
+                <!-- TAB 5: FICHA INDIVIDUAL DIARIA -->
                 <section id="tab-individual" class="space-y-6 hidden">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
@@ -420,7 +495,7 @@
                                             <th class="p-3">Día</th>
                                             <th class="p-3">Hora de Marcación</th>
                                             <th class="p-3 text-center">Estado de Entrada</th>
-                                            <th class="p-3">Horario Salida Requerida</th>
+                                            <th class="p-3">Origen / Observación</th>
                                         </tr>
                                     </thead>
                                     <tbody id="indvDocenteTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
@@ -430,7 +505,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 5: GESTOR DE CARPETAS DE ARCHIVOS BIOMÉTRICOS -->
+                <!-- TAB 6: GESTOR DE CARPETAS DE ARCHIVOS BIOMÉTRICOS -->
                 <section id="tab-biometrico" class="space-y-6 hidden">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div class="border-b border-slate-100 pb-4 flex justify-between items-center">
@@ -598,16 +673,17 @@
             { id: "DOC-028", bioId: 18, name: "YACELGA CORONEL MAYRA DE LOS ANGELES", regimen: "LOEI" }
         ];
 
-        let docentesList = JSON.parse(localStorage.getItem('docentesList_v16')) || defaultDocentes;
-        let salidasList = JSON.parse(localStorage.getItem('salidasList_v16')) || [];
-        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v16')) || [];
-        let uploadedFilesList = JSON.parse(localStorage.getItem('uploadedFilesList_v16')) || [];
+        let docentesList = JSON.parse(localStorage.getItem('docentesList_v17')) || defaultDocentes;
+        let salidasList = JSON.parse(localStorage.getItem('salidasList_v17')) || [];
+        let atrasosManualesList = JSON.parse(localStorage.getItem('atrasosManualesList_v17')) || [];
+        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v17')) || [];
+        let uploadedFilesList = JSON.parse(localStorage.getItem('uploadedFilesList_v17')) || [];
 
         let barChartInstance = null;
         let donutChartInstance = null;
 
         window.onload = function() {
-            // Establecer por defecto desde el 1er día del mes actual hasta el día de hoy
+            // Configuración inicial de fechas: 1er día del mes actual hasta el día de hoy
             const now = new Date();
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -616,10 +692,13 @@
 
             document.getElementById('filterDateFrom').value = firstDayMonthStr;
             document.getElementById('filterDateTo').value = todayStr;
+            document.getElementById('atrasoManualFecha').value = todayStr;
+            document.getElementById('atrasoManualHora').value = "07:15";
             document.getElementById('permisoDesde').value = todayStr + "T08:00";
             document.getElementById('permisoHasta').value = todayStr + "T12:00";
 
             populateSelects();
+            renderAtrasosManualesHistorial();
             renderSalidasHistorial();
             renderTable();
             initCharts();
@@ -629,10 +708,11 @@
         };
 
         function saveData() {
-            localStorage.setItem('docentesList_v16', JSON.stringify(docentesList));
-            localStorage.setItem('salidasList_v16', JSON.stringify(salidasList));
-            localStorage.setItem('biometricLogs_v16', JSON.stringify(biometricLogs));
-            localStorage.setItem('uploadedFilesList_v16', JSON.stringify(uploadedFilesList));
+            localStorage.setItem('docentesList_v17', JSON.stringify(docentesList));
+            localStorage.setItem('salidasList_v17', JSON.stringify(salidasList));
+            localStorage.setItem('atrasosManualesList_v17', JSON.stringify(atrasosManualesList));
+            localStorage.setItem('biometricLogs_v17', JSON.stringify(biometricLogs));
+            localStorage.setItem('uploadedFilesList_v17', JSON.stringify(uploadedFilesList));
         }
 
         function triggerGlobalSave(sectionName) {
@@ -640,7 +720,42 @@
             alert(`💾 ¡Éxito! Todos los datos de [${sectionName}] han sido guardados sin perder nada.`);
         }
 
-        // LECTOR DE EXCEL Y DETECCIÓN DE ATRASOS DESDE LAS 07:01 AM
+        // PARSER ULTRA ROBUSTO DE HORA (Soporta Horas String y Números de Serie de Excel)
+        function parseTimeValue(val) {
+            if (val === undefined || val === null) return null;
+            let str = String(val).trim();
+
+            // Si es número flotante de Excel (ej: 0.2923611 -> 07:01:00)
+            if (!isNaN(str) && parseFloat(str) > 0 && parseFloat(str) < 1) {
+                let totalSeconds = Math.round(parseFloat(str) * 86400);
+                let hours = Math.floor(totalSeconds / 3600);
+                let minutes = Math.floor((totalSeconds % 3600) / 60);
+                let seconds = totalSeconds % 60;
+                return `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+            }
+
+            // Si contiene hora en texto tipo "07:01", "7:01:00", "07:01 AM"
+            if (str.includes(':')) {
+                let timeOnly = str;
+                if (str.includes(' ')) {
+                    let parts = str.split(' ');
+                    // Buscar la parte que tiene dos puntos
+                    timeOnly = parts.find(p => p.includes(':')) || str;
+                }
+
+                let timeParts = timeOnly.split(':');
+                let h = parseInt(timeParts[0]);
+                let m = parseInt(timeParts[1] || 0);
+                let s = parseInt(timeParts[2] || 0);
+
+                if (!isNaN(h) && !isNaN(m)) {
+                    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                }
+            }
+            return null;
+        }
+
+        // LECTOR DE EXCEL CON DETECCIÓN ULTRA REVISADA DE ATRASOS (> 07:00:00)
         function processBiometricExcel(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -648,7 +763,7 @@
             const statusBox = document.getElementById('excelProcessStatus');
             const statusMsg = document.getElementById('excelStatusMsg');
             statusBox.classList.remove('hidden');
-            statusMsg.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Analizando archivo y creando carpeta...`;
+            statusMsg.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Analizando archivo y verificando marcaciones...`;
 
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -678,6 +793,7 @@
                             if (cellVal === undefined || cellVal === null) return;
                             let strVal = String(cellVal).trim();
 
+                            // Detección de ID Biométrico
                             if (!bioIdFound && !isNaN(strVal) && parseInt(strVal) > 0 && parseInt(strVal) < 200) {
                                 let num = parseInt(strVal);
                                 if (docentesList.some(d => d.bioId === num)) {
@@ -685,17 +801,15 @@
                                 }
                             }
 
-                            if (strVal.includes(':')) {
-                                if (strVal.includes('-') || strVal.includes('/')) {
-                                    let parts = strVal.split(' ');
-                                    if (parts.length >= 2) {
-                                        dateStrFound = parts[0];
-                                        timeStrFound = parts[1];
-                                    }
-                                } else {
-                                    timeStrFound = strVal;
-                                }
-                            } else if ((strVal.includes('-') || strVal.includes('/')) && strVal.length >= 8) {
+                            // Detección de Hora
+                            let parsedT = parseTimeValue(cellVal);
+                            if (parsedT) {
+                                timeStrFound = parsedT;
+                            }
+
+                            // Detección de Fecha
+                            if ((strVal.includes('-') || strVal.includes('/')) && strVal.length >= 8) {
+                                if (strVal.includes(' ')) strVal = strVal.split(' ')[0];
                                 dateStrFound = strVal;
                             }
                         });
@@ -704,7 +818,6 @@
                             const docente = docentesList.find(d => d.bioId === bioIdFound);
                             if (docente) {
                                 let cleanTime = timeStrFound || "07:00:00";
-                                if (cleanTime.length === 5) cleanTime += ":00";
 
                                 let cleanDate = dateStrFound || new Date().toISOString().split('T')[0];
                                 if (cleanDate.includes('/')) {
@@ -714,7 +827,7 @@
                                     }
                                 }
 
-                                // REGLA: Atraso desde las 07:01 AM (cualquier hora mayor a 07:00:00)
+                                // REGLA DE ATRASO ESTRICTA: Cualquier hora estrictamente mayor a 07:00:00 (i.e. 07:00:01 o 07:01 en adelante)
                                 let esAtraso = cleanTime > "07:00:00";
                                 let estadoEntrada = esAtraso ? "Atraso" : "A Tiempo";
 
@@ -734,17 +847,6 @@
                                 biometricLogs.unshift(logItem);
 
                                 if (esAtraso) {
-                                    salidasList.unshift({
-                                        id: Date.now() + Math.random(),
-                                        fileId: fileId,
-                                        docId: docente.id,
-                                        tipo: "Atraso",
-                                        desde: `${cleanDate}T${cleanTime.substring(0,5)}`,
-                                        hasta: `${cleanDate}T13:00`,
-                                        motivo: `Atraso Biométrico (${cleanTime})`,
-                                        estado: "Injustificado",
-                                        obs: `Importado de ${fileName}`
-                                    });
                                     atrasosCount++;
                                 }
                                 fileLogsCount++;
@@ -766,16 +868,85 @@
                     loadDocenteSheet();
 
                     if (fileLogsCount > 0) {
-                        statusMsg.innerHTML = `✅ ¡Carpeta creada con éxito! Se leyeron ${fileLogsCount} registros (${atrasosCount} atrasos desde las 07:01 AM).`;
+                        statusMsg.innerHTML = `✅ ¡Carpeta procesada! Se importaron ${fileLogsCount} marcaciones (${atrasosCount} atrasos detectados desde las 07:01 AM).`;
                     } else {
-                        statusMsg.innerHTML = `⚠️ Carpeta creada, pero no se detectaron marcaciones válidas con los IDs de la nómina.`;
+                        statusMsg.innerHTML = `⚠️ Carpeta creada, pero no se detectaron marcaciones que coincidan con los números de nómina.`;
                     }
                 } catch (err) {
                     alert("⚠️ Error al leer el archivo Excel.");
-                    statusMsg.innerText = "Error en formato.";
+                    statusMsg.innerText = "Error en formato de Excel.";
                 }
             };
             reader.readAsArrayBuffer(file);
+        }
+
+        // GESTIÓN DE ATRASOS MANUALES
+        function handleAtrasoManualSubmit(e) {
+            e.preventDefault();
+            const docId = document.getElementById('atrasoManualDocente').value;
+            const fecha = document.getElementById('atrasoManualFecha').value;
+            const hora = document.getElementById('atrasoManualHora').value;
+            const motivo = document.getElementById('atrasoManualMotivo').value || 'Atraso manual registrado por Inspectoría';
+            const estado = document.getElementById('atrasoManualEstado').value;
+
+            const docente = docentesList.find(d => d.id === docId);
+
+            atrasosManualesList.unshift({
+                id: 'AT-MAN-' + Date.now(),
+                docId: docId,
+                name: docente ? docente.name : 'Docente',
+                fecha: fecha,
+                hora: hora,
+                motivo: motivo,
+                estado: estado
+            });
+
+            saveData();
+            renderAtrasosManualesHistorial();
+            applyDateFilter();
+            document.getElementById('atrasoManualMotivo').value = '';
+            alert("✅ Atraso manual registrado correctamente.");
+        }
+
+        function renderAtrasosManualesHistorial() {
+            const tbody = document.getElementById('historialAtrasosManualesBody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+
+            const from = document.getElementById('filterDateFrom').value;
+            const to = document.getElementById('filterDateTo').value;
+
+            const filtered = atrasosManualesList.filter(a => a.fecha >= from && a.fecha <= to);
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">No hay atrasos manuales registrados en este periodo.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const badgeColor = item.estado === 'Justificado' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 border-b border-slate-100">
+                        <td class="p-3 font-semibold text-blue-600">${item.docId} - ${item.name}</td>
+                        <td class="p-3 font-medium">${item.fecha}</td>
+                        <td class="p-3 font-mono font-bold text-amber-600">${item.hora}</td>
+                        <td class="p-3">${item.motivo}</td>
+                        <td class="p-3 text-center"><span class="px-2.5 py-1 ${badgeColor} rounded-full font-bold text-xs">${item.estado}</span></td>
+                        <td class="p-3 text-center">
+                            <button type="button" onclick="deleteAtrasoManual('${item.id}')" class="px-3 py-1 bg-red-50 hover:bg-red-600 hover:text-white text-red-600 rounded-lg text-xs font-bold transition">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function deleteAtrasoManual(id) {
+            if(confirm("⚠️ ¿Desea eliminar este atraso manual?")) {
+                atrasosManualesList = atrasosManualesList.filter(a => a.id !== id);
+                saveData();
+                renderAtrasosManualesHistorial();
+                applyDateFilter();
+            }
         }
 
         function renderFoldersContainer() {
@@ -816,7 +987,7 @@
 
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex justify-between items-center text-xs">
                             <span class="text-slate-600">Atrasos en archivo:</span>
-                            <span class="font-bold text-amber-600">${folder.atrasosCount} detectados</span>
+                            <span class="font-bold text-amber-600">${folder.atrasosCount} detectados (> 07:00 AM)</span>
                         </div>
 
                         <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
@@ -861,10 +1032,9 @@
         }
 
         function deleteFolder(id) {
-            if(confirm("⚠️ ¿Desea eliminar esta carpeta de biométrico? Se borrarán las marcaciones y atrasos asociados a este archivo Excel.")) {
+            if(confirm("⚠️ ¿Desea eliminar esta carpeta de biométrico? Se borrarán las marcaciones asociadas a este archivo Excel.")) {
                 uploadedFilesList = uploadedFilesList.filter(f => f.id !== id);
                 biometricLogs = biometricLogs.filter(b => b.fileId !== id);
-                salidasList = salidasList.filter(s => s.fileId !== id || !s.obs.includes('Importado'));
 
                 saveData();
                 renderFoldersContainer();
@@ -907,7 +1077,7 @@
             document.getElementById('inspectFolderModal').classList.add('hidden');
         }
 
-        // MINI GEMINI IA LOGIC - 100% CONECTADO A DOCENTES, ATRASOS Y CARPETAS
+        // MINI GEMINI IA LOGIC - 100% CONECTADO A NÓMINA, ATRASOS BIOMÉTRICOS Y ATRASOS MANUALES
         function handleGeminiQuery(e) {
             e.preventDefault();
             const input = document.getElementById('geminiPromptInput');
@@ -933,40 +1103,41 @@
                 const to = document.getElementById('filterDateTo').value;
 
                 const totalDocs = docentesList.length;
-                const filteredAtrasos = biometricLogs.filter(b => b.estado === 'Atraso' && b.datePart >= from && b.datePart <= to);
-                const totalCarpetas = uploadedFilesList.length;
+                const filteredBioAtrasos = biometricLogs.filter(b => b.estado === 'Atraso' && b.datePart >= from && b.datePart <= to);
+                const filteredManualAtrasos = atrasosManualesList.filter(a => a.fecha >= from && a.fecha <= to);
+                const totalAtrasosCount = filteredBioAtrasos.length + filteredManualAtrasos.length;
 
-                // Buscar si preguntan por un docente específico en la consulta
+                // Buscar docente específico
                 let docenteMencionado = docentesList.find(d => qLower.includes(d.name.toLowerCase()) || qLower.includes(d.id.toLowerCase()) || (d.bioId && qLower.includes(String(d.bioId))));
 
                 if (docenteMencionado) {
-                    const docLogs = biometricLogs.filter(b => b.docId === docenteMencionado.id && b.datePart >= from && b.datePart <= to);
-                    const docAtrasos = docLogs.filter(b => b.estado === 'Atraso').length;
-                    const docATiempo = docLogs.filter(b => b.estado === 'A Tiempo').length;
+                    const docBioLogs = biometricLogs.filter(b => b.docId === docenteMencionado.id && b.datePart >= from && b.datePart <= to);
+                    const docBioAtrasos = docBioLogs.filter(b => b.estado === 'Atraso').length;
+                    const docManualAtrasos = filteredManualAtrasos.filter(a => a.docId === docenteMencionado.id).length;
+                    const docATiempo = docBioLogs.filter(b => b.estado === 'A Tiempo').length;
 
-                    responseText = `Información para <strong>${docenteMencionado.name}</strong> (N° ${docenteMencionado.bioId}) en el periodo (${from} a ${to}):<br>` +
-                        `• <strong>Atrasos (> 07:00 AM):</strong> ${docAtrasos}<br>` +
-                        `• <strong>Entradas a tiempo:</strong> ${docATiempo}<br>` +
-                        `• <strong>Total marcaciones:</strong> ${docLogs.length}`;
+                    responseText = `Resumen para <strong>${docenteMencionado.name}</strong> (N° ${docenteMencionado.bioId}) entre ${from} y ${to}:<br>` +
+                        `• <strong>Atrasos Biométricos (> 07:00 AM):</strong> ${docBioAtrasos}<br>` +
+                        `• <strong>Atrasos Manuales:</strong> ${docManualAtrasos}<br>` +
+                        `• <strong>Total Atrasos:</strong> ${docBioAtrasos + docManualAtrasos}<br>` +
+                        `• <strong>Entradas a tiempo:</strong> ${docATiempo}`;
                 } else if (qLower.includes('atraso') || qLower.includes('tarde') || qLower.includes('quien') || qLower.includes('quién')) {
-                    const docentesConAtrasos = docentesList.map(d => {
-                        const count = biometricLogs.filter(b => b.docId === d.id && b.estado === 'Atraso' && b.datePart >= from && b.datePart <= to).length;
-                        return { name: d.name, count };
+                    const ranking = docentesList.map(d => {
+                        const bioCount = biometricLogs.filter(b => b.docId === d.id && b.estado === 'Atraso' && b.datePart >= from && b.datePart <= to).length;
+                        const manCount = filteredManualAtrasos.filter(a => a.docId === d.id).length;
+                        return { name: d.name, count: bioCount + manCount };
                     }).filter(d => d.count > 0).sort((a,b) => b.count - a.count);
 
-                    if (docentesConAtrasos.length > 0) {
-                        responseText = `En el periodo (${from} al ${to}) hay <strong>${filteredAtrasos.length} atrasos</strong> (desde las 07:01 AM).<br>Docentes con más atrasos:<br>• ` +
-                            docentesConAtrasos.map(d => `<strong>${d.name}</strong>: ${d.count} atraso(s)`).join('<br>• ');
+                    if (ranking.length > 0) {
+                        responseText = `En el periodo (${from} al ${to}) hay <strong>${totalAtrasosCount} atrasos totales</strong> (${filteredBioAtrasos.length} biométricos + ${filteredManualAtrasos.length} manuales).<br>Docentes con atrasos registrados:<br>• ` +
+                            ranking.map(d => `<strong>${d.name}</strong>: ${d.count} atraso(s)`).join('<br>• ');
                     } else {
-                        responseText = `No se registran atrasos entre ${from} y ${to}. ¡Excelente asistencia!`;
+                        responseText = `No se registran atrasos ni biométricos ni manuales entre ${from} y ${to}. ¡Excelente asistencia!`;
                     }
-                } else if (qLower.includes('carpeta') || qLower.includes('archivo') || qLower.includes('excel')) {
-                    responseText = `Actualmente hay <strong>${totalCarpetas} carpeta(s)</strong> de biométrico subidas, con un total de ${biometricLogs.length} marcaciones registradas en el sistema.`;
-                } else if (qLower.includes('horario') || qLower.includes('hora')) {
-                    responseText = `El horario oficial es:<br>• <strong>Entrada:</strong> 07:00 AM (Atraso desde las 07:01 AM).<br>• <strong>Salida Normal:</strong> 13:00 PM.<br>• <strong>Salida Miércoles:</strong> 15:00 PM.`;
+                } else if (qLower.includes('carpeta') || qLower.includes('archivo')) {
+                    responseText = `Actualmente hay <strong>${uploadedFilesList.length} carpeta(s)</strong> de biométrico subidas en el sistema.`;
                 } else {
-                    // Respuesta general inteligente
-                    responseText = `He revisado los registros (${from} al ${to}). Tenemos <strong>${totalDocs} docentes</strong> en la nómina, <strong>${totalCarpetas} carpetas</strong> de biométrico y <strong>${filteredAtrasos.length} atrasos</strong> en este periodo. ¿Quieres consultar sobre algún docente en particular?`;
+                    responseText = `En el periodo (${from} a ${to}) tenemos registrados <strong>${totalDocs} docentes</strong> en nómina, <strong>${totalAtrasosCount} atrasos en total</strong> (${filteredBioAtrasos.length} del biométrico y ${filteredManualAtrasos.length} manuales).`;
                 }
 
                 chatBox.innerHTML += `
@@ -980,7 +1151,7 @@
         }
 
         function switchTab(tabId) {
-            ['dashboard', 'resumen', 'salidas', 'individual', 'biometrico'].forEach(t => {
+            ['dashboard', 'resumen', 'atrasos-manuales', 'salidas', 'individual', 'biometrico'].forEach(t => {
                 const el = document.getElementById('tab-' + t);
                 const nav = document.getElementById('nav-' + t);
                 if(el) el.classList.add('hidden');
@@ -999,6 +1170,7 @@
         }
 
         function applyDateFilter() {
+            renderAtrasosManualesHistorial();
             renderSalidasHistorial();
             renderTable();
             updateCharts();
@@ -1037,9 +1209,11 @@
 
             data.forEach(d => {
                 const docBioLogs = biometricLogs.filter(b => b.docId === d.id && b.datePart >= from && b.datePart <= to);
+                const docManuals = atrasosManualesList.filter(a => a.docId === d.id && a.fecha >= from && a.fecha <= to);
                 const docSalidas = currentSalidas.filter(s => s.docId === d.id);
 
                 const atrasosBioCount = docBioLogs.filter(b => b.estado === 'Atraso').length;
+                const atrasosTotal = atrasosBioCount + docManuals.length;
                 const faltasPermisosCount = docSalidas.length;
 
                 tbody.innerHTML += `
@@ -1048,7 +1222,7 @@
                         <td class="p-4 font-semibold text-slate-700">N° ${d.bioId}</td>
                         <td class="p-4 font-medium">${d.name}</td>
                         <td class="p-4 text-center"><span class="px-2.5 py-1 bg-slate-100 rounded-md text-xs font-semibold">${d.regimen}</span></td>
-                        <td class="p-4 text-center font-bold ${atrasosBioCount > 0 ? 'text-amber-600 bg-amber-50 rounded-xl' : 'text-slate-400'}">${atrasosBioCount}</td>
+                        <td class="p-4 text-center font-bold ${atrasosTotal > 0 ? 'text-amber-600 bg-amber-50 rounded-xl' : 'text-slate-400'}">${atrasosTotal} <span class="text-[10px] text-slate-400 font-normal">(${atrasosBioCount} bio / ${docManuals.length} man)</span></td>
                         <td class="p-4 text-center font-bold ${faltasPermisosCount > 0 ? 'text-blue-600' : 'text-slate-400'}">${faltasPermisosCount}</td>
                         <td class="p-4 text-center space-x-2 whitespace-nowrap">
                             <button type="button" onclick="goToDocente('${d.id}')" class="px-3 py-1 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg text-xs font-semibold transition">Ficha</button>
@@ -1068,16 +1242,19 @@
         function populateSelects() {
             const selectDoc = document.getElementById('selectDocente');
             const salidaDoc = document.getElementById('salidaDocente');
+            const manualDoc = document.getElementById('atrasoManualDocente');
             const exportDoc = document.getElementById('exportSelectDocente');
 
             if(selectDoc) selectDoc.innerHTML = '';
             if(salidaDoc) salidaDoc.innerHTML = '';
+            if(manualDoc) manualDoc.innerHTML = '';
             if(exportDoc) exportDoc.innerHTML = '';
 
             docentesList.forEach(d => {
                 const optionStr = `<option value="${d.id}">${d.id} - ${d.name} (N° ${d.bioId})</option>`;
                 if(selectDoc) selectDoc.innerHTML += optionStr;
                 if(salidaDoc) salidaDoc.innerHTML += optionStr;
+                if(manualDoc) manualDoc.innerHTML += optionStr;
                 if(exportDoc) exportDoc.innerHTML += optionStr;
             });
         }
@@ -1101,37 +1278,54 @@
             const to = document.getElementById('filterDateTo').value;
 
             const docBioLogs = biometricLogs.filter(b => b.docId === docId && b.datePart >= from && b.datePart <= to);
+            const docManuals = atrasosManualesList.filter(a => a.docId === docId && a.fecha >= from && a.fecha <= to);
 
             const atrasosBio = docBioLogs.filter(b => b.estado === 'Atraso').length;
+            const atrasosTotal = atrasosBio + docManuals.length;
             const normalesBio = docBioLogs.filter(b => b.estado === 'A Tiempo').length;
 
-            document.getElementById('lblDocenteAtrasos').innerText = atrasosBio;
+            document.getElementById('lblDocenteAtrasos').innerText = `${atrasosTotal} (${atrasosBio} Bio / ${docManuals.length} Man)`;
             document.getElementById('lblDocenteNormi').innerText = normalesBio;
 
             const tbody = document.getElementById('indvDocenteTableBody');
             tbody.innerHTML = '';
 
-            if (docBioLogs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No hay registros de marcaciones para este docente en el rango de fechas.</td></tr>`;
+            if (docBioLogs.length === 0 && docManuals.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No hay registros de marcaciones ni atrasos manuales para este docente en el rango de fechas.</td></tr>`;
                 return;
             }
 
+            // Renderizar Marcaciones Biométricas
             docBioLogs.forEach(log => {
                 const isAtraso = log.estado === 'Atraso';
                 const badgeColor = isAtraso ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800';
 
                 const dObj = new Date(log.datePart + "T00:00:00");
                 const dayName = dObj.toLocaleDateString('es-ES', { weekday: 'long' });
-                const isMiercoles = dayName.toLowerCase().includes('miér') || dayName.toLowerCase().includes('mier');
-                const salidaHorario = isMiercoles ? "15:00 PM (Miércoles Especial)" : "13:00 PM (Jornada Normal)";
 
                 tbody.innerHTML += `
                     <tr>
                         <td class="p-3 font-semibold">${log.datePart}</td>
                         <td class="p-3 capitalize font-medium text-slate-600">${dayName}</td>
                         <td class="p-3 font-mono font-bold">${log.timePart}</td>
-                        <td class="p-3 text-center"><span class="px-2.5 py-1 ${badgeColor} rounded-full font-bold text-xs">${log.estado}</span></td>
-                        <td class="p-3 text-xs text-slate-500">${salidaHorario}</td>
+                        <td class="p-3 text-center"><span class="px-2.5 py-1 ${badgeColor} rounded-full font-bold text-xs">${log.estado} (Biométrico)</span></td>
+                        <td class="p-3 text-xs text-slate-500">Marcación de Huella / Rostro</td>
+                    </tr>
+                `;
+            });
+
+            // Renderizar Atrasos Manuales
+            docManuals.forEach(m => {
+                const dObj = new Date(m.fecha + "T00:00:00");
+                const dayName = dObj.toLocaleDateString('es-ES', { weekday: 'long' });
+
+                tbody.innerHTML += `
+                    <tr class="bg-amber-50/50">
+                        <td class="p-3 font-semibold text-amber-900">${m.fecha}</td>
+                        <td class="p-3 capitalize font-medium text-amber-700">${dayName}</td>
+                        <td class="p-3 font-mono font-bold text-amber-600">${m.hora}</td>
+                        <td class="p-3 text-center"><span class="px-2.5 py-1 bg-amber-200 text-amber-900 rounded-full font-bold text-xs">Atraso Manual (${m.estado})</span></td>
+                        <td class="p-3 text-xs text-amber-800 font-medium">${m.motivo}</td>
                     </tr>
                 `;
             });
@@ -1310,11 +1504,16 @@
             const from = document.getElementById('filterDateFrom').value;
             const to = document.getElementById('filterDateTo').value;
 
-            const totalAtrasosBio = biometricLogs.filter(b => b.estado === 'Atraso' && b.datePart >= from && b.datePart <= to).length;
+            const bioAtrasosCount = biometricLogs.filter(b => b.estado === 'Atraso' && b.datePart >= from && b.datePart <= to).length;
+            const manAtrasosCount = atrasosManualesList.filter(a => a.fecha >= from && a.fecha <= to).length;
+            const totalAtrasosBio = bioAtrasosCount + manAtrasosCount;
+
             document.getElementById('statAtrasos').innerText = totalAtrasosBio;
 
             const counts = docentesList.map(d => {
-                return biometricLogs.filter(b => b.docId === d.id && b.estado === 'Atraso' && b.datePart >= from && b.datePart <= to).length;
+                const bCount = biometricLogs.filter(b => b.docId === d.id && b.estado === 'Atraso' && b.datePart >= from && b.datePart <= to).length;
+                const mCount = atrasosManualesList.filter(a => a.docId === d.id && a.fecha >= from && a.fecha <= to).length;
+                return bCount + mCount;
             });
 
             barChartInstance.data.labels = docentesList.slice(0, 10).map(d => d.id);
@@ -1336,7 +1535,8 @@
 
             const excelData = docentesList.map(d => {
                 const docBioLogs = biometricLogs.filter(b => b.docId === d.id && b.datePart >= from && b.datePart <= to);
-                const atrasos = docBioLogs.filter(b => b.estado === 'Atraso').length;
+                const docManuals = atrasosManualesList.filter(a => a.docId === d.id && a.fecha >= from && a.fecha <= to);
+                const atrasosBio = docBioLogs.filter(b => b.estado === 'Atraso').length;
                 const aTiempo = docBioLogs.filter(b => b.estado === 'A Tiempo').length;
 
                 return {
@@ -1345,14 +1545,16 @@
                     "Docente": d.name,
                     "Régimen": d.regimen,
                     "Entradas A Tiempo": aTiempo,
-                    "Atrasos (> 07:00 AM)": atrasos
+                    "Atrasos Biométrico": atrasosBio,
+                    "Atrasos Manuales": docManuals.length,
+                    "Total Atrasos": atrasosBio + docManuals.length
                 };
             });
 
             const worksheet = XLSX.utils.json_to_sheet(excelData);
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Atrasos Biométrico");
-            XLSX.writeFile(workbook, `Reporte_Atrasos_Biometrico_${from}_al_${to}.xlsx`);
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Atrasos Consolidado");
+            XLSX.writeFile(workbook, `Reporte_Atrasos_${from}_al_${to}.xlsx`);
         }
 
         function exportConsolidatedPDF() {
@@ -1365,19 +1567,20 @@
             doc.setFontSize(16);
             doc.text("UNIDAD EDUCATIVA CRISTÓBAL COLÓN", 14, 15);
             doc.setFontSize(11);
-            doc.text(`REPORTE CONSOLIDADO DE ATRASOS BIOMÉTRICOS (${from} al ${to})`, 14, 22);
+            doc.text(`REPORTE CONSOLIDADO DE ATRASOS Y ASISTENCIA (${from} al ${to})`, 14, 22);
 
             const tableRows = docentesList.map(d => {
                 const docBioLogs = biometricLogs.filter(b => b.docId === d.id && b.datePart >= from && b.datePart <= to);
-                const atrasos = docBioLogs.filter(b => b.estado === 'Atraso').length;
+                const docManuals = atrasosManualesList.filter(a => a.docId === d.id && a.fecha >= from && a.fecha <= to);
+                const atrasosBio = docBioLogs.filter(b => b.estado === 'Atraso').length;
                 const aTiempo = docBioLogs.filter(b => b.estado === 'A Tiempo').length;
 
-                return [d.id, `N° ${d.bioId}`, d.name, d.regimen, aTiempo, atrasos];
+                return [d.id, `N° ${d.bioId}`, d.name, d.regimen, aTiempo, atrasosBio, docManuals.length, atrasosBio + docManuals.length];
             });
 
             doc.autoTable({
                 startY: 30,
-                head: [['Código', 'N° Asignado', 'Apellidos y Nombres', 'Régimen', 'A Tiempo', 'Atrasos (> 07:00 AM)']],
+                head: [['Código', 'N° Asignado', 'Apellidos y Nombres', 'Régimen', 'A Tiempo', 'Atrasos Bio', 'Atrasos Man', 'Total Atrasos']],
                 body: tableRows,
                 theme: 'grid'
             });
