@@ -11,7 +11,7 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SheetJS (Excel) -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <!-- jsPDF & AutoTable (PDF Horizontal) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -39,13 +39,13 @@
                         <i class="fa-solid fa-user-pen w-5"></i> Ficha & Reporte Ind.
                     </button>
                     <button type="button" onclick="switchTab('biometrico')" id="nav-biometrico" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition text-left">
-                        <i class="fa-solid fa-fingerprint w-5"></i> Módulo Biométrico
+                        <i class="fa-solid fa-fingerprint w-5"></i> Cargar Excel Biométrico
                     </button>
                 </nav>
             </div>
             <div class="p-4 border-t border-slate-800 text-xs text-slate-500">
-                <p>Inspectoría General v11.0</p>
-                <p class="mt-1">Gestión Total de Nómina</p>
+                <p>Inspectoría General v12.0</p>
+                <p class="mt-1">Lector Automático Excel</p>
             </div>
         </aside>
 
@@ -84,21 +84,19 @@
 
                 <!-- TAB 1: DASHBOARD -->
                 <section id="tab-dashboard" class="space-y-8">
-                    <!-- Barra de acción -->
                     <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
                         <span class="text-sm font-semibold text-slate-700"><i class="fa-solid fa-shield-halved text-emerald-600 mr-2"></i> Estado: Datos Sincronizados y Seguros</span>
                         <button type="button" onclick="triggerGlobalSave('Dashboard')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
-                            <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios en Dashboard
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
                         </button>
                     </div>
 
-                    <!-- Metric Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                         <div onclick="openMetricModal('docentes')" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-blue-400 transition">
                             <div>
                                 <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Docentes</p>
                                 <h3 id="statTotalDoc" class="text-3xl font-extrabold text-slate-800 mt-1">28</h3>
-                                <span class="text-xs text-emerald-600 font-medium mt-2 inline-block"><i class="fa-solid fa-check"></i> Nómina Registrada</span>
+                                <span class="text-xs text-emerald-600 font-medium mt-2 inline-block"><i class="fa-solid fa-check"></i> Nómina Activa</span>
                             </div>
                             <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-chalkboard-user"></i>
@@ -109,7 +107,7 @@
                             <div>
                                 <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Novedades</p>
                                 <h3 id="statAtrasos" class="text-3xl font-extrabold text-amber-600 mt-1">0</h3>
-                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Permisos y faltas en rango</span>
+                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Atrasos / Faltas / Permisos</span>
                             </div>
                             <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-business-time"></i>
@@ -120,7 +118,7 @@
                             <div>
                                 <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Puntualidad General</p>
                                 <h3 id="statCumplimiento" class="text-3xl font-extrabold text-emerald-600 mt-1">100%</h3>
-                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Proporción sin novedad</span>
+                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Sin novedad</span>
                             </div>
                             <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-bullseye"></i>
@@ -131,7 +129,7 @@
                             <div>
                                 <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Marcaciones Biométricas</p>
                                 <h3 id="statRegistros" class="text-3xl font-extrabold text-purple-600 mt-1">0</h3>
-                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Registros en el periodo</span>
+                                <span class="text-xs text-slate-400 font-medium mt-2 inline-block">Registros leídos</span>
                             </div>
                             <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
                                 <i class="fa-solid fa-fingerprint"></i>
@@ -139,7 +137,7 @@
                         </div>
                     </div>
 
-                    <!-- MÓDULO ESPECIAL DE EXPORTACIÓN EN PANEL -->
+                    <!-- MÓDULO EXPORTACIÓN -->
                     <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-6 rounded-2xl text-white shadow-md space-y-4 border border-slate-700">
                         <div>
                             <h3 class="text-lg font-bold text-white flex items-center gap-2">
@@ -149,31 +147,26 @@
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                            <!-- Exportación Consolidada -->
                             <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700 space-y-3">
                                 <h4 class="font-semibold text-sm text-emerald-300 flex items-center gap-2">
-                                    <i class="fa-solid fa-layer-group"></i> Reporte Consolidado General (Toda la Nómina)
+                                    <i class="fa-solid fa-layer-group"></i> Reporte Consolidado General
                                 </h4>
-                                <p class="text-xs text-slate-400">Incluye los docentes con su desglose total de atrasos, permisos registrados y detalle de descripciones.</p>
+                                <p class="text-xs text-slate-400">Desglose total de la nómina con atrasos y permisos.</p>
                                 <div class="flex flex-wrap gap-2 pt-1">
                                     <button type="button" onclick="exportConsolidatedPDF()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition shadow-sm flex items-center gap-2">
-                                        <i class="fa-solid fa-file-pdf"></i> Exportar Consolidado PDF (Horizontal)
+                                        <i class="fa-solid fa-file-pdf"></i> PDF Consolidado (Horizontal)
                                     </button>
                                     <button type="button" onclick="exportConsolidatedExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition shadow-sm flex items-center gap-2">
-                                        <i class="fa-solid fa-file-excel"></i> Exportar Consolidado Excel
+                                        <i class="fa-solid fa-file-excel"></i> Excel Consolidado
                                     </button>
                                 </div>
                             </div>
 
-                            <!-- Exportación Individual -->
                             <div class="bg-slate-800/80 p-4 rounded-xl border border-slate-700 space-y-3">
                                 <h4 class="font-semibold text-sm text-blue-300 flex items-center gap-2">
                                     <i class="fa-solid fa-user-check"></i> Reporte Individual por Docente
                                 </h4>
-                                <div class="flex items-center gap-2">
-                                    <select id="exportSelectDocente" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-1.5 text-xs text-white">
-                                    </select>
-                                </div>
+                                <select id="exportSelectDocente" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-1.5 text-xs text-white"></select>
                                 <div class="flex flex-wrap gap-2 pt-1">
                                     <button type="button" onclick="exportIndividualPDF()" class="bg-red-600 hover:bg-red-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition shadow-sm flex items-center gap-2">
                                         <i class="fa-solid fa-file-pdf"></i> PDF Individual
@@ -195,18 +188,18 @@
                         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
                             <h3 class="font-bold text-slate-800 text-lg mb-4">Distribución de Novedades</h3>
                             <div class="h-64 relative flex items-center justify-center"><canvas id="donutChart"></canvas></div>
-                            <p id="chartSubtext" class="text-xs text-slate-400 text-center mt-4">Proporción general en el periodo seleccionado.</p>
+                            <p id="chartSubtext" class="text-xs text-slate-400 text-center mt-4">Proporción general en el periodo.</p>
                         </div>
                     </div>
                 </section>
 
-                <!-- TAB 2: NÓMINA Y RESUMEN (CON OPCIÓN DE AGREGAR Y ELIMINAR DOCENTES) -->
+                <!-- TAB 2: NÓMINA Y RESUMEN -->
                 <section id="tab-resumen" class="space-y-6 hidden">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-slate-100 pb-4">
                             <div>
                                 <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-users-rectangle text-blue-600 mr-2"></i> Nómina Oficial y Gestión de Docentes</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">Agregue nuevos docentes o elimine registros sin perder la información cargada.</p>
+                                <p class="text-xs text-slate-500 mt-0.5">Gestione docentes sin perder información.</p>
                             </div>
                             <div class="flex gap-2">
                                 <button type="button" onclick="openAddTeacherModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
@@ -272,7 +265,6 @@
                             </div>
                         </div>
 
-                        <!-- Formulario de Registro / Edición -->
                         <form onsubmit="handleSalidaSubmit(event)" class="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-200">
                             <input type="hidden" id="editRecordIndex" value="-1">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -282,7 +274,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Tipo de Novedad</label>
-                                    <select id="tipoNovedad" onchange="togglePermisoFields()" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <select id="tipoNovedad" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
                                         <option value="Atraso">Atraso</option>
                                         <option value="Salida por Permiso" selected>Salida por Permiso</option>
                                         <option value="Falta Justificada">Falta Justificada</option>
@@ -306,8 +298,8 @@
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-semibold text-blue-900 uppercase mb-1">Motivo / Descripción de la Novedad</label>
-                                        <input type="text" id="permisoMotivo" placeholder="Ej. Cita médica IESS, trámite personal, calamidad doméstica..." class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800">
+                                        <label class="block text-xs font-semibold text-blue-900 uppercase mb-1">Motivo / Descripción</label>
+                                        <input type="text" id="permisoMotivo" placeholder="Ej. Cita médica IESS, trámite personal..." class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800">
                                     </div>
                                     <div>
                                         <label class="block text-xs font-semibold text-blue-900 uppercase mb-1">Estado del Caso</label>
@@ -321,7 +313,7 @@
 
                             <div>
                                 <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Observaciones Adicionales</label>
-                                <textarea id="salidaObservacion" rows="2" placeholder="Ingrese notas adicionales si lo requiere..." class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm text-slate-800"></textarea>
+                                <textarea id="salidaObservacion" rows="2" placeholder="Notas opcionales..." class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm text-slate-800"></textarea>
                             </div>
 
                             <div class="flex justify-end gap-3">
@@ -332,11 +324,10 @@
                             </div>
                         </form>
 
-                        <!-- Tabla del Historial -->
                         <div class="space-y-3">
                             <h4 class="font-bold text-slate-800 text-sm flex items-center justify-between">
                                 <span>Historial de Registros</span>
-                                <span class="text-xs font-normal text-slate-500">Utilice los botones a la derecha para modificar o borrar</span>
+                                <span class="text-xs font-normal text-slate-500">Modifique o elimine según necesite</span>
                             </h4>
                             <div class="overflow-x-auto border border-slate-200 rounded-xl">
                                 <table class="w-full text-left border-collapse text-sm">
@@ -348,7 +339,7 @@
                                             <th class="p-3">Motivo / Descripción</th>
                                             <th class="p-3 text-center">Estado</th>
                                             <th class="p-3">Observación</th>
-                                            <th class="p-3 text-center">Acciones (Editar / Eliminar)</th>
+                                            <th class="p-3 text-center">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody id="historialSalidasBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
@@ -371,7 +362,7 @@
                                     <i class="fa-solid fa-floppy-disk"></i> Guardar Ficha
                                 </button>
                                 <button type="button" onclick="exportIndividualPDF()" class="bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-file-pdf"></i> PDF Individual (Horizontal)
+                                    <i class="fa-solid fa-file-pdf"></i> PDF Individual
                                 </button>
                                 <button type="button" onclick="exportIndividualExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition shadow-sm flex items-center gap-2">
                                     <i class="fa-solid fa-file-excel"></i> Excel Individual
@@ -405,30 +396,54 @@
                     </div>
                 </section>
 
-                <!-- TAB 5: MÓDULO BIOMÉTRICO -->
+                <!-- TAB 5: CARGAR EXCEL BIOMÉTRICO (NUEVA IMPLEMENTACIÓN COMPLETA) -->
                 <section id="tab-biometrico" class="space-y-6 hidden">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
                         <div class="border-b border-slate-100 pb-4 flex justify-between items-center">
                             <div>
-                                <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-fingerprint text-blue-600 mr-2"></i> Módulo Biométrico</h3>
-                                <p id="biometricSubtext" class="text-xs text-slate-500 mt-1">Visualización y gestión de marcas biométricas cargadas en el sistema.</p>
+                                <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-file-excel text-emerald-600 mr-2"></i> Subir Documento Excel del Biométrico</h3>
+                                <p class="text-xs text-slate-500 mt-1">Cargue el archivo Excel del biométrico para detectar automáticamente Atrasos e Inasistencias cruzando con el ID Asignado (Ej: Almeida = 3).</p>
                             </div>
                             <button type="button" onclick="triggerGlobalSave('Módulo Biométrico')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
-                                <i class="fa-solid fa-floppy-disk"></i> Guardar Estado Biométrico
+                                <i class="fa-solid fa-floppy-disk"></i> Guardar Registros Biométricos
                             </button>
                         </div>
+
+                        <!-- Zona de Carga de Archivo Excel -->
+                        <div class="bg-slate-50 p-6 rounded-2xl border-2 border-dashed border-slate-300 space-y-4 text-center">
+                            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-2xl shadow-inner">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                            </div>
+                            <div>
+                                <label class="cursor-pointer bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition inline-flex items-center gap-2 shadow-sm">
+                                    <i class="fa-solid fa-file-excel"></i> Seleccionar Archivo Excel del Biométrico
+                                    <input type="file" id="excelFileInput" accept=".xlsx, .xls" onchange="processBiometricExcel(event)" class="hidden">
+                                </label>
+                                <p class="text-xs text-slate-400 mt-2">Formatos aceptados: .xlsx, .xls (El archivo se procesa de manera segura en su navegador)</p>
+                            </div>
+                        </div>
+
+                        <!-- Estado del procesamiento -->
+                        <div id="excelProcessStatus" class="hidden bg-blue-50 p-4 rounded-xl border border-blue-200 text-xs font-medium text-blue-900 flex items-center justify-between">
+                            <span id="excelStatusMsg"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Procesando registros del Excel...</span>
+                        </div>
+
                         <div class="overflow-x-auto border border-slate-100 rounded-xl">
                             <table class="w-full text-left border-collapse text-sm">
                                 <thead>
                                     <tr class="bg-slate-100 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
-                                        <th class="p-3">N° Asignado</th>
-                                        <th class="p-3">ID Biométrico</th>
-                                        <th class="p-3">Docente</th>
-                                        <th class="p-3">Fecha y Hora</th>
-                                        <th class="p-3 text-center">Estado / Atraso</th>
+                                        <th class="p-3">ID Bio Asignado</th>
+                                        <th class="p-3">Docente Vinculado</th>
+                                        <th class="p-3">Fecha y Hora Marcada</th>
+                                        <th class="p-3 text-center">Tipo Novedad Detectada</th>
+                                        <th class="p-3 text-center">Acción</th>
                                     </tr>
                                 </thead>
-                                <tbody id="biometricTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
+                                <tbody id="biometricTableBody" class="divide-y divide-slate-100 text-slate-700">
+                                    <tr>
+                                        <td colspan="5" class="p-4 text-center text-slate-400">Seleccione su archivo de Excel arriba para cargar y visualizar los registros.</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -452,7 +467,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">ID Biométrico</label>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">ID Biométrico (N° Asignado)</label>
                         <input type="number" id="newDocBioId" required placeholder="Ej. 47" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-800">
                     </div>
                     <div>
@@ -483,7 +498,7 @@
     </div>
 
     <script>
-        // NÓMINA INICIAL (O RECUPERADA DE LOCALSTORAGE)
+        // NÓMINA OFICIAL CON ID BIOMÉTRICO (Ej: Almeida = 3)
         let defaultDocentes = [
             { id: "DOC-001", bioId: 3, name: "ALMEIDA ROMERO JHONNY PATRICIO", regimen: "LOEI", jornada: "Matutina" },
             { id: "DOC-002", bioId: 31, name: "ANDINO POZO MODESTO ABSALON", regimen: "LOEI", jornada: "Matutina" },
@@ -515,9 +530,9 @@
             { id: "DOC-028", bioId: 18, name: "YACELGA CORONEL MAYRA DE LOS ANGELES", regimen: "LOEI", jornada: "Matutina" }
         ];
 
-        let docentesList = JSON.parse(localStorage.getItem('docentesList_v11')) || defaultDocentes;
-        let salidasList = JSON.parse(localStorage.getItem('salidasList_v11')) || [];
-        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v11')) || [];
+        let docentesList = JSON.parse(localStorage.getItem('docentesList_v12')) || defaultDocentes;
+        let salidasList = JSON.parse(localStorage.getItem('salidasList_v12')) || [];
+        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v12')) || [];
 
         let barChartInstance = null;
         let donutChartInstance = null;
@@ -535,17 +550,131 @@
             initCharts();
             loadDocenteSheet();
             applyDateFilter();
+            renderBiometricTable();
         };
 
         function saveData() {
-            localStorage.setItem('docentesList_v11', JSON.stringify(docentesList));
-            localStorage.setItem('salidasList_v11', JSON.stringify(salidasList));
-            localStorage.setItem('biometricLogs_v11', JSON.stringify(biometricLogs));
+            localStorage.setItem('docentesList_v12', JSON.stringify(docentesList));
+            localStorage.setItem('salidasList_v12', JSON.stringify(salidasList));
+            localStorage.setItem('biometricLogs_v12', JSON.stringify(biometricLogs));
         }
 
         function triggerGlobalSave(sectionName) {
             saveData();
-            alert(`💾 ¡Éxito! Todos los datos de [${sectionName}], la nómina y el sistema han sido guardados permanentemente.`);
+            alert(`💾 ¡Éxito! Todos los datos de [${sectionName}] y del sistema han sido guardados de manera permanente.`);
+        }
+
+        // FUNCIÓN CLAVE: PROCESAR EL EXCEL DEL BIOMÉTRICO
+        function processBiometricExcel(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const statusBox = document.getElementById('excelProcessStatus');
+            const statusMsg = document.getElementById('excelStatusMsg');
+            statusBox.classList.remove('hidden');
+            statusMsg.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Leyendo archivo Excel: ${file.name}...`;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const jsonRows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+                    let registrosNuevos = 0;
+
+                    // Escaneo inteligente de filas
+                    jsonRows.forEach((row) => {
+                        if (!row || row.length < 2) return;
+
+                        // Buscar ID Asignado en la primera o segunda columna
+                        let extractedBioId = parseInt(row[0]) || parseInt(row[1]) || null;
+                        let rawDateTime = row[1] || row[2] || '';
+
+                        if (extractedBioId && rawDateTime) {
+                            const docente = docentesList.find(d => d.bioId === extractedBioId);
+                            if (docente) {
+                                // Determinar si es Atraso (hora posterior a 07:05:00)
+                                let horaStr = String(rawDateTime).split(' ')[1] || "07:00:00";
+                                let esAtraso = horaStr > "07:05:00";
+                                let tipoDetected = esAtraso ? "Atraso" : "Entrada Normal";
+
+                                const newLog = {
+                                    id: Date.now() + Math.random(),
+                                    bioId: extractedBioId,
+                                    docId: docente.id,
+                                    name: docente.name,
+                                    datetime: String(rawDateTime),
+                                    tipo: tipoDetected
+                                };
+
+                                biometricLogs.unshift(newLog);
+
+                                // Si es atraso, registrar como novedad en el historial automáticamente sin borrar nada
+                                if (esAtraso) {
+                                    const fechaSolo = String(rawDateTime).split(' ')[0] || new Date().toISOString().split('T')[0];
+                                    salidasList.unshift({
+                                        id: Date.now() + Math.random(),
+                                        docId: docente.id,
+                                        tipo: "Atraso",
+                                        desde: `${fechaSolo}T${horaStr.substring(0,5)}`,
+                                        hasta: `${fechaSolo}T13:00`,
+                                        motivo: `Atraso detectado por biométrico (${horaStr})`,
+                                        estado: "Injustificado",
+                                        obs: "Cargado automáticamente desde Excel del Biométrico"
+                                    });
+                                }
+                                registrosNuevos++;
+                            }
+                        }
+                    });
+
+                    saveData();
+                    renderBiometricTable();
+                    renderSalidasHistorial();
+                    renderTable();
+                    updateCharts();
+
+                    statusMsg.innerHTML = `✅ ¡Procesamiento completado! Se registraron ${registrosNuevos} marcas biométricas vinculadas a la nómina de docentes.`;
+                } catch (err) {
+                    alert("⚠️ Ocurrió un inconveniente al leer el archivo. Asegúrese de subir un Excel válido.");
+                    statusMsg.innerText = "Error al procesar el archivo Excel.";
+                }
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+
+        function renderBiometricTable() {
+            const tbody = document.getElementById('biometricTableBody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+
+            if (biometricLogs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Sin marcas biométricas registradas. Suba un archivo Excel arriba.</td></tr>`;
+                return;
+            }
+
+            document.getElementById('statRegistros').innerText = biometricLogs.length;
+
+            biometricLogs.slice(0, 50).forEach(log => {
+                const isAtraso = log.tipo === 'Atraso';
+                const badgeClass = isAtraso ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100">
+                        <td class="p-3 font-bold text-blue-600">#${log.bioId}</td>
+                        <td class="p-3 font-medium">${log.docId} - ${log.name}</td>
+                        <td class="p-3 text-xs">${log.datetime}</td>
+                        <td class="p-3 text-center"><span class="px-2.5 py-1 ${badgeClass} rounded-full text-xs font-bold">${log.tipo}</span></td>
+                        <td class="p-3 text-center">
+                            <button type="button" onclick="goToDocente('${log.docId}')" class="px-2.5 py-1 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg text-xs font-semibold transition">Ver Ficha</button>
+                        </td>
+                    </tr>
+                `;
+            });
         }
 
         // FUNCIONES MODAL AGREGAR DOCENTE
@@ -565,7 +694,6 @@
             const bioId = parseInt(document.getElementById('newDocBioId').value);
             const regimen = document.getElementById('newDocRegimen').value;
 
-            // Generar ID correlativo ej DOC-029
             const nextNum = docentesList.length + 1;
             const id = "DOC-" + String(nextNum).padStart(3, '0');
 
@@ -575,10 +703,9 @@
             renderTable();
             updateCharts();
             closeAddTeacherModal();
-            alert(`✅ Docente ${name} agregado con éxito a la nómina.`);
+            alert(`✅ Docente ${name} agregado con éxito a la nómina con ID Biométrico #${bioId}.`);
         }
 
-        // ELIMINAR DOCENTE DE LA NÓMINA
         function deleteTeacher(docId) {
             const docente = docentesList.find(d => d.id === docId);
             if(!docente) return;
@@ -612,10 +739,6 @@
             }
         }
 
-        function togglePermisoFields() {
-            document.getElementById('permisoCollapseSection').style.display = 'block';
-        }
-
         function applyDateFilter() {
             const from = document.getElementById('filterDateFrom').value;
             const to = document.getElementById('filterDateTo').value;
@@ -624,7 +747,6 @@
             renderSalidasHistorial();
             renderTable();
             updateCharts();
-            renderBiometricTableFiltered(from, to);
         }
 
         function resetDateFilter() {
@@ -773,7 +895,7 @@
 
             currentSalidas.forEach((item) => {
                 const realIndex = salidasList.findIndex(s => s.id === item.id);
-                const docente = docentesList.find(d => d.id === item.docId) || { id: item.docId, name: 'Docente Eliminado' };
+                const docente = docentesList.find(d => d.id === item.docId) || { id: item.docId, name: 'Docente' };
                 const badgeColor = item.estado === 'Justificado' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800';
 
                 tbody.innerHTML += `
@@ -837,32 +959,6 @@
                 loadDocenteSheet();
                 alert('🗑️ Registro eliminado correctamente.');
             }
-        }
-
-        function renderBiometricTableFiltered(from, to) {
-            const tbody = document.getElementById('biometricTableBody');
-            if(!tbody) return;
-            tbody.innerHTML = '';
-            const filtered = biometricLogs.filter(l => {
-                const dStr = l.datetime.split(' ')[0];
-                return dStr >= from && dStr <= to;
-            });
-            if(filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Sin marcas biométricas registradas en este periodo.</td></tr>`;
-                return;
-            }
-            filtered.forEach(l => {
-                const color = l.estado.includes('Atraso') ? 'text-amber-600' : 'text-emerald-600';
-                tbody.innerHTML += `
-                    <tr>
-                        <td class="p-3 font-bold text-blue-600">${l.docId}</td>
-                        <td class="p-3">${l.bioId}</td>
-                        <td class="p-3">${l.name}</td>
-                        <td class="p-3">${l.datetime}</td>
-                        <td class="p-3 text-center font-bold ${color}">${l.estado}</td>
-                    </tr>
-                `;
-            });
         }
 
         function openMetricModal(type) {
