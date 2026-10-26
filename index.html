@@ -1554,11 +1554,17 @@
             const from = document.getElementById('filterDateFrom').value;
             const to = document.getElementById('filterDateTo').value;
 
+            const currentSalidas = getFilteredSalidas();
+
             const excelData = docentesList.map(d => {
                 const docBioLogs = biometricLogs.filter(b => b.bioId === d.bioId && b.datePart >= from && b.datePart <= to);
                 const docManuals = atrasosManualesList.filter(a => a.bioId === d.bioId && a.fecha >= from && a.fecha <= to);
+                const docSalidas = currentSalidas.filter(s => s.bioId === d.bioId);
                 const atrasosBio = docBioLogs.filter(b => b.estado === 'Atraso').length;
                 const aTiempo = docBioLogs.filter(b => b.estado === 'A Tiempo').length;
+
+                // Resumen de permisos/faltas
+                let permisosStr = docSalidas.map(s => `${s.tipo} (${s.estado})`).join('; ') || 'Ninguno';
 
                 return {
                     "Código Biométrico": d.bioId,
@@ -1567,7 +1573,8 @@
                     "Entradas A Tiempo": aTiempo,
                     "Atrasos Biométrico": atrasosBio,
                     "Atrasos Manuales": docManuals.length,
-                    "Total Atrasos": atrasosBio + docManuals.length
+                    "Total Atrasos": atrasosBio + docManuals.length,
+                    "Permisos / Faltas / Novedades": permisosStr
                 };
             });
 
@@ -1589,71 +1596,143 @@
             doc.setFontSize(11);
             doc.text(`REPORTE CONSOLIDADO DE ATRASOS Y ASISTENCIA (${from} al ${to})`, 14, 22);
 
+            const currentSalidas = getFilteredSalidas();
+
             const tableRows = docentesList.map(d => {
                 const docBioLogs = biometricLogs.filter(b => b.bioId === d.bioId && b.datePart >= from && b.datePart <= to);
                 const docManuals = atrasosManualesList.filter(a => a.bioId === d.bioId && a.fecha >= from && a.fecha <= to);
+                const docSalidas = currentSalidas.filter(s => s.bioId === d.bioId);
                 const atrasosBio = docBioLogs.filter(b => b.estado === 'Atraso').length;
                 const aTiempo = docBioLogs.filter(b => b.estado === 'A Tiempo').length;
 
-                return [d.bioId, d.name, d.regimen, aTiempo, atrasosBio, docManuals.length, atrasosBio + docManuals.length];
+                let permisosStr = docSalidas.map(s => `${s.tipo} [${s.estado}]`).join(', ') || 'Ninguno';
+
+                return [d.bioId, d.name, d.regimen, aTiempo, atrasosBio, docManuals.length, atrasosBio + docManuals.length, permisosStr];
             });
 
             doc.autoTable({
                 startY: 30,
-                head: [['Código Biométrico', 'Apellidos y Nombres', 'Régimen', 'A Tiempo', 'Atrasos Bio', 'Atrasos Man', 'Total Atrasos']],
+                head: [['Código', 'Apellidos y Nombres', 'Régimen', 'A Tiem.', 'Bio', 'Man', 'Tot. Atr.', 'Permisos / Faltas / Novedades']],
                 body: tableRows,
-                theme: 'grid'
+                theme: 'grid',
+                styles: { fontSize: 8 }
             });
 
             doc.save(`Consolidado_Atrasos_${from}_al_${to}.pdf`);
         }
 
         function exportIndividualExcel() {
-            const bioId = parseInt(document.getElementById('exportSelectDocente').value || document.getElementById('selectDocente').value);
+            const bioId = parseInt(document.getElementById('selectDocente').value || document.getElementById('exportSelectDocente').value);
             const docente = docentesList.find(d => d.bioId === bioId);
             if(!docente) return alert("Seleccione un docente.");
 
-            const docBioLogs = biometricLogs.filter(b => b.bioId === bioId);
+            const from = document.getElementById('filterDateFrom').value;
+            const to = document.getElementById('filterDateTo').value;
 
-            const excelData = docBioLogs.map(l => ({
-                "Código Biométrico": l.bioId,
-                "Docente": docente.name,
-                "Fecha": l.datePart,
-                "Hora Marcación": l.timePart,
-                "Estado": l.estado
-            }));
+            const docBioLogs = biometricLogs.filter(b => b.bioId === bioId && b.datePart >= from && b.datePart <= to);
+            const docManuals = atrasosManualesList.filter(a => a.bioId === bioId && a.fecha >= from && a.fecha <= to);
 
-            const worksheet = XLSX.utils.json_to_sheet(excelData.length ? excelData : [{ Docente: docente.name, Detalle: "Sin marcas" }]);
+            const docSalidas = getFilteredSalidas().filter(s => s.bioId === bioId);
+
+            let excelData = [];
+            docBioLogs.forEach(l => {
+                excelData.push({
+                    "Código Biométrico": l.bioId,
+                    "Docente": docente.name,
+                    "Fecha": l.datePart,
+                    "Día": new Date(l.datePart + "T00:00:00").toLocaleDateString('es-ES', { weekday: 'long' }),
+                    "Hora Marcación / Novedad": l.timePart,
+                    "Tipo de Registro": "Biométrico",
+                    "Estado": l.estado,
+                    "Permisos / Faltas / Novedades": "Asistencia Normal",
+                    "Observación": "Marcación de Huella / Rostro"
+                });
+            });
+
+            docManuals.forEach(m => {
+                excelData.push({
+                    "Código Biométrico": m.bioId,
+                    "Docente": docente.name,
+                    "Fecha": m.fecha,
+                    "Día": new Date(m.fecha + "T00:00:00").toLocaleDateString('es-ES', { weekday: 'long' }),
+                    "Hora Marcación / Novedad": m.hora,
+                    "Tipo de Registro": "Atraso Manual",
+                    "Estado": `Atraso (${m.estado})`,
+                    "Permisos / Faltas / Novedades": "Atraso Registrado",
+                    "Observación": m.motivo
+                });
+            });
+
+            docSalidas.forEach(s => {
+                let fechaDesde = s.desde ? s.desde.replace('T', ' ') : '';
+                let fechaHasta = s.hasta ? s.hasta.replace('T', ' ') : '';
+                excelData.push({
+                    "Código Biométrico": s.bioId,
+                    "Docente": docente.name,
+                    "Fecha": fechaDesde.split(' ')[0],
+                    "Día": "-",
+                    "Hora Marcación / Novedad": `${fechaDesde} al ${fechaHasta}`,
+                    "Tipo de Registro": "Permiso / Novedad",
+                    "Estado": s.estado,
+                    "Permisos / Faltas / Novedades": s.tipo,
+                    "Observación": s.motivo + (s.obs ? ` (${s.obs})` : '')
+                });
+            });
+
+            const worksheet = XLSX.utils.json_to_sheet(excelData.length ? excelData : [{ Docente: docente.name, Detalle: "Sin registros en este periodo" }]);
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Ficha");
-            XLSX.writeFile(workbook, `Ficha_Individual_Biometrico_${docente.bioId}.xlsx`);
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Ficha Individual");
+            XLSX.writeFile(workbook, `Ficha_${docente.bioId}_${from}_al_${to}.xlsx`);
         }
 
         function exportIndividualPDF() {
-            const bioId = parseInt(document.getElementById('exportSelectDocente').value || document.getElementById('selectDocente').value);
+            const bioId = parseInt(document.getElementById('selectDocente').value || document.getElementById('exportSelectDocente').value);
             const docente = docentesList.find(d => d.bioId === bioId);
             if(!docente) return alert("Seleccione un docente.");
+
+            const from = document.getElementById('filterDateFrom').value;
+            const to = document.getElementById('filterDateTo').value;
 
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
 
-            const docBioLogs = biometricLogs.filter(b => b.bioId === bioId);
+            const docBioLogs = biometricLogs.filter(b => b.bioId === bioId && b.datePart >= from && b.datePart <= to);
+            const docManuals = atrasosManualesList.filter(a => a.bioId === bioId && a.fecha >= from && a.fecha <= to);
 
             doc.setFontSize(16);
             doc.text("UNIDAD EDUCATIVA CRISTÓBAL COLÓN", 14, 15);
             doc.setFontSize(11);
-            doc.text(`FICHA INDIVIDUAL DE ATRASOS Y ASISTENCIA: CÓDIGO ${docente.bioId} - ${docente.name}`, 14, 22);
+            doc.text(`FICHA INDIVIDUAL: CÓDIGO ${docente.bioId} - ${docente.name} (${from} al ${to})`, 14, 22);
 
-            const tableRows = docBioLogs.map(l => [l.datePart, l.timePart, l.estado, "Hora de entrada oficial: 07:00 AM"]);
+            const docSalidas = getFilteredSalidas().filter(s => s.bioId === bioId);
+
+            let tableRows = [];
+
+            docBioLogs.forEach(l => {
+                const dayName = new Date(l.datePart + "T00:00:00").toLocaleDateString('es-ES', { weekday: 'long' });
+                tableRows.push([l.datePart, dayName, l.timePart, l.estado, 'Ninguno', 'Marcación biométrica']);
+            });
+
+            docManuals.forEach(m => {
+                const dayName = new Date(m.fecha + "T00:00:00").toLocaleDateString('es-ES', { weekday: 'long' });
+                tableRows.push([m.fecha, dayName, m.hora, `Atraso (${m.estado})`, 'Atraso Manual', m.motivo]);
+            });
+
+            docSalidas.forEach(s => {
+                let fDesde = s.desde ? s.desde.replace('T', ' ') : '';
+                let fHasta = s.hasta ? s.hasta.replace('T', ' ') : '';
+                tableRows.push([fDesde.split(' ')[0], 'Permiso', `${fDesde} a ${fHasta}`, s.estado, s.tipo, s.motivo]);
+            });
 
             doc.autoTable({
                 startY: 30,
-                head: [['Fecha', 'Hora Marcada', 'Estado Entrada', 'Observación Horario']],
-                body: tableRows.length ? tableRows : [['-', '-', 'Sin marcas', '-']],
-                theme: 'grid'
+                head: [['Fecha', 'Día / Tipo', 'Hora / Rango', 'Estado', 'Permisos / Faltas / Novedades', 'Observación']],
+                body: tableRows.length ? tableRows : [['-', '-', '-', '-', 'Sin registros en este periodo', '-']],
+                theme: 'grid',
+                styles: { fontSize: 8 }
             });
 
-            doc.save(`Ficha_Biometrico_${docente.bioId}.pdf`);
+            doc.save(`Ficha_Individual_${docente.bioId}_${from}_al_${to}.pdf`);
         }
     </script>
 </body>
