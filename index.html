@@ -50,7 +50,7 @@
                 </nav>
             </div>
             <div class="p-4 border-t border-slate-800 text-xs text-slate-500 space-y-1">
-                <p>Inspectoría General v29.0</p>
+                <p>Inspectoría General v30.0</p>
                 <p class="text-emerald-400 font-semibold"><i class="fa-solid fa-sparkles mr-1"></i> Mini Gemini Conectado</p>
             </div>
         </aside>
@@ -669,7 +669,7 @@
     <script>
         let defaultDocentes = [{"bioId": 3, "name": "ALMEIDA ROMERO JHONNY PATRICIO", "regimen": "LOEI"}, {"bioId": 31, "name": "ANDINO POZO MODESTO ABSALON", "regimen": "LOEI"}, {"bioId": 4, "name": "CAICEDO ENRIQUEZ BRENDA ELIZABETH", "regimen": "LOEI"}, {"bioId": 36, "name": "JUAN CARLOS MIER", "regimen": "LOEI"}, {"bioId": 44, "name": "CEVALLOS GUERRERO BYRON WILFRIDO", "regimen": "LOEI"}, {"bioId": 5, "name": "CUASAPAZ CUASAPAZ GLADYS LUCIA", "regimen": "LOEI"}, {"bioId": 46, "name": "DE LA VEGA REYES JENNY ESTEFANIA", "regimen": "LOEI"}, {"bioId": 7, "name": "ERAZO BENAVIDES LILIA ROCIO", "regimen": "LOEI"}, {"bioId": 23, "name": "ESTRADA PEREZ LIDIA NARCIZA", "regimen": "LOEI"}, {"bioId": 14, "name": "FUELAGAN CUASES LIVIA CECILIA", "regimen": "LOEI"}, {"bioId": 8, "name": "GUACHAN CHULDE EDWIN ULPIANO", "regimen": "LOEI"}, {"bioId": 45, "name": "HERNANDEZ BENAVIDES YADIRA LIZETH", "regimen": "LOEI"}, {"bioId": 20, "name": "LANDAZURI RAMIREZ ERNESTO PATRICIO", "regimen": "LOEI"}, {"bioId": 22, "name": "LLORE GUERRERO FREDDY GERMAN", "regimen": "LOEI"}, {"bioId": 28, "name": "MARCO MADERA", "regimen": "LOEI"}, {"bioId": 29, "name": "MARTINEZ MARCELO", "regimen": "LOEI"}, {"bioId": 9, "name": "MEJIA CHAMORRO ROSA EDILMA", "regimen": "LOEI"}, {"bioId": 10, "name": "MORENO RUANO MARIA FILOMENA", "regimen": "LOEI"}, {"bioId": 21, "name": "MOLINA ROSA", "regimen": "LOEI"}, {"bioId": 16, "name": "PADILLA ESCOBAR JUAN VLADIMIR", "regimen": "LOEI"}, {"bioId": 11, "name": "PANTOJA JIMENEZ SARA JANETH", "regimen": "LOEI"}, {"bioId": 30, "name": "PANTOJA SUAREZ LILIA CARMELINA", "regimen": "LOEI"}, {"bioId": 19, "name": "PASPUEL ORMAZA NARCISA EDDY", "regimen": "LOEI"}, {"bioId": 34, "name": "PORTILLA RUEDA MARIANA DE JESUS", "regimen": "LOEI"}, {"bioId": 1, "name": "POZO PRADO MARCELO GUSTAVO", "regimen": "LOEI"}, {"bioId": 37, "name": "PATRICIA ELIZABETH ROSERO AYALA", "regimen": "LOEI"}, {"bioId": 12, "name": "RODRIGUEZ TAIMAL RITHA ESPERANZA", "regimen": "LOEI"}, {"bioId": 32, "name": "ROSERO LANDAZURI ELSA MARIELA", "regimen": "LOEI"}, {"bioId": 25, "name": "BECERRA VIZCAÍNO JUAN BOSCO", "regimen": "LOEI"}, {"bioId": 13, "name": "TAIMAL JIMENEZ ELINA OLIVA", "regimen": "LOEI"}, {"bioId": 18, "name": "YACELGA CORONEL MAYRA DE LOS ANGELES", "regimen": "LOEI"}, {"bioId": 26, "name": "CANGAS MORILLO MARLENE SOLEDAD", "regimen": "LOEI"}, {"bioId": 27, "name": "TAPIA NOLIVOS VIVIANA GEOCONDA", "regimen": "LOEI"}, {"bioId": 24, "name": "DOCENTE 24", "regimen": "LOEI"}, {"bioId": 33, "name": "DOCENTE 33", "regimen": "LOEI"}];
 
-        let storedDocentes = JSON.parse(localStorage.getItem('docentesList_v29')) || [];
+        let storedDocentes = JSON.parse(localStorage.getItem('docentesList_v30')) || [];
         defaultDocentes.forEach(d => {
             if (!storedDocentes.some(s => s.bioId === d.bioId)) {
                 storedDocentes.push(d);
@@ -679,10 +679,10 @@
             }
         });
         let docentesList = storedDocentes;
-        let salidasList = JSON.parse(localStorage.getItem('salidasList_v29')) || [];
-        let atrasosManualesList = JSON.parse(localStorage.getItem('atrasosManualesList_v29')) || [];
-        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v29')) || [];
-        let uploadedFilesList = JSON.parse(localStorage.getItem('uploadedFilesList_v29')) || [];
+        let salidasList = JSON.parse(localStorage.getItem('salidasList_v30')) || [];
+        let atrasosManualesList = JSON.parse(localStorage.getItem('atrasosManualesList_v30')) || [];
+        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v30')) || [];
+        let uploadedFilesList = JSON.parse(localStorage.getItem('uploadedFilesList_v30')) || [];
 
         let barChartInstance = null;
         let donutChartInstance = null;
@@ -713,11 +713,11 @@
         };
 
         function saveData() {
-            localStorage.setItem('docentesList_v29', JSON.stringify(docentesList));
-            localStorage.setItem('salidasList_v29', JSON.stringify(salidasList));
-            localStorage.setItem('atrasosManualesList_v29', JSON.stringify(atrasosManualesList));
-            localStorage.setItem('biometricLogs_v29', JSON.stringify(biometricLogs));
-            localStorage.setItem('uploadedFilesList_v29', JSON.stringify(uploadedFilesList));
+            localStorage.setItem('docentesList_v30', JSON.stringify(docentesList));
+            localStorage.setItem('salidasList_v30', JSON.stringify(salidasList));
+            localStorage.setItem('atrasosManualesList_v30', JSON.stringify(atrasosManualesList));
+            localStorage.setItem('biometricLogs_v30', JSON.stringify(biometricLogs));
+            localStorage.setItem('uploadedFilesList_v30', JSON.stringify(uploadedFilesList));
         }
 
         function triggerGlobalSave(sectionName) {
@@ -789,7 +789,7 @@
             const statusBox = document.getElementById('excelProcessStatus');
             const statusMsg = document.getElementById('excelStatusMsg');
             statusBox.classList.remove('hidden');
-            statusMsg.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Procesando archivo y extrayendo horas exactas de entrada y salida...`;
+            statusMsg.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Procesando archivo y asignando salidas oficiales correctas...`;
 
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -883,7 +883,19 @@
                     Object.values(groupedMap).forEach(g => {
                         g.times.sort();
                         let entrada = g.times[0];
-                        let salida = g.times.length > 1 ? g.times[g.times.length - 1] : "13:00:00";
+                        
+                        // CORRECCIÓN CLAVE: Determinar salida oficial si no hay segunda marcación o si la última es igual a la entrada
+                        let ultimaMarcacion = g.times.length > 1 ? g.times[g.times.length - 1] : entrada;
+                        let salida = "13:00:00";
+
+                        if (ultimaMarcacion > entrada && ultimaMarcacion > "07:00:00") {
+                            salida = ultimaMarcacion;
+                        } else {
+                            // Validar si es miércoles (día 3 en getDay() o calculando la fecha)
+                            let dObj = new Date(g.datePart + "T00:00:00");
+                            let esMiercoles = dObj.getDay() === 3;
+                            salida = esMiercoles ? "15:00:00" : "13:00:00";
+                        }
 
                         let esAtraso = entrada > "07:00:00";
                         let estadoEntrada = esAtraso ? "Atraso" : "A Tiempo";
@@ -922,7 +934,7 @@
                     loadDocenteSheet();
 
                     if (fileLogsCount > 0) {
-                        statusMsg.innerHTML = `✅ ¡Carpeta procesada! Se consolidaron ${fileLogsCount} registros de entrada y salida con horas exactas.`;
+                        statusMsg.innerHTML = `✅ ¡Carpeta procesada! Salidas corregidas automáticamente a las 13:00 (o 15:00 los miércoles) cuando no hubo doble marcación.`;
                     } else {
                         statusMsg.innerHTML = `⚠️ Carpeta creada, pero verifique el formato del Excel.`;
                     }
@@ -1105,7 +1117,6 @@
             }
         }
 
-        // RENDERIZAR CARPETAS CON ACORDEÓN DESPLEGABLE Y FILTRO DE FECHAS INDIVIDUAL
         function renderFoldersContainer() {
             const container = document.getElementById('foldersContainer');
             const countBadge = document.getElementById('folderCountBadge');
@@ -1129,7 +1140,6 @@
             uploadedFilesList.forEach(folder => {
                 let logs = biometricLogs.filter(b => b.fileId === folder.id);
 
-                // Aplicar filtro de fechas individual de la carpeta si existe
                 if (folder.filterFrom) {
                     logs = logs.filter(l => l.datePart >= folder.filterFrom);
                 }
@@ -1151,7 +1161,7 @@
                                 <td class="p-3 font-medium">${l.name}</td>
                                 <td class="p-3 text-center font-semibold">${l.datePart}</td>
                                 <td class="p-3 text-center font-mono text-blue-700">${l.timePart}</td>
-                                <td class="p-3 text-center font-mono text-purple-700">${l.salidaPart || '13:00:00'}</td>
+                                <td class="p-3 text-center font-mono text-purple-700">${l.salidaPart}</td>
                                 <td class="p-3 text-center"><span class="px-2.5 py-1 ${badgeColor} rounded-full font-bold text-xs">${l.estado}</span></td>
                                 <td class="p-3 text-center font-mono font-bold text-red-600">${mins > 0 ? mins + ' mins' : '-'}</td>
                             </tr>
@@ -1161,7 +1171,6 @@
 
                 container.innerHTML += `
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition">
-                        <!-- Cabecera de la Carpeta -->
                         <div class="p-5 bg-slate-50 border-b border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
                             <div class="flex items-center gap-3">
                                 <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center text-2xl shadow-inner flex-shrink-0">
@@ -1189,9 +1198,7 @@
                             </div>
                         </div>
 
-                        <!-- Contenido Desplegable (Hacia Abajo) con Filtro de Fechas Individual -->
                         <div id="accordion-content-${folder.id}" class="hidden p-5 space-y-4 bg-white">
-                            <!-- BARRA DE FILTRO DE FECHAS DE LA CARPETA -->
                             <div class="bg-blue-50/60 p-4 rounded-xl border border-blue-200 flex flex-wrap items-center justify-between gap-3 text-xs">
                                 <div class="flex flex-wrap items-center gap-3">
                                     <span class="font-bold text-blue-900"><i class="fa-solid fa-filter mr-1"></i> Filtrar este archivo por fechas:</span>
@@ -1262,7 +1269,6 @@
                 folder.filterTo = toVal;
                 saveData();
                 renderFoldersContainer();
-                // Mantener desplegado el acordeón tras filtrar
                 setTimeout(() => {
                     const content = document.getElementById(`accordion-content-${folderId}`);
                     const icon = document.getElementById(`icon-toggle-${folderId}`);
@@ -1555,7 +1561,7 @@
                         <td class="p-3 font-semibold">${log.datePart}</td>
                         <td class="p-3 capitalize font-medium text-slate-600">${dayName}</td>
                         <td class="p-3 font-mono font-bold text-blue-700">${log.timePart}</td>
-                        <td class="p-3 font-mono font-bold text-purple-700">${log.salidaPart || '13:00:00'}</td>
+                        <td class="p-3 font-mono font-bold text-purple-700">${log.salidaPart}</td>
                         <td class="p-3 text-center"><span class="px-2.5 py-1 ${badgeColor} rounded-full font-bold text-xs">${log.estado}</span></td>
                         <td class="p-3 text-center font-mono font-bold text-red-600">${mins > 0 ? mins + ' mins' : '-'}</td>
                     </tr>
@@ -1859,7 +1865,7 @@
                     "Docente": docente.name,
                     "Fecha": l.datePart,
                     "Hora Entrada": l.timePart,
-                    "Hora Salida": l.salidaPart || '13:00:00',
+                    "Hora Salida": l.salidaPart,
                     "Estado": l.estado,
                     "Minutos de Atraso": mins > 0 ? mins : 0,
                     "Minutos Justificados": 0
@@ -1929,7 +1935,7 @@
 
             docBioLogs.forEach(l => {
                 let mins = l.estado === 'Atraso' ? calcularMinutosAtraso(l.timePart) : 0;
-                tableRows.push([l.datePart, l.timePart, l.salidaPart || '13:00:00', l.estado, mins > 0 ? `${mins} mins` : '-', '0 mins']);
+                tableRows.push([l.datePart, l.timePart, l.salidaPart, l.estado, mins > 0 ? `${mins} mins` : '-', '0 mins']);
             });
 
             docManuals.forEach(m => {
