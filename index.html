@@ -50,7 +50,7 @@
                 </nav>
             </div>
             <div class="p-4 border-t border-slate-800 text-xs text-slate-500 space-y-1">
-                <p>Inspectoría General v25.0</p>
+                <p>Inspectoría General v28.0</p>
                 <p class="text-emerald-400 font-semibold"><i class="fa-solid fa-sparkles mr-1"></i> Mini Gemini Conectado</p>
             </div>
         </aside>
@@ -96,7 +96,7 @@
                             <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-lg font-bold"><i class="fa-solid fa-clock"></i></div>
                             <div>
                                 <h3 class="font-bold text-sm text-blue-200">Horario Oficial de Asistencia</h3>
-                                <p class="text-xs text-slate-300">Entrada: <strong>07:00 AM</strong> (Atraso contabilizado desde las <strong>07:01 AM</strong>) | Salida: <strong>13:00 PM</strong> (Miércoles: <strong>15:00 PM</strong>)</p>
+                                <p class="text-xs text-slate-300">Entrada: <strong>07:00 AM</strong> (Atraso desde <strong>07:01 AM</strong>) | Salida: <strong>13:00 PM</strong> (Miércoles: <strong>15:00 PM</strong>)</p>
                             </div>
                         </div>
                         <button type="button" onclick="triggerGlobalSave('Dashboard')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
@@ -160,21 +160,19 @@
                                 </div>
                                 <div>
                                     <h3 class="font-bold text-slate-800 text-base">Asistente IA - Mini Gemini Inspectoría</h3>
-                                    <p class="text-xs text-slate-500">Pregúntale sobre cualquier docente, atrasos del mes, carpetas o pínchale consultas directas.</p>
+                                    <p class="text-xs text-slate-500">Pregúntale sobre cualquier docente, atrasos, minutos o justificaciones.</p>
                                 </div>
                             </div>
                             <span class="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-bold">Conectado a Datos</span>
                         </div>
 
-                        <!-- Chat Display -->
                         <div id="geminiChatBox" class="h-48 overflow-y-auto bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3 text-xs">
                             <div class="bg-purple-100/70 border border-purple-200 text-purple-950 p-3 rounded-xl max-w-xl">
                                 <strong><i class="fa-solid fa-robot mr-1 text-purple-600"></i> Mini Gemini:</strong>
-                                ¡Hola! Estoy conectado directamente con las carpetas, la nómina, los atrasos manuales y biométricos. Pregúntame por ejemplo: <em>"¿Cuántos atrasos tiene Almeida (N° 3)?"</em> o <em>"¿Qué docentes llegaron tarde este mes?"</em>.
+                                ¡Hola! Estoy conectado con las marcaciones reales, entradas, salidas y minutos de atraso o permisos. Pregúntame lo que necesites.
                             </div>
                         </div>
 
-                        <!-- Input Area -->
                         <form onsubmit="handleGeminiQuery(event)" class="flex gap-2">
                             <input type="text" id="geminiPromptInput" placeholder="Escriba su consulta por docente o sobre los reportes..." class="flex-1 bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-purple-500">
                             <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
@@ -189,7 +187,7 @@
                             <h3 class="text-lg font-bold text-white flex items-center gap-2">
                                 <i class="fa-solid fa-file-export text-emerald-400"></i> Centro de Exportación de Informes Consolidados
                             </h3>
-                            <p class="text-xs text-slate-300 mt-1">Descargue reportes oficiales en Excel o PDF horizontal incluyendo atrasos, minutos y justificaciones.</p>
+                            <p class="text-xs text-slate-300 mt-1">Descargue reportes oficiales en Excel o PDF horizontal incluyendo minutos de atraso y justificaciones.</p>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
@@ -671,7 +669,7 @@
     <script>
         let defaultDocentes = [{"bioId": 3, "name": "ALMEIDA ROMERO JHONNY PATRICIO", "regimen": "LOEI"}, {"bioId": 31, "name": "ANDINO POZO MODESTO ABSALON", "regimen": "LOEI"}, {"bioId": 4, "name": "CAICEDO ENRIQUEZ BRENDA ELIZABETH", "regimen": "LOEI"}, {"bioId": 36, "name": "JUAN CARLOS MIER", "regimen": "LOEI"}, {"bioId": 44, "name": "CEVALLOS GUERRERO BYRON WILFRIDO", "regimen": "LOEI"}, {"bioId": 5, "name": "CUASAPAZ CUASAPAZ GLADYS LUCIA", "regimen": "LOEI"}, {"bioId": 46, "name": "DE LA VEGA REYES JENNY ESTEFANIA", "regimen": "LOEI"}, {"bioId": 7, "name": "ERAZO BENAVIDES LILIA ROCIO", "regimen": "LOEI"}, {"bioId": 23, "name": "ESTRADA PEREZ LIDIA NARCIZA", "regimen": "LOEI"}, {"bioId": 14, "name": "FUELAGAN CUASES LIVIA CECILIA", "regimen": "LOEI"}, {"bioId": 8, "name": "GUACHAN CHULDE EDWIN ULPIANO", "regimen": "LOEI"}, {"bioId": 45, "name": "HERNANDEZ BENAVIDES YADIRA LIZETH", "regimen": "LOEI"}, {"bioId": 20, "name": "LANDAZURI RAMIREZ ERNESTO PATRICIO", "regimen": "LOEI"}, {"bioId": 22, "name": "LLORE GUERRERO FREDDY GERMAN", "regimen": "LOEI"}, {"bioId": 28, "name": "MARCO MADERA", "regimen": "LOEI"}, {"bioId": 29, "name": "MARTINEZ MARCELO", "regimen": "LOEI"}, {"bioId": 9, "name": "MEJIA CHAMORRO ROSA EDILMA", "regimen": "LOEI"}, {"bioId": 10, "name": "MORENO RUANO MARIA FILOMENA", "regimen": "LOEI"}, {"bioId": 21, "name": "MOLINA ROSA", "regimen": "LOEI"}, {"bioId": 16, "name": "PADILLA ESCOBAR JUAN VLADIMIR", "regimen": "LOEI"}, {"bioId": 11, "name": "PANTOJA JIMENEZ SARA JANETH", "regimen": "LOEI"}, {"bioId": 30, "name": "PANTOJA SUAREZ LILIA CARMELINA", "regimen": "LOEI"}, {"bioId": 19, "name": "PASPUEL ORMAZA NARCISA EDDY", "regimen": "LOEI"}, {"bioId": 34, "name": "PORTILLA RUEDA MARIANA DE JESUS", "regimen": "LOEI"}, {"bioId": 1, "name": "POZO PRADO MARCELO GUSTAVO", "regimen": "LOEI"}, {"bioId": 37, "name": "PATRICIA ELIZABETH ROSERO AYALA", "regimen": "LOEI"}, {"bioId": 12, "name": "RODRIGUEZ TAIMAL RITHA ESPERANZA", "regimen": "LOEI"}, {"bioId": 32, "name": "ROSERO LANDAZURI ELSA MARIELA", "regimen": "LOEI"}, {"bioId": 25, "name": "BECERRA VIZCAÍNO JUAN BOSCO", "regimen": "LOEI"}, {"bioId": 13, "name": "TAIMAL JIMENEZ ELINA OLIVA", "regimen": "LOEI"}, {"bioId": 18, "name": "YACELGA CORONEL MAYRA DE LOS ANGELES", "regimen": "LOEI"}, {"bioId": 26, "name": "CANGAS MORILLO MARLENE SOLEDAD", "regimen": "LOEI"}, {"bioId": 27, "name": "TAPIA NOLIVOS VIVIANA GEOCONDA", "regimen": "LOEI"}, {"bioId": 24, "name": "DOCENTE 24", "regimen": "LOEI"}, {"bioId": 33, "name": "DOCENTE 33", "regimen": "LOEI"}];
 
-        let storedDocentes = JSON.parse(localStorage.getItem('docentesList_v25')) || [];
+        let storedDocentes = JSON.parse(localStorage.getItem('docentesList_v28')) || [];
         defaultDocentes.forEach(d => {
             if (!storedDocentes.some(s => s.bioId === d.bioId)) {
                 storedDocentes.push(d);
@@ -681,10 +679,10 @@
             }
         });
         let docentesList = storedDocentes;
-        let salidasList = JSON.parse(localStorage.getItem('salidasList_v25')) || [];
-        let atrasosManualesList = JSON.parse(localStorage.getItem('atrasosManualesList_v25')) || [];
-        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v25')) || [];
-        let uploadedFilesList = JSON.parse(localStorage.getItem('uploadedFilesList_v25')) || [];
+        let salidasList = JSON.parse(localStorage.getItem('salidasList_v28')) || [];
+        let atrasosManualesList = JSON.parse(localStorage.getItem('atrasosManualesList_v28')) || [];
+        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v28')) || [];
+        let uploadedFilesList = JSON.parse(localStorage.getItem('uploadedFilesList_v28')) || [];
 
         let barChartInstance = null;
         let donutChartInstance = null;
@@ -715,11 +713,11 @@
         };
 
         function saveData() {
-            localStorage.setItem('docentesList_v25', JSON.stringify(docentesList));
-            localStorage.setItem('salidasList_v25', JSON.stringify(salidasList));
-            localStorage.setItem('atrasosManualesList_v25', JSON.stringify(atrasosManualesList));
-            localStorage.setItem('biometricLogs_v25', JSON.stringify(biometricLogs));
-            localStorage.setItem('uploadedFilesList_v25', JSON.stringify(uploadedFilesList));
+            localStorage.setItem('docentesList_v28', JSON.stringify(docentesList));
+            localStorage.setItem('salidasList_v28', JSON.stringify(salidasList));
+            localStorage.setItem('atrasosManualesList_v28', JSON.stringify(atrasosManualesList));
+            localStorage.setItem('biometricLogs_v28', JSON.stringify(biometricLogs));
+            localStorage.setItem('uploadedFilesList_v28', JSON.stringify(uploadedFilesList));
         }
 
         function triggerGlobalSave(sectionName) {
@@ -784,7 +782,7 @@
             return null;
         }
 
-        // LECTOR DE EXCEL BIOMÉTRICO (CONSOLIDANDO ENTRADA Y SALIDA POR DOCENTE Y DÍA)
+        // LECTOR DE EXCEL BIOMÉTRICO EXTREMADAMENTE PRECISO
         function processBiometricExcel(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -792,7 +790,7 @@
             const statusBox = document.getElementById('excelProcessStatus');
             const statusMsg = document.getElementById('excelStatusMsg');
             statusBox.classList.remove('hidden');
-            statusMsg.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Analizando archivo y agrupando entradas y salidas...`;
+            statusMsg.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Procesando archivo y extrayendo horas exactas de entrada y salida...`;
 
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -865,7 +863,6 @@
                         }
                     });
 
-                    // Agrupar por Docente y Fecha para obtener Entrada (mínima hora) y Salida (máxima hora)
                     let groupedMap = {};
                     rawMarks.forEach(m => {
                         let key = `${m.bioId}_${m.datePart}`;
@@ -924,9 +921,9 @@
                     loadDocenteSheet();
 
                     if (fileLogsCount > 0) {
-                        statusMsg.innerHTML = `✅ ¡Carpeta procesada! Se consolidaron ${fileLogsCount} registros de entrada y salida correctamente.`;
+                        statusMsg.innerHTML = `✅ ¡Carpeta procesada! Se consolidaron ${fileLogsCount} registros de entrada y salida con horas exactas.`;
                     } else {
-                        statusMsg.innerHTML = `⚠️ Carpeta creada, pero verifique que el Excel contenga columnas válidas.`;
+                        statusMsg.innerHTML = `⚠️ Carpeta creada, pero verifique el formato del Excel.`;
                     }
                 } catch (err) {
                     alert("⚠️ Error al leer el archivo Excel.");
@@ -945,7 +942,6 @@
             return totalMins > 0 ? totalMins : 0;
         }
 
-        // Obtener minutos de permisos justificados para un docente en el periodo activo
         function obtenerMinutosJustificados(bioId, from, to) {
             const permisosDoc = salidasList.filter(s => s.bioId === bioId && s.estado === 'Justificado');
             let totalMinutosJustificados = 0;
@@ -1148,7 +1144,7 @@
                                 <td class="p-3 text-center font-semibold">${l.datePart}</td>
                                 <td class="p-3 text-center font-mono text-blue-700">${l.timePart}</td>
                                 <td class="p-3 text-center font-mono text-purple-700">${l.salidaPart || '13:00:00'}</td>
-                                <td class="p-3 text-center"><span class="px-2.5 py-1 ${badgeColor} rounded-full text-xs font-bold">${l.estado}</span></td>
+                                <td class="p-3 text-center"><span class="px-2.5 py-1 ${badgeColor} rounded-full font-bold text-xs">${l.estado}</span></td>
                                 <td class="p-3 text-center font-mono font-bold text-red-600">${mins > 0 ? mins + ' mins' : '-'}</td>
                             </tr>
                         `;
