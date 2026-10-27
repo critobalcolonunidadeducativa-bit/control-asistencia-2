@@ -47,7 +47,7 @@
                 </nav>
             </div>
             <div class="p-4 border-t border-slate-800 text-xs text-slate-500 space-y-1">
-                <p>Inspectoría General v19.0</p>
+                <p>Inspectoría General v24.0</p>
                 <p class="text-emerald-400 font-semibold"><i class="fa-solid fa-sparkles mr-1"></i> Mini Gemini Conectado</p>
             </div>
         </aside>
@@ -106,7 +106,7 @@
                         <div onclick="openMetricModal('docentes')" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer hover:border-blue-400 transition">
                             <div>
                                 <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Docentes</p>
-                                <h3 id="statTotalDoc" class="text-3xl font-extrabold text-slate-800 mt-1">28</h3>
+                                <h3 id="statTotalDoc" class="text-3xl font-extrabold text-slate-800 mt-1">35</h3>
                                 <span class="text-xs text-emerald-600 font-medium mt-2 inline-block"><i class="fa-solid fa-check"></i> Nómina Registrada</span>
                             </div>
                             <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl shadow-inner">
@@ -167,7 +167,7 @@
                         <div id="geminiChatBox" class="h-48 overflow-y-auto bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3 text-xs">
                             <div class="bg-purple-100/70 border border-purple-200 text-purple-950 p-3 rounded-xl max-w-xl">
                                 <strong><i class="fa-solid fa-robot mr-1 text-purple-600"></i> Mini Gemini:</strong>
-                                ¡Hola! Estoy conectado directamente con las carpetas, la nómina, los atrasos manuales y biométricos. Pregúntame por ejemplo: <em>"¿Cuántos atrasos tiene Almeida (N° 3)?"</em> o <em>"¿Qué docentes llegaron tarde este mes?"</em>.
+                                ¡Hola! Estoy conectado directamente con las carpetas, la nómina de 35 docentes, los atrasos manuales y biométricos. Pregúntame por ejemplo: <em>"¿Cuántos atrasos tiene Molina Rosa?"</em> o <em>"¿Qué docentes llegaron tarde este mes?"</em>.
                             </div>
                         </div>
 
@@ -510,7 +510,7 @@
                         <div class="border-b border-slate-100 pb-4 flex justify-between items-center">
                             <div>
                                 <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-folder-tree text-blue-600 mr-2"></i> Gestor de Carpetas y Reportes Biométricos</h3>
-                                <p class="text-xs text-slate-500 mt-1">Cada archivo Excel subido se organiza como una carpeta individual para editar su nombre, revisar su contenido o eliminarlo.</p>
+                                <p class="text-xs text-slate-500 mt-1">Cada archivo Excel subido se organiza como una carpeta individual para desplegar sus datos hacia abajo, editarlos o eliminarlos.</p>
                             </div>
                             <button type="button" onclick="triggerGlobalSave('Archivos Biométricos')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
                                 <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
@@ -541,7 +541,7 @@
                             <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
                                 <i class="fa-solid fa-folder-open text-amber-500"></i> Carpetas de Reportes Subidos (<span id="folderCountBadge">0</span>)
                             </h4>
-                            <div id="foldersContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div id="foldersContainer" class="grid grid-cols-1 gap-4">
                                 <!-- Se renderiza dinámicamente -->
                             </div>
                         </div>
@@ -569,29 +569,6 @@
             <div class="flex justify-end gap-3 pt-2">
                 <button type="button" onclick="closeEditFolderModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-4 py-2 rounded-xl text-sm transition">Cancelar</button>
                 <button type="button" onclick="saveFolderEditName()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-xl text-sm transition shadow-sm">Guardar Cambios</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL INSPECCIONAR CONTENIDO DE CARPETA -->
-    <div id="inspectFolderModal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl max-w-3xl w-full p-6 space-y-4 shadow-2xl">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 id="inspectFolderTitle" class="font-bold text-lg text-slate-800"><i class="fa-solid fa-folder-open text-amber-500 mr-2"></i> Contenido de la Carpeta</h3>
-                <button type="button" onclick="closeInspectFolderModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="max-h-96 overflow-y-auto">
-                <table class="w-full text-left border-collapse text-xs">
-                    <thead>
-                        <tr class="bg-slate-100 text-slate-600 uppercase tracking-wider border-b border-slate-200">
-                            <th class="p-2.5 text-center">Código Biométrico</th>
-                            <th class="p-2.5">Docente</th>
-                            <th class="p-2.5">Fecha y Hora</th>
-                            <th class="p-2.5 text-center">Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody id="inspectTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
-                </table>
             </div>
         </div>
     </div>
@@ -641,15 +618,49 @@
     </div>
 
     <script>
-        let defaultDocentes = [{"bioId": 3, "name": "ALMEIDA ROMERO JHONNY PATRICIO", "regimen": "LOEI"}, {"bioId": 31, "name": "ANDINO POZO MODESTO ABSALON", "regimen": "LOEI"}, {"bioId": 4, "name": "CAICEDO ENRIQUEZ BRENDA ELIZABETH", "regimen": "LOEI"}, {"bioId": 36, "name": "JUAN CARLOS MIER", "regimen": "LOEI"}, {"bioId": 44, "name": "CEVALLOS GUERRERO BYRON WILFRIDO", "regimen": "LOEI"}, {"bioId": 5, "name": "CUASAPAZ CUASAPAZ GLADYS LUCIA", "regimen": "LOEI"}, {"bioId": 46, "name": "DE LA VEGA REYES JENNY ESTEFANIA", "regimen": "LOEI"}, {"bioId": 7, "name": "ERAZO BENAVIDES LILIA ROCIO", "regimen": "LOEI"}, {"bioId": 23, "name": "ESTRADA PEREZ LIDIA NARCIZA", "regimen": "LOEI"}, {"bioId": 14, "name": "FUELAGAN CUASES LIVIA CECILIA", "regimen": "LOEI"}, {"bioId": 8, "name": "GUACHAN CHULDE EDWIN ULPIANO", "regimen": "LOEI"}, {"bioId": 45, "name": "HERNANDEZ BENAVIDES YADIRA LIZETH", "regimen": "LOEI"}, {"bioId": 20, "name": "LANDAZURI RAMIREZ ERNESTO PATRICIO", "regimen": "LOEI"}, {"bioId": 22, "name": "LLORE GUERRERO FREDDY GERMAN", "regimen": "LOEI"}, {"bioId": 28, "name": "MARCO MADERA", "regimen": "LOEI"}, {"bioId": 29, "name": "MARTINEZ MARCELO", "regimen": "LOEI"}, {"bioId": 9, "name": "MEJIA CHAMORRO ROSA EDILMA", "regimen": "LOEI"}, {"bioId": 10, "name": "MORENO RUANO MARIA FILOMENA", "regimen": "LOEI"}, {"bioId": 21, "name": "MOLINA ROSA", "regimen": "LOEI"}, {"bioId": 16, "name": "PADILLA ESCOBAR JUAN VLADIMIR", "regimen": "LOEI"}, {"bioId": 11, "name": "PANTOJA JIMENEZ SARA JANETH", "regimen": "LOEI"}, {"bioId": 30, "name": "PANTOJA SUAREZ LILIA CARMELINA", "regimen": "LOEI"}, {"bioId": 19, "name": "PASPUEL ORMAZA NARCISA EDDY", "regimen": "LOEI"}, {"bioId": 34, "name": "PORTILLA RUEDA MARIANA DE JESUS", "regimen": "LOEI"}, {"bioId": 1, "name": "POZO PRADO MARCELO GUSTAVO", "regimen": "LOEI"}, {"bioId": 37, "name": "PATRICIA ELIZABETH ROSERO AYALA", "regimen": "LOEI"}, {"bioId": 12, "name": "RODRIGUEZ TAIMAL RITHA ESPERANZA", "regimen": "LOEI"}, {"bioId": 32, "name": "ROSERO LANDAZURI ELSA MARIELA", "regimen": "LOEI"}, {"bioId": 25, "name": "BECERRA VIZCAÍNO JUAN BOSCO", "regimen": "LOEI"}, {"bioId": 13, "name": "TAIMAL JIMENEZ ELINA OLIVA", "regimen": "LOEI"}, {"bioId": 18, "name": "YACELGA CORONEL MAYRA DE LOS ANGELES", "regimen": "LOEI"}, {"bioId": 26, "name": "CANGAS MORILLO MARLENE SOLEDAD", "regimen": "LOEI"}, {"bioId": 27, "name": "TAPIA NOLIVOS VIVIANA GEOCONDA", "regimen": "LOEI"}, {"bioId": 24, "name": "DOCENTE 24", "regimen": "LOEI"}, {"bioId": 33, "name": "DOCENTE 33", "regimen": "LOEI"}];
+        let defaultDocentes = [
+            {"bioId": 3, "name": "ALMEIDA ROMERO JHONNY PATRICIO", "regimen": "LOEI"},
+            {"bioId": 31, "name": "ANDINO POZO MODESTO ABSALON", "regimen": "LOEI"},
+            {"bioId": 4, "name": "CAICEDO ENRIQUEZ BRENDA ELIZABETH", "regimen": "LOEI"},
+            {"bioId": 36, "name": "JUAN CARLOS MIER", "regimen": "LOEI"},
+            {"bioId": 44, "name": "CEVALLOS GUERRERO BYRON WILFRIDO", "regimen": "LOEI"},
+            {"bioId": 5, "name": "CUASAPAZ CUASAPAZ GLADYS LUCIA", "regimen": "LOEI"},
+            {"bioId": 46, "name": "DE LA VEGA REYES JENNY ESTEFANIA", "regimen": "LOEI"},
+            {"bioId": 7, "name": "ERAZO BENAVIDES LILIA ROCIO", "regimen": "LOEI"},
+            {"bioId": 23, "name": "ESTRADA PEREZ LIDIA NARCIZA", "regimen": "LOEI"},
+            {"bioId": 14, "name": "FUELAGAN CUASES LIVIA CECILIA", "regimen": "LOEI"},
+            {"bioId": 8, "name": "GUACHAN CHULDE EDWIN ULPIANO", "regimen": "LOEI"},
+            {"bioId": 45, "name": "HERNANDEZ BENAVIDES YADIRA LIZETH", "regimen": "LOEI"},
+            {"bioId": 20, "name": "LANDAZURI RAMIREZ ERNESTO PATRICIO", "regimen": "LOEI"},
+            {"bioId": 22, "name": "LLORE GUERRERO FREDDY GERMAN", "regimen": "LOEI"},
+            {"bioId": 28, "name": "MARCO MADERA", "regimen": "LOEI"},
+            {"bioId": 29, "name": "MARTINEZ MARCELO", "regimen": "LOEI"},
+            {"bioId": 9, "name": "MEJIA CHAMORRO ROSA EDILMA", "regimen": "LOEI"},
+            {"bioId": 10, "name": "MORENO RUANO MARIA FILOMENA", "regimen": "LOEI"},
+            {"bioId": 21, "name": "MOLINA ROSA", "regimen": "LOEI"},
+            {"bioId": 16, "name": "PADILLA ESCOBAR JUAN VLADIMIR", "regimen": "LOEI"},
+            {"bioId": 11, "name": "PANTOJA JIMENEZ SARA JANETH", "regimen": "LOEI"},
+            {"bioId": 30, "name": "PANTOJA SUAREZ LILIA CARMELINA", "regimen": "LOEI"},
+            {"bioId": 19, "name": "PASPUEL ORMAZA NARCISA EDDY", "regimen": "LOEI"},
+            {"bioId": 34, "name": "PORTILLA RUEDA MARIANA DE JESUS", "regimen": "LOEI"},
+            {"bioId": 1, "name": "POZO PRADO MARCELO GUSTAVO", "regimen": "LOEI"},
+            {"bioId": 37, "name": "PATRICIA ELIZABETH ROSERO AYALA", "regimen": "LOEI"},
+            {"bioId": 12, "name": "RODRIGUEZ TAIMAL RITHA ESPERANZA", "regimen": "LOEI"},
+            {"bioId": 32, "name": "ROSERO LANDAZURI ELSA MARIELA", "regimen": "LOEI"},
+            {"bioId": 25, "name": "BECERRA VIZCAÍNO JUAN BOSCO", "regimen": "LOEI"},
+            {"bioId": 13, "name": "TAIMAL JIMENEZ ELINA OLIVA", "regimen": "LOEI"},
+            {"bioId": 18, "name": "YACELGA CORONEL MAYRA DE LOS ANGELES", "regimen": "LOEI"},
+            {"bioId": 26, "name": "CANGAS MORILLO MARLENE SOLEDAD", "regimen": "LOEI"},
+            {"bioId": 27, "name": "TAPIA NOLIVOS VIVIANA GEOCONDA", "regimen": "LOEI"},
+            {"bioId": 24, "name": "DOCENTE 24", "regimen": "LOEI"},
+            {"bioId": 33, "name": "DOCENTE 33", "regimen": "LOEI"}
+        ];
 
         let storedDocentes = JSON.parse(localStorage.getItem('docentesList_v18')) || [];
-        // Asegurar que todos los defaultDocentes estén presentes en la lista
         defaultDocentes.forEach(d => {
             if (!storedDocentes.some(s => s.bioId === d.bioId)) {
                 storedDocentes.push(d);
             } else {
-                // Actualizar nombre si fuera necesario
                 let existing = storedDocentes.find(s => s.bioId === d.bioId);
                 if (existing) existing.name = d.name;
             }
@@ -662,9 +673,9 @@
 
         let barChartInstance = null;
         let donutChartInstance = null;
+        let expandedFolders = {};
 
         window.onload = function() {
-            // Configuración inicial de fechas: 1er día del mes actual hasta el día de hoy
             const now = new Date();
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -701,7 +712,6 @@
             alert(`💾 ¡Éxito! Todos los datos de [${sectionName}] han sido guardados sin perder nada.`);
         }
 
-        // PARSER DE HORA (Soporta Horas String y Números de Serie de Excel)
         function parseTimeValue(val) {
             if (val === undefined || val === null) return null;
             let str = String(val).trim();
@@ -733,7 +743,6 @@
             return null;
         }
 
-        // LECTOR DE EXCEL CON DETECCIÓN DE ATRASOS (> 07:00:00)
         function processBiometricExcel(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -767,7 +776,6 @@
                         let dateStrFound = '';
                         let timeStrFound = '';
 
-                        // 1. Detección específica para formato estándar (Columna 0 = ID Biométrico, Columna 1 = Fecha/Hora)
                         if (row[0] !== undefined && row[0] !== null) {
                             let firstCell = String(row[0]).trim();
                             if (!isNaN(firstCell) && parseInt(firstCell) > 0) {
@@ -791,7 +799,6 @@
                             }
                         }
 
-                        // 2. Fallback de respaldo (barrido de celdas por si el orden varía)
                         if (!bioIdFound || !timeStrFound) {
                             row.forEach((cellVal) => {
                                 if (cellVal === undefined || cellVal === null) return;
@@ -820,7 +827,6 @@
                             const docente = docentesList.find(d => d.bioId === bioIdFound);
                             if (docente) {
                                 let cleanTime = timeStrFound || "07:00:00";
-
                                 let cleanDate = dateStrFound || new Date().toISOString().split('T')[0];
                                 if (cleanDate.includes('/')) {
                                     let dParts = cleanDate.split('/');
@@ -880,7 +886,197 @@
             reader.readAsArrayBuffer(file);
         }
 
-        // GESTIÓN DE ATRASOS MANUALES
+        function toggleFolderExpand(id) {
+            expandedFolders[id] = !expandedFolders[id];
+            renderFoldersContainer();
+        }
+
+        function renderFoldersContainer() {
+            const container = document.getElementById('foldersContainer');
+            const countBadge = document.getElementById('folderCountBadge');
+            if(!container) return;
+
+            container.innerHTML = '';
+            countBadge.innerText = uploadedFilesList.length;
+            document.getElementById('statRegistros').innerText = biometricLogs.length;
+
+            if (uploadedFilesList.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center text-slate-400 bg-slate-50 rounded-2xl border border-slate-200">
+                        <i class="fa-solid fa-folder-open text-4xl mb-2 text-slate-300"></i>
+                        <p class="text-sm font-medium">No hay carpetas de biométrico subidas aún.</p>
+                        <p class="text-xs text-slate-400 mt-1">Sube un Excel arriba para que aparezca aquí como una carpeta interactiva.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            uploadedFilesList.forEach(folder => {
+                const isExpanded = !!expandedFolders[folder.id];
+                const folderLogs = biometricLogs.filter(b => b.fileId === folder.id);
+
+                let rowsHtml = '';
+                if (folderLogs.length === 0) {
+                    rowsHtml = `<tr><td colspan="5" class="p-3 text-center text-slate-400 text-xs">No hay marcaciones en esta carpeta.</td></tr>`;
+                } else {
+                    folderLogs.forEach((l) => {
+                        const badge = l.estado === 'Atraso' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800';
+                        rowsHtml += `
+                            <tr class="hover:bg-slate-50 transition border-b border-slate-100 text-xs">
+                                <td class="p-2.5 text-center font-bold text-blue-600">${l.bioId}</td>
+                                <td class="p-2.5 font-medium">${l.name}</td>
+                                <td class="p-2.5 font-mono">${l.datetime}</td>
+                                <td class="p-2.5 text-center"><span class="px-2.5 py-0.5 ${badge} rounded-full font-bold text-[10px]">${l.estado}</span></td>
+                                <td class="p-2.5 text-center space-x-1">
+                                    <button type="button" onclick="editBiometricLog('${l.id}')" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-500 hover:text-white text-amber-700 rounded text-xs font-bold transition" title="Editar Hora"><i class="fa-solid fa-pen"></i> Editar</button>
+                                    <button type="button" onclick="deleteBiometricLog('${l.id}')" class="px-2.5 py-1 bg-red-50 hover:bg-red-600 hover:text-white text-red-600 rounded text-xs font-bold transition" title="Eliminar Registro"><i class="fa-solid fa-trash"></i> Eliminar</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                container.innerHTML += `
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition space-y-4 flex flex-col justify-between">
+                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-2xl shadow-inner flex-shrink-0">
+                                    <i class="fa-solid ${isExpanded ? 'fa-folder-open' : 'fa-folder-closed'}"></i>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-slate-800 text-sm" title="${folder.name}">${folder.name}</h5>
+                                    <p class="text-xs text-slate-400">Subido: ${folder.uploadDate} | <strong class="text-blue-600">${folder.totalRecords} marcas</strong> | <strong class="text-amber-600">${folder.atrasosCount} atrasos</strong></p>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button type="button" onclick="toggleFolderExpand('${folder.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm">
+                                    <i class="fa-solid ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'}"></i> ${isExpanded ? 'Ocultar Datos' : 'Desplegar Datos (Ver / Gestionar)'}
+                                </button>
+                                <button type="button" onclick="openEditFolderModal('${folder.id}', '${folder.name}')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1">
+                                    <i class="fa-solid fa-pen"></i> Editar Carpeta
+                                </button>
+                                <button type="button" onclick="deleteFolder('${folder.id}')" class="bg-red-50 hover:bg-red-600 hover:text-white text-red-600 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1" title="Eliminar Carpeta">
+                                    <i class="fa-solid fa-trash"></i> Borrar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- DESPLIEGUE HACIA ABAJO (ACORDEÓN INLINE) -->
+                        <div id="expand-${folder.id}" class="${isExpanded ? 'block' : 'hidden'} pt-4 border-t border-slate-100 space-y-3">
+                            <div class="flex justify-between items-center">
+                                <h6 class="font-bold text-slate-700 text-xs uppercase tracking-wider flex items-center gap-2">
+                                    <i class="fa-solid fa-list text-blue-600"></i> Registros y Marcaciones de esta Carpeta
+                                </h6>
+                                <button type="button" onclick="addManualLogToFolder('${folder.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1">
+                                    <i class="fa-solid fa-plus"></i> Agregar Marcación
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto border border-slate-200 rounded-xl max-h-72 overflow-y-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-100 text-slate-600 uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                            <th class="p-2.5 text-center">Cód Biométrico</th>
+                                            <th class="p-2.5">Docente</th>
+                                            <th class="p-2.5">Fecha y Hora</th>
+                                            <th class="p-2.5 text-center">Estado</th>
+                                            <th class="p-2.5 text-center">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-100 text-slate-700">
+                                        ${rowsHtml}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteBiometricLog(logId) {
+            if(confirm("⚠️ ¿Desea eliminar este registro de marcación?")) {
+                biometricLogs = biometricLogs.filter(b => b.id != logId);
+                uploadedFilesList.forEach(f => {
+                    let logsInFolder = biometricLogs.filter(b => b.fileId === f.id);
+                    f.totalRecords = logsInFolder.length;
+                    f.atrasosCount = logsInFolder.filter(b => b.estado === 'Atraso').length;
+                });
+                saveData();
+                renderFoldersContainer();
+                applyDateFilter();
+                loadDocenteSheet();
+            }
+        }
+
+        function editBiometricLog(logId) {
+            const log = biometricLogs.find(b => b.id == logId);
+            if(!log) return;
+
+            let newTime = prompt("Ingrese la nueva hora (HH:MM:SS o HH:MM):", log.timePart);
+            if(newTime === null) return;
+
+            let cleanT = parseTimeValue(newTime) || newTime;
+            log.timePart = cleanT;
+            log.datetime = log.datePart + ' ' + cleanT;
+            log.estado = cleanT > "07:00:00" ? "Atraso" : "A Tiempo";
+
+            uploadedFilesList.forEach(f => {
+                let logsInFolder = biometricLogs.filter(b => b.fileId === f.id);
+                f.totalRecords = logsInFolder.length;
+                f.atrasosCount = logsInFolder.filter(b => b.estado === 'Atraso').length;
+            });
+
+            saveData();
+            renderFoldersContainer();
+            applyDateFilter();
+            loadDocenteSheet();
+            alert("✅ Registro actualizado correctamente.");
+        }
+
+        function addManualLogToFolder(fileId) {
+            let bioIdInput = prompt("Ingrese el Código Biométrico del Docente (ej. 3):");
+            if(!bioIdInput) return;
+            let bioId = parseInt(bioIdInput);
+            let docente = docentesList.find(d => d.bioId === bioId);
+            if(!docente) return alert("⚠️ No existe ningún docente con ese código biométrico en la nómina oficial.");
+
+            let dateInput = prompt("Ingrese la fecha (YYYY-MM-DD):", new Date().toISOString().split('T')[0]);
+            if(!dateInput) return;
+
+            let timeInput = prompt("Ingrese la hora de entrada (ej. 07:15):", "07:15");
+            if(!timeInput) return;
+
+            let cleanT = parseTimeValue(timeInput) || timeInput;
+            let esAtraso = cleanT > "07:00:00";
+
+            const newLog = {
+                id: Date.now() + Math.random(),
+                fileId: fileId,
+                bioId: bioId,
+                name: docente.name,
+                datePart: dateInput,
+                timePart: cleanT,
+                datetime: `${dateInput} ${cleanT}`,
+                estado: esAtraso ? "Atraso" : "A Tiempo"
+            };
+
+            biometricLogs.unshift(newLog);
+
+            uploadedFilesList.forEach(f => {
+                if(f.id === fileId) {
+                    let logsInFolder = biometricLogs.filter(b => b.fileId === f.id);
+                    f.totalRecords = logsInFolder.length;
+                    f.atrasosCount = logsInFolder.filter(b => b.estado === 'Atraso').length;
+                }
+            });
+
+            saveData();
+            renderFoldersContainer();
+            applyDateFilter();
+            loadDocenteSheet();
+            alert("✅ Marcación agregada con éxito a la carpeta.");
+        }
+
         function handleAtrasoManualSubmit(e) {
             e.preventDefault();
             const bioId = parseInt(document.getElementById('atrasoManualDocente').value);
@@ -949,63 +1145,6 @@
             }
         }
 
-        function renderFoldersContainer() {
-            const container = document.getElementById('foldersContainer');
-            const countBadge = document.getElementById('folderCountBadge');
-            if(!container) return;
-
-            container.innerHTML = '';
-            countBadge.innerText = uploadedFilesList.length;
-            document.getElementById('statRegistros').innerText = biometricLogs.length;
-
-            if (uploadedFilesList.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full p-8 text-center text-slate-400 bg-slate-50 rounded-2xl border border-slate-200">
-                        <i class="fa-solid fa-folder-open text-4xl mb-2 text-slate-300"></i>
-                        <p class="text-sm font-medium">No hay carpetas de biométrico subidas aún.</p>
-                        <p class="text-xs text-slate-400 mt-1">Sube un Excel arriba para que aparezca aquí como una carpeta editable.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            uploadedFilesList.forEach(folder => {
-                container.innerHTML += `
-                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition space-y-4 flex flex-col justify-between">
-                        <div class="flex items-start justify-between gap-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-2xl shadow-inner flex-shrink-0">
-                                    <i class="fa-solid fa-folder-closed"></i>
-                                </div>
-                                <div>
-                                    <h5 class="font-bold text-slate-800 text-sm truncate max-w-[200px]" title="${folder.name}">${folder.name}</h5>
-                                    <p class="text-xs text-slate-400">Subido: ${folder.uploadDate}</p>
-                                </div>
-                            </div>
-                            <span class="px-2.5 py-1 bg-blue-50 text-blue-700 font-bold text-xs rounded-full">${folder.totalRecords} marcas</span>
-                        </div>
-
-                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex justify-between items-center text-xs">
-                            <span class="text-slate-600">Atrasos en archivo:</span>
-                            <span class="font-bold text-amber-600">${folder.atrasosCount} detectados (> 07:00 AM)</span>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
-                            <button type="button" onclick="inspectFolder('${folder.id}')" class="flex-1 bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-600 px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-eye"></i> Ver
-                            </button>
-                            <button type="button" onclick="openEditFolderModal('${folder.id}', '${folder.name}')" class="flex-1 bg-amber-50 hover:bg-amber-500 hover:text-white text-amber-700 px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-pen"></i> Editar
-                            </button>
-                            <button type="button" onclick="deleteFolder('${folder.id}')" class="bg-red-50 hover:bg-red-600 hover:text-white text-red-600 px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center justify-center" title="Borrar Carpeta">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
         function openEditFolderModal(id, currentName) {
             document.getElementById('editFolderId').value = id;
             document.getElementById('editFolderNameInput').value = currentName;
@@ -1044,40 +1183,6 @@
             }
         }
 
-        function inspectFolder(id) {
-            const folder = uploadedFilesList.find(f => f.id === id);
-            if(!folder) return;
-
-            document.getElementById('inspectFolderTitle').innerHTML = `<i class="fa-solid fa-folder-open text-amber-500 mr-2"></i> Contenido de: ${folder.name}`;
-            const tbody = document.getElementById('inspectTableBody');
-            tbody.innerHTML = '';
-
-            const logs = biometricLogs.filter(b => b.fileId === id);
-
-            if(logs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">No hay registros en esta carpeta.</td></tr>`;
-            } else {
-                logs.forEach(l => {
-                    const badge = l.estado === 'Atraso' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800';
-                    tbody.innerHTML += `
-                        <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-                            <td class="p-2.5 text-center font-bold text-blue-600">${l.bioId}</td>
-                            <td class="p-2.5 font-medium">${l.name}</td>
-                            <td class="p-2.5 font-mono">${l.datetime}</td>
-                            <td class="p-2.5 text-center"><span class="px-2 py-0.5 ${badge} rounded-full text-xs font-bold">${l.estado}</span></td>
-                        </tr>
-                    `;
-                });
-            }
-
-            document.getElementById('inspectFolderModal').classList.remove('hidden');
-        }
-
-        function closeInspectFolderModal() {
-            document.getElementById('inspectFolderModal').classList.add('hidden');
-        }
-
-        // MINI GEMINI IA LOGIC - 100% CONECTADO A CÓDIGOS DE BIOMÉTRICO
         function handleGeminiQuery(e) {
             e.preventDefault();
             const input = document.getElementById('geminiPromptInput');
@@ -1107,7 +1212,6 @@
                 const filteredManualAtrasos = atrasosManualesList.filter(a => a.fecha >= from && a.fecha <= to);
                 const totalAtrasosCount = filteredBioAtrasos.length + filteredManualAtrasos.length;
 
-                // Buscar docente específico por nombre o código biométrico (ej. "3" o "almeida")
                 let docenteMencionado = docentesList.find(d => qLower.includes(d.name.toLowerCase()) || qLower.includes(String(d.bioId)));
 
                 if (docenteMencionado) {
@@ -1249,7 +1353,6 @@
             if(manualDoc) manualDoc.innerHTML = '';
             if(exportDoc) exportDoc.innerHTML = '';
 
-            // Ordenar docentes por código biométrico numérico
             let sortedDocs = [...docentesList].sort((a,b) => a.bioId - b.bioId);
 
             sortedDocs.forEach(d => {
@@ -1297,7 +1400,6 @@
                 return;
             }
 
-            // Renderizar Marcaciones Biométricas
             docBioLogs.forEach(log => {
                 const isAtraso = log.estado === 'Atraso';
                 const badgeColor = isAtraso ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800';
@@ -1316,7 +1418,6 @@
                 `;
             });
 
-            // Renderizar Atrasos Manuales
             docManuals.forEach(m => {
                 const dObj = new Date(m.fecha + "T00:00:00");
                 const dayName = dObj.toLocaleDateString('es-ES', { weekday: 'long' });
@@ -1545,7 +1646,6 @@
                 const atrasosBio = docBioLogs.filter(b => b.estado === 'Atraso').length;
                 const aTiempo = docBioLogs.filter(b => b.estado === 'A Tiempo').length;
 
-                // Resumen de permisos/faltas
                 let permisosStr = docSalidas.map(s => `${s.tipo} (${s.estado})`).join('; ') || 'Ninguno';
 
                 return {
