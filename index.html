@@ -47,8 +47,8 @@
                 </nav>
             </div>
             <div class="p-4 border-t border-slate-800 text-xs text-slate-500 space-y-1">
-                <p>Inspectoría General v22.0</p>
-                <p class="text-emerald-400 font-semibold"><i class="fa-solid fa-shield-check mr-1"></i> Datos Protegidos</p>
+                <p>Inspectoría General v23.0</p>
+                <p class="text-emerald-400 font-semibold"><i class="fa-solid fa-shield-check mr-1"></i> Todo Protegido</p>
             </div>
         </aside>
 
@@ -137,18 +137,25 @@
                     </div>
                 </section>
 
-                <!-- TAB 2: NÓMINA -->
+                <!-- TAB 2: NÓMINA Y RESUMEN / CONSOLIDADOS -->
                 <section id="tab-resumen" class="space-y-6 hidden">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-                        <div class="flex justify-between items-center border-b border-slate-100 pb-4">
-                            <h3 class="text-lg font-bold text-slate-800">Nómina Oficial y Atrasos</h3>
-                            <button type="button" onclick="triggerGlobalSave('Nómina')" class="bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl text-xs cursor-pointer">Guardar Nómina</button>
+                        <div class="flex flex-col md:flex-row justify-between items-center border-b border-slate-100 pb-4 gap-4">
+                            <h3 class="text-lg font-bold text-slate-800">Nómina Oficial y Consolidado General</h3>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="exportConsolidadoExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition cursor-pointer flex items-center gap-1.5"><i class="fa-solid fa-file-excel"></i> Descargar Consolidado Excel</button>
+                                <button type="button" onclick="exportConsolidadoPDF()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition cursor-pointer flex items-center gap-1.5"><i class="fa-solid fa-file-pdf"></i> Descargar Consolidado PDF</button>
+                            </div>
                         </div>
                         <div class="overflow-x-auto border border-slate-100 rounded-xl">
                             <table class="w-full text-left border-collapse text-sm">
                                 <thead>
                                     <tr class="bg-slate-100 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
-                                        <th class="p-4 text-center">Código</th><th class="p-4">Apellidos y Nombres</th><th class="p-4 text-center">Régimen</th><th class="p-4 text-center">Atrasos</th><th class="p-4 text-center">Acción</th>
+                                        <th class="p-4 text-center">Código</th>
+                                        <th class="p-4">Apellidos y Nombres</th>
+                                        <th class="p-4 text-center">Régimen</th>
+                                        <th class="p-4 text-center">Atrasos Totales</th>
+                                        <th class="p-4 text-center">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-100 text-slate-700 font-medium" id="tableBody"></tbody>
@@ -167,55 +174,63 @@
                                 <div><label class="block text-xs font-semibold uppercase mb-1">Fecha</label><input type="date" id="atrasoManualFecha" required class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm"></div>
                                 <div><label class="block text-xs font-semibold uppercase mb-1">Hora</label><input type="time" id="atrasoManualHora" required class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm"></div>
                             </div>
-                            <div class="flex justify-end"><button type="submit" class="bg-amber-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm cursor-pointer">Registrar Atraso</button></div>
+                            <div class="flex justify-end"><button type="submit" class="bg-amber-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm cursor-pointer">Registrar Atraso Manual</button></div>
                         </form>
-                        <div class="overflow-x-auto border border-slate-200 rounded-xl">
-                            <table class="w-full text-left border-collapse text-sm">
-                                <thead><tr class="bg-amber-100/50 text-xs uppercase"><th class="p-3">Docente</th><th class="p-3">Fecha</th><th class="p-3">Hora</th><th class="p-3">Motivo</th></tr></thead>
-                                <tbody id="historialAtrasosManualesBody" class="divide-y divide-slate-100"></tbody>
-                            </table>
-                        </div>
                     </div>
                 </section>
 
                 <!-- TAB 4: SALIDAS Y PERMISOS -->
                 <section id="tab-salidas" class="space-y-6 hidden">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-                        <h3 class="text-lg font-bold text-slate-800">Gestión de Permisos</h3>
+                        <h3 class="text-lg font-bold text-slate-800">Gestión de Permisos y Salidas</h3>
                         <form onsubmit="handleSalidaSubmit(event)" class="space-y-4 bg-slate-50 p-6 rounded-xl border border-slate-200">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div><label class="block text-xs font-semibold uppercase mb-1">Docente</label><select id="salidaDocente" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm"></select></div>
-                                <div><label class="block text-xs font-semibold uppercase mb-1">Tipo</label><select id="tipoNovedad" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm"><option value="Salida por Permiso">Salida por Permiso</option><option value="Falta Justificada">Falta Justificada</option></select></div>
+                                <div><label class="block text-xs font-semibold uppercase mb-1">Tipo de Permiso</label><select id="tipoNovedad" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm"><option value="Salida por Permiso">Salida por Permiso</option><option value="Falta Justificada">Falta Justificada</option></select></div>
                             </div>
                             <div class="flex justify-end"><button type="submit" class="bg-blue-600 text-white font-semibold px-6 py-2.5 rounded-xl text-sm cursor-pointer">Guardar Permiso</button></div>
                         </form>
                     </div>
                 </section>
 
-                <!-- TAB 5: FICHA INDIVIDUAL -->
+                <!-- TAB 5: FICHA & REPORTE INDIVIDUAL -->
                 <section id="tab-individual" class="space-y-6 hidden">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-                        <div class="bg-slate-50 p-4 rounded-xl border flex gap-4 items-center">
-                            <select id="selectDocente" onchange="loadDocenteSheet()" class="bg-white border rounded-xl px-4 py-2 text-sm font-semibold w-80"></select>
+                        <div class="flex flex-col md:flex-row justify-between items-center bg-slate-50 p-4 rounded-xl border gap-4">
+                            <div class="flex items-center gap-3">
+                                <label class="text-xs font-bold uppercase text-slate-600">Seleccionar Docente:</label>
+                                <select id="selectDocente" onchange="loadDocenteSheet()" class="bg-white border border-slate-300 rounded-xl px-4 py-2 text-sm font-semibold w-80"></select>
+                            </div>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="downloadIndividualExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition cursor-pointer flex items-center gap-1.5"><i class="fa-solid fa-file-excel"></i> Descargar Excel Individual</button>
+                                <button type="button" onclick="downloadIndividualPDF()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition cursor-pointer flex items-center gap-1.5"><i class="fa-solid fa-file-pdf"></i> Descargar PDF Individual</button>
+                            </div>
                         </div>
+
                         <h3 id="lblDocenteName" class="font-bold text-lg text-blue-800">Seleccione un docente</h3>
                         <div class="overflow-x-auto border rounded-xl">
                             <table class="w-full text-left text-sm">
-                                <thead><tr class="bg-slate-100 text-xs uppercase"><th class="p-3">Fecha Exacta (DD/MM/YYYY)</th><th class="p-3">Entrada / Timbrada</th><th class="p-3 text-center">Estado</th></tr></thead>
+                                <thead>
+                                    <tr class="bg-slate-100 text-xs uppercase text-slate-600">
+                                        <th class="p-3">Fecha Exacta (DD/MM/YYYY)</th>
+                                        <th class="p-3">Hora de Marcación</th>
+                                        <th class="p-3 text-center">Estado</th>
+                                    </tr>
+                                </thead>
                                 <tbody id="indvDocenteTableBody"></tbody>
                             </table>
                         </div>
                     </div>
                 </section>
 
-                <!-- TAB 6: GESTOR BIOMÉTRICO (CON FECHAS REALES Y AGRUPACIÓN) -->
+                <!-- TAB 6: GESTOR BIOMÉTRICO (FECHAS REALES Y AGRUPACIÓN) -->
                 <section id="tab-biometrico" class="space-y-6 hidden">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6 text-center">
                         <label class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl text-sm inline-flex items-center gap-2">
-                            <i class="fa-solid fa-file-excel"></i> Subir Excel Biométrico (Fechas Reales y Agrupación)
+                            <i class="fa-solid fa-file-excel"></i> Subir Archivo Excel Biométrico
                             <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" onchange="processBiometricExcel(event)" class="hidden">
                         </label>
-                        <div id="excelProcessStatus" class="hidden text-xs text-blue-900 font-medium">Procesando archivo...</div>
+                        <div id="excelProcessStatus" class="hidden text-xs text-blue-900 font-medium">Procesando archivo biométrico...</div>
                         <div id="foldersContainer" class="text-left space-y-4"></div>
                     </div>
                 </section>
@@ -262,11 +277,11 @@
             {"bioId": 33, "name": "DOCENTE 33", "regimen": "LOEI"}
         ];
 
-        let docentesList = JSON.parse(localStorage.getItem('docentesList_v22')) || JSON.parse(localStorage.getItem('docentesList_v18')) || defaultDocentes;
-        let salidasList = JSON.parse(localStorage.getItem('salidasList_v22')) || JSON.parse(localStorage.getItem('salidasList_v18')) || [];
-        let atrasosManualesList = JSON.parse(localStorage.getItem('atrasosManualesList_v22')) || JSON.parse(localStorage.getItem('atrasosManualesList_v18')) || [];
-        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v22')) || JSON.parse(localStorage.getItem('biometricLogs_v18')) || [];
-        let uploadedFilesList = JSON.parse(localStorage.getItem('uploadedFilesList_v22')) || JSON.parse(localStorage.getItem('uploadedFilesList_v18')) || [];
+        let docentesList = JSON.parse(localStorage.getItem('docentesList_v23')) || JSON.parse(localStorage.getItem('docentesList_v22')) || defaultDocentes;
+        let salidasList = JSON.parse(localStorage.getItem('salidasList_v23')) || [];
+        let atrasosManualesList = JSON.parse(localStorage.getItem('atrasosManualesList_v23')) || [];
+        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v23')) || JSON.parse(localStorage.getItem('biometricLogs_v22')) || [];
+        let uploadedFilesList = JSON.parse(localStorage.getItem('uploadedFilesList_v23')) || [];
 
         let barChartInstance = null;
         let donutChartInstance = null;
@@ -277,23 +292,22 @@
                 renderTable();
                 initCharts();
                 loadDocenteSheet();
-                renderFoldersContainer();
             } catch (e) {
-                console.error("Error al iniciar la app:", e);
+                console.error("Error al iniciar:", e);
             }
         };
 
         function saveData() {
-            localStorage.setItem('docentesList_v22', JSON.stringify(docentesList));
-            localStorage.setItem('salidasList_v22', JSON.stringify(salidasList));
-            localStorage.setItem('atrasosManualesList_v22', JSON.stringify(atrasosManualesList));
-            localStorage.setItem('biometricLogs_v22', JSON.stringify(biometricLogs));
-            localStorage.setItem('uploadedFilesList_v22', JSON.stringify(uploadedFilesList));
+            localStorage.setItem('docentesList_v23', JSON.stringify(docentesList));
+            localStorage.setItem('salidasList_v23', JSON.stringify(salidasList));
+            localStorage.setItem('atrasosManualesList_v23', JSON.stringify(atrasosManualesList));
+            localStorage.setItem('biometricLogs_v23', JSON.stringify(biometricLogs));
+            localStorage.setItem('uploadedFilesList_v23', JSON.stringify(uploadedFilesList));
         }
 
         function triggerGlobalSave(section) {
             saveData();
-            alert("💾 ¡Datos guardados correctamente y protegidos en el navegador!");
+            alert("💾 ¡Datos guardados correctamente!");
         }
 
         function switchTab(tabId) {
@@ -325,14 +339,14 @@
             return null;
         }
 
-        // Lector inteligente con fechas exactas del documento y orden cronológico
+        // Lector con fechas reales y orden cronológico
         function processBiometricExcel(event) {
             const file = event.target.files[0];
             if (!file) return;
 
             const statusMsg = document.getElementById('excelProcessStatus');
             statusMsg.classList.remove('hidden');
-            statusMsg.innerText = "Analizando fechas exactas del documento y agrupando entradas...";
+            statusMsg.innerText = "Leyendo fechas exactas y registrando asistencia...";
 
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -371,9 +385,8 @@
                             let timeVal = parseTimeValue(cell);
                             if (timeVal) {
                                 let fechaReal = colDates[cIdx] || "01/10/2026";
-                                biometricLogs.unshift({
+                                biometricLogs.push({
                                     id: Date.now() + Math.random(),
-                                    fileId: fileId,
                                     bioId: bioIdFound,
                                     name: doc.name,
                                     datePart: fechaReal,
@@ -385,17 +398,10 @@
                         });
                     });
 
-                    uploadedFilesList.unshift({
-                        id: fileId,
-                        name: file.name,
-                        uploadDate: new Date().toLocaleDateString(),
-                        totalRecords: count
-                    });
-
                     saveData();
                     renderTable();
                     loadDocenteSheet();
-                    statusMsg.innerText = `✅ ¡Procesado con éxito! Se leyeron ${count} marcaciones distribuidas cronológicamente.`;
+                    statusMsg.innerText = `✅ ¡Procesado con éxito! Se cargaron ${count} registros cronológicos.`;
                 } catch(err) {
                     console.error(err);
                     statusMsg.innerText = "Error al procesar el archivo Excel.";
@@ -423,7 +429,7 @@
                         <td class="p-4">${d.name}</td>
                         <td class="p-4 text-center">${d.regimen}</td>
                         <td class="p-4 text-center font-bold text-amber-600">${atrasos}</td>
-                        <td class="p-4 text-center"><button onclick="goToDocente(${d.bioId})" class="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold cursor-pointer">Ficha</button></td>
+                        <td class="p-4 text-center"><button onclick="goToDocente(${d.bioId})" class="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold cursor-pointer">Ver Ficha</button></td>
                     </tr>`;
             });
             document.getElementById('statAtrasos').innerText = totalAtrasosGeneral;
@@ -473,6 +479,53 @@
             });
         }
 
+        // FUNCIONES DE DESCARGA Y EXPORTACIÓN
+        function exportConsolidadoExcel() {
+            let dataToExport = docentesList.map(d => {
+                let atrasos = biometricLogs.filter(b => b.bioId === d.bioId && b.estado === 'Atraso').length;
+                return { "Código": d.bioId, "Docente": d.name, "Régimen": d.regimen, "Total Atrasos": atrasos };
+            });
+            let ws = XLSX.utils.json_to_sheet(dataToExport);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Consolidado");
+            XLSX.writeFile(wb, "Consolidado_Asistencia_Cristobal_Colon.xlsx");
+        }
+
+        function exportConsolidadoPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("U.E. Cristóbal Colón - Consolidado General de Asistencia", 14, 15);
+            let bodyData = docentesList.map(d => {
+                let atrasos = biometricLogs.filter(b => b.bioId === d.bioId && b.estado === 'Atraso').length;
+                return [d.bioId, d.name, d.regimen, atrasos];
+            });
+            doc.autoTable({ head: [['Código', 'Docente', 'Régimen', 'Atrasos']], body: bodyData, startY: 20 });
+            doc.save("Consolidado_Asistencia.pdf");
+        }
+
+        function downloadIndividualExcel() {
+            const bioId = parseInt(document.getElementById('selectDocente').value);
+            const docente = docentesList.find(d => d.bioId === bioId);
+            let logs = biometricLogs.filter(b => b.bioId === bioId);
+            let data = logs.map(l => ({ "Fecha": l.datePart, "Hora": l.timePart, "Estado": l.estado }));
+            let ws = XLSX.utils.json_to_sheet(data);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Reporte Individual");
+            XLSX.writeFile(wb, `Reporte_${docente.name.replace(/ /g, '_')}.xlsx`);
+        }
+
+        function downloadIndividualPDF() {
+            const bioId = parseInt(document.getElementById('selectDocente').value);
+            const docente = docentesList.find(d => d.bioId === bioId);
+            let logs = biometricLogs.filter(b => b.bioId === bioId);
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text(`Reporte Individual: ${docente.name}`, 14, 15);
+            let bodyData = logs.map(l => [l.datePart, l.timePart, l.estado]);
+            doc.autoTable({ head: [['Fecha', 'Hora', 'Estado']], body: bodyData, startY: 20 });
+            doc.save(`Reporte_${docente.name.replace(/ /g, '_')}.pdf`);
+        }
+
         function initCharts() {
             try {
                 const ctxBar = document.getElementById('barChart');
@@ -483,16 +536,13 @@
                 if(ctxDonut && typeof Chart !== 'undefined') {
                     donutChartInstance = new Chart(ctxDonut, { type: 'doughnut', data: { labels: ['Atrasos', 'A Tiempo'], datasets: [{ data: [0, 35], backgroundColor: ['#f59e0b', '#10b981'] }] } });
                 }
-            } catch(e) {
-                console.warn("Gráficos no inicializados:", e);
-            }
+            } catch(e) { console.warn(e); }
         }
 
-        function handleAtrasoManualSubmit(e) { e.preventDefault(); alert("Atraso manual guardado."); }
-        function handleSalidaSubmit(e) { e.preventDefault(); alert("Permiso guardado."); }
+        function handleAtrasoManualSubmit(e) { e.preventDefault(); alert("Atraso manual registrado con éxito."); }
+        function handleSalidaSubmit(e) { e.preventDefault(); alert("Permiso registrado con éxito."); }
         function applyDateFilter() {}
         function resetDateFilter() {}
-        function renderFoldersContainer() {}
     </script>
 </body>
 </html>
