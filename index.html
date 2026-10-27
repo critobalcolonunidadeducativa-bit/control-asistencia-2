@@ -32,6 +32,9 @@
                     <button type="button" onclick="switchTab('resumen')" id="nav-resumen" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition text-left">
                         <i class="fa-solid fa-users-rectangle w-5"></i> Nómina y Resumen
                     </button>
+                    <button type="button" onclick="switchTab('minutos-atrasos')" id="nav-minutos-atrasos" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition text-left text-indigo-400 font-semibold">
+                        <i class="fa-solid fa-stopwatch w-5"></i> Minutos de Atraso y Permisos
+                    </button>
                     <button type="button" onclick="switchTab('atrasos-manuales')" id="nav-atrasos-manuales" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 hover:text-white transition text-left text-amber-400 font-semibold">
                         <i class="fa-solid fa-clock-rotate-left w-5"></i> Atrasos Manuales
                     </button>
@@ -47,7 +50,7 @@
                 </nav>
             </div>
             <div class="p-4 border-t border-slate-800 text-xs text-slate-500 space-y-1">
-                <p>Inspectoría General v19.0</p>
+                <p>Inspectoría General v25.0</p>
                 <p class="text-emerald-400 font-semibold"><i class="fa-solid fa-sparkles mr-1"></i> Mini Gemini Conectado</p>
             </div>
         </aside>
@@ -186,7 +189,7 @@
                             <h3 class="text-lg font-bold text-white flex items-center gap-2">
                                 <i class="fa-solid fa-file-export text-emerald-400"></i> Centro de Exportación de Informes Consolidados
                             </h3>
-                            <p class="text-xs text-slate-300 mt-1">Descargue reportes oficiales en Excel o PDF horizontal incluyendo atrasos y marcaciones diarias.</p>
+                            <p class="text-xs text-slate-300 mt-1">Descargue reportes oficiales en Excel o PDF horizontal incluyendo atrasos, minutos y justificaciones.</p>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
@@ -281,6 +284,39 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-100 text-slate-700 font-medium" id="tableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB: MINUTOS DE ATRASOS Y PERMISOS -->
+                <section id="tab-minutos-atrasos" class="space-y-6 hidden">
+                    <div class="bg-white p-6 rounded-2xl border border-indigo-200 shadow-sm space-y-6">
+                        <div class="border-b border-indigo-100 pb-4 flex justify-between items-center">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                    <i class="fa-solid fa-stopwatch text-indigo-600"></i> Resumen de Nómina, Minutos de Atraso y Justificaciones
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1">Acumulado de minutos de atraso, tiempo justificado por permisos y detalle de justificativos flotantes.</p>
+                            </div>
+                            <button type="button" onclick="triggerGlobalSave('Minutos y Atrasos')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
+                                <i class="fa-solid fa-floppy-disk"></i> Guardar Vista
+                            </button>
+                        </div>
+
+                        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                            <table class="w-full text-left border-collapse text-sm">
+                                <thead>
+                                    <tr class="bg-indigo-50 text-indigo-900 uppercase text-xs tracking-wider border-b border-indigo-200">
+                                        <th class="p-3 text-center">Código</th>
+                                        <th class="p-3">Docente</th>
+                                        <th class="p-3 text-center">Total Atrasos</th>
+                                        <th class="p-3 text-center">Minutos de Atraso Acumulados</th>
+                                        <th class="p-3 text-center">Minutos Justificados (Permisos)</th>
+                                        <th class="p-3 text-center">Estado / Justificativos</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="minutosAtrasosBody" class="divide-y divide-slate-100 text-slate-700 font-medium"></tbody>
                             </table>
                         </div>
                     </div>
@@ -483,7 +519,7 @@
                         <!-- Ficha Diaria Detallada -->
                         <div class="space-y-3">
                             <h4 class="font-bold text-slate-800 text-sm flex justify-between items-center">
-                                <span><i class="fa-solid fa-calendar-days text-blue-600 mr-2"></i> Registro Diario de Entradas del Biométrico</span>
+                                <span><i class="fa-solid fa-calendar-days text-blue-600 mr-2"></i> Registro Diario Consolidado del Docente</span>
                                 <span class="text-xs text-slate-400 font-normal">Entrada oficial 07:00 AM</span>
                             </h4>
                             <div class="overflow-x-auto border border-slate-100 rounded-xl">
@@ -492,9 +528,10 @@
                                         <tr class="bg-slate-100 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
                                             <th class="p-3">Fecha</th>
                                             <th class="p-3">Día</th>
-                                            <th class="p-3">Hora de Marcación</th>
+                                            <th class="p-3">Entrada Biométrico</th>
+                                            <th class="p-3">Salida Biométrico</th>
                                             <th class="p-3 text-center">Estado de Entrada</th>
-                                            <th class="p-3">Origen / Observación</th>
+                                            <th class="p-3 text-center">Minutos Atraso</th>
                                         </tr>
                                     </thead>
                                     <tbody id="indvDocenteTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
@@ -510,7 +547,7 @@
                         <div class="border-b border-slate-100 pb-4 flex justify-between items-center">
                             <div>
                                 <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-folder-tree text-blue-600 mr-2"></i> Gestor de Carpetas y Reportes Biométricos</h3>
-                                <p class="text-xs text-slate-500 mt-1">Cada archivo Excel subido se organiza como una carpeta individual para editar su nombre, revisar su contenido o eliminarlo.</p>
+                                <p class="text-xs text-slate-500 mt-1">Cada archivo Excel subido despliega hacia abajo con sus marcaciones procesadas, mostrando entradas, salidas y botón de implementar cambios.</p>
                             </div>
                             <button type="button" onclick="triggerGlobalSave('Archivos Biométricos')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-2">
                                 <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
@@ -536,13 +573,13 @@
                             <span id="excelStatusMsg"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Procesando archivo Excel...</span>
                         </div>
 
-                        <!-- VISTA DE CARPETAS / CARDS -->
+                        <!-- VISTA DE CARPETAS / ACORDEÓN DESPLEGABLE -->
                         <div class="space-y-4">
                             <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-folder-open text-amber-500"></i> Carpetas de Reportes Subidos (<span id="folderCountBadge">0</span>)
+                                <i class="fa-solid fa-folder-open text-amber-500"></i> Carpetas y Reportes Subidos (<span id="folderCountBadge">0</span>)
                             </h4>
-                            <div id="foldersContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                <!-- Se renderiza dinámicamente -->
+                            <div id="foldersContainer" class="space-y-4">
+                                <!-- Se renderiza dinámicamente con despliegue hacia abajo -->
                             </div>
                         </div>
                     </div>
@@ -573,25 +610,16 @@
         </div>
     </div>
 
-    <!-- MODAL INSPECCIONAR CONTENIDO DE CARPETA -->
-    <div id="inspectFolderModal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl max-w-3xl w-full p-6 space-y-4 shadow-2xl">
+    <!-- VENTANA FLOTANTE PARA DETALLE DE PERMISO / JUSTIFICATIVO -->
+    <div id="permisoModal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 id="inspectFolderTitle" class="font-bold text-lg text-slate-800"><i class="fa-solid fa-folder-open text-amber-500 mr-2"></i> Contenido de la Carpeta</h3>
-                <button type="button" onclick="closeInspectFolderModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold"><i class="fa-solid fa-xmark"></i></button>
+                <h3 class="font-bold text-lg text-slate-800"><i class="fa-solid fa-file-circle-check text-emerald-600 mr-2"></i> Detalle de Justificativo / Permiso</h3>
+                <button type="button" onclick="closePermisoModal()" class="text-slate-400 hover:text-slate-600 text-lg font-bold"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="max-h-96 overflow-y-auto">
-                <table class="w-full text-left border-collapse text-xs">
-                    <thead>
-                        <tr class="bg-slate-100 text-slate-600 uppercase tracking-wider border-b border-slate-200">
-                            <th class="p-2.5 text-center">Código Biométrico</th>
-                            <th class="p-2.5">Docente</th>
-                            <th class="p-2.5">Fecha y Hora</th>
-                            <th class="p-2.5 text-center">Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody id="inspectTableBody" class="divide-y divide-slate-100 text-slate-700"></tbody>
-                </table>
+            <div id="permisoModalContent" class="space-y-3 text-sm"></div>
+            <div class="flex justify-end pt-2">
+                <button type="button" onclick="closePermisoModal()" class="bg-slate-800 text-white font-semibold px-4 py-2 rounded-xl text-xs transition">Cerrar</button>
             </div>
         </div>
     </div>
@@ -643,28 +671,25 @@
     <script>
         let defaultDocentes = [{"bioId": 3, "name": "ALMEIDA ROMERO JHONNY PATRICIO", "regimen": "LOEI"}, {"bioId": 31, "name": "ANDINO POZO MODESTO ABSALON", "regimen": "LOEI"}, {"bioId": 4, "name": "CAICEDO ENRIQUEZ BRENDA ELIZABETH", "regimen": "LOEI"}, {"bioId": 36, "name": "JUAN CARLOS MIER", "regimen": "LOEI"}, {"bioId": 44, "name": "CEVALLOS GUERRERO BYRON WILFRIDO", "regimen": "LOEI"}, {"bioId": 5, "name": "CUASAPAZ CUASAPAZ GLADYS LUCIA", "regimen": "LOEI"}, {"bioId": 46, "name": "DE LA VEGA REYES JENNY ESTEFANIA", "regimen": "LOEI"}, {"bioId": 7, "name": "ERAZO BENAVIDES LILIA ROCIO", "regimen": "LOEI"}, {"bioId": 23, "name": "ESTRADA PEREZ LIDIA NARCIZA", "regimen": "LOEI"}, {"bioId": 14, "name": "FUELAGAN CUASES LIVIA CECILIA", "regimen": "LOEI"}, {"bioId": 8, "name": "GUACHAN CHULDE EDWIN ULPIANO", "regimen": "LOEI"}, {"bioId": 45, "name": "HERNANDEZ BENAVIDES YADIRA LIZETH", "regimen": "LOEI"}, {"bioId": 20, "name": "LANDAZURI RAMIREZ ERNESTO PATRICIO", "regimen": "LOEI"}, {"bioId": 22, "name": "LLORE GUERRERO FREDDY GERMAN", "regimen": "LOEI"}, {"bioId": 28, "name": "MARCO MADERA", "regimen": "LOEI"}, {"bioId": 29, "name": "MARTINEZ MARCELO", "regimen": "LOEI"}, {"bioId": 9, "name": "MEJIA CHAMORRO ROSA EDILMA", "regimen": "LOEI"}, {"bioId": 10, "name": "MORENO RUANO MARIA FILOMENA", "regimen": "LOEI"}, {"bioId": 21, "name": "MOLINA ROSA", "regimen": "LOEI"}, {"bioId": 16, "name": "PADILLA ESCOBAR JUAN VLADIMIR", "regimen": "LOEI"}, {"bioId": 11, "name": "PANTOJA JIMENEZ SARA JANETH", "regimen": "LOEI"}, {"bioId": 30, "name": "PANTOJA SUAREZ LILIA CARMELINA", "regimen": "LOEI"}, {"bioId": 19, "name": "PASPUEL ORMAZA NARCISA EDDY", "regimen": "LOEI"}, {"bioId": 34, "name": "PORTILLA RUEDA MARIANA DE JESUS", "regimen": "LOEI"}, {"bioId": 1, "name": "POZO PRADO MARCELO GUSTAVO", "regimen": "LOEI"}, {"bioId": 37, "name": "PATRICIA ELIZABETH ROSERO AYALA", "regimen": "LOEI"}, {"bioId": 12, "name": "RODRIGUEZ TAIMAL RITHA ESPERANZA", "regimen": "LOEI"}, {"bioId": 32, "name": "ROSERO LANDAZURI ELSA MARIELA", "regimen": "LOEI"}, {"bioId": 25, "name": "BECERRA VIZCAÍNO JUAN BOSCO", "regimen": "LOEI"}, {"bioId": 13, "name": "TAIMAL JIMENEZ ELINA OLIVA", "regimen": "LOEI"}, {"bioId": 18, "name": "YACELGA CORONEL MAYRA DE LOS ANGELES", "regimen": "LOEI"}, {"bioId": 26, "name": "CANGAS MORILLO MARLENE SOLEDAD", "regimen": "LOEI"}, {"bioId": 27, "name": "TAPIA NOLIVOS VIVIANA GEOCONDA", "regimen": "LOEI"}, {"bioId": 24, "name": "DOCENTE 24", "regimen": "LOEI"}, {"bioId": 33, "name": "DOCENTE 33", "regimen": "LOEI"}];
 
-        let storedDocentes = JSON.parse(localStorage.getItem('docentesList_v18')) || [];
-        // Asegurar que todos los defaultDocentes estén presentes en la lista
+        let storedDocentes = JSON.parse(localStorage.getItem('docentesList_v25')) || [];
         defaultDocentes.forEach(d => {
             if (!storedDocentes.some(s => s.bioId === d.bioId)) {
                 storedDocentes.push(d);
             } else {
-                // Actualizar nombre si fuera necesario
                 let existing = storedDocentes.find(s => s.bioId === d.bioId);
                 if (existing) existing.name = d.name;
             }
         });
         let docentesList = storedDocentes;
-        let salidasList = JSON.parse(localStorage.getItem('salidasList_v18')) || [];
-        let atrasosManualesList = JSON.parse(localStorage.getItem('atrasosManualesList_v18')) || [];
-        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v18')) || [];
-        let uploadedFilesList = JSON.parse(localStorage.getItem('uploadedFilesList_v18')) || [];
+        let salidasList = JSON.parse(localStorage.getItem('salidasList_v25')) || [];
+        let atrasosManualesList = JSON.parse(localStorage.getItem('atrasosManualesList_v25')) || [];
+        let biometricLogs = JSON.parse(localStorage.getItem('biometricLogs_v25')) || [];
+        let uploadedFilesList = JSON.parse(localStorage.getItem('uploadedFilesList_v25')) || [];
 
         let barChartInstance = null;
         let donutChartInstance = null;
 
         window.onload = function() {
-            // Configuración inicial de fechas: 1er día del mes actual hasta el día de hoy
             const now = new Date();
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -682,6 +707,7 @@
             renderAtrasosManualesHistorial();
             renderSalidasHistorial();
             renderTable();
+            renderMinutosAtrasosTab();
             initCharts();
             loadDocenteSheet();
             applyDateFilter();
@@ -689,11 +715,11 @@
         };
 
         function saveData() {
-            localStorage.setItem('docentesList_v18', JSON.stringify(docentesList));
-            localStorage.setItem('salidasList_v18', JSON.stringify(salidasList));
-            localStorage.setItem('atrasosManualesList_v18', JSON.stringify(atrasosManualesList));
-            localStorage.setItem('biometricLogs_v18', JSON.stringify(biometricLogs));
-            localStorage.setItem('uploadedFilesList_v18', JSON.stringify(uploadedFilesList));
+            localStorage.setItem('docentesList_v25', JSON.stringify(docentesList));
+            localStorage.setItem('salidasList_v25', JSON.stringify(salidasList));
+            localStorage.setItem('atrasosManualesList_v25', JSON.stringify(atrasosManualesList));
+            localStorage.setItem('biometricLogs_v25', JSON.stringify(biometricLogs));
+            localStorage.setItem('uploadedFilesList_v25', JSON.stringify(uploadedFilesList));
         }
 
         function triggerGlobalSave(sectionName) {
@@ -701,7 +727,32 @@
             alert(`💾 ¡Éxito! Todos los datos de [${sectionName}] han sido guardados sin perder nada.`);
         }
 
-        // PARSER DE HORA (Soporta Horas String y Números de Serie de Excel)
+        function parseExcelDate(val) {
+            if (val === undefined || val === null) return null;
+            let str = String(val).trim();
+
+            if (!isNaN(str) && parseFloat(str) > 30000) {
+                let utc_days = Math.floor(parseFloat(str) - 25569);
+                let utc_value = utc_days * 86400;
+                let dateInfo = new Date(utc_value * 1000);
+                let y = dateInfo.getUTCFullYear();
+                let m = String(dateInfo.getUTCMonth() + 1).padStart(2, '0');
+                let d = String(dateInfo.getUTCDate()).padStart(2, '0');
+                return `${y}-${m}-${d}`;
+            }
+
+            if (str.includes('-') || str.includes('/')) {
+                let clean = str.split(' ')[0].replace('T', '');
+                if (clean.includes('/')) {
+                    let p = clean.split('/');
+                    if (p[2] && p[2].length === 4) return `${p[2]}-${String(p[1]).padStart(2,'0')}-${String(p[0]).padStart(2,'0')}`;
+                    if (p[0] && p[0].length === 4) return `${p[0]}-${String(p[1]).padStart(2,'0')}-${String(p[2]).padStart(2,'0')}`;
+                }
+                if (clean.length >= 10) return clean.substring(0, 10);
+            }
+            return null;
+        }
+
         function parseTimeValue(val) {
             if (val === undefined || val === null) return null;
             let str = String(val).trim();
@@ -733,7 +784,7 @@
             return null;
         }
 
-        // LECTOR DE EXCEL CON DETECCIÓN DE ATRASOS (> 07:00:00)
+        // LECTOR DE EXCEL BIOMÉTRICO (CONSOLIDANDO ENTRADA Y SALIDA POR DOCENTE Y DÍA)
         function processBiometricExcel(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -741,7 +792,7 @@
             const statusBox = document.getElementById('excelProcessStatus');
             const statusMsg = document.getElementById('excelStatusMsg');
             statusBox.classList.remove('hidden');
-            statusMsg.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Analizando archivo y verificando marcaciones...`;
+            statusMsg.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Analizando archivo y agrupando entradas y salidas...`;
 
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -756,102 +807,106 @@
                     const fileName = file.name;
                     const uploadDate = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
-                    let fileLogsCount = 0;
-                    let fileLogs = [];
-                    let atrasosCount = 0;
+                    let rawMarks = [];
 
                     jsonRows.forEach((row) => {
                         if (!row || row.length < 2) return;
 
                         let bioIdFound = null;
-                        let dateStrFound = '';
-                        let timeStrFound = '';
+                        let dateStrFound = null;
+                        let timeStrFound = null;
 
-                        // 1. Detección específica para formato estándar (Columna 0 = ID Biométrico, Columna 1 = Fecha/Hora)
-                        if (row[0] !== undefined && row[0] !== null) {
-                            let firstCell = String(row[0]).trim();
-                            if (!isNaN(firstCell) && parseInt(firstCell) > 0) {
-                                let num = parseInt(firstCell);
+                        row.forEach((cellVal) => {
+                            if (cellVal === undefined || cellVal === null) return;
+                            let strVal = String(cellVal).trim();
+
+                            if (!bioIdFound && !isNaN(strVal) && parseInt(strVal) > 0 && parseInt(strVal) < 200) {
+                                let num = parseInt(strVal);
                                 if (docentesList.some(d => d.bioId === num)) {
                                     bioIdFound = num;
                                 }
                             }
-                        }
 
-                        if (row[1] !== undefined && row[1] !== null) {
-                            let secondCell = String(row[1]).trim();
-                            let parsedT = parseTimeValue(secondCell);
-                            if (parsedT) {
+                            let parsedD = parseExcelDate(cellVal);
+                            if (parsedD && !dateStrFound) {
+                                dateStrFound = parsedD;
+                            }
+
+                            let parsedT = parseTimeValue(cellVal);
+                            if (parsedT && !timeStrFound) {
                                 timeStrFound = parsedT;
                             }
-                            if (secondCell.includes('T') || secondCell.includes('-') || secondCell.includes('/')) {
-                                let datePart = secondCell.split(' ')[0].replace('T', ' ');
-                                if (datePart.includes(' ')) datePart = datePart.split(' ')[0];
-                                dateStrFound = datePart;
-                            }
-                        }
-
-                        // 2. Fallback de respaldo (barrido de celdas por si el orden varía)
-                        if (!bioIdFound || !timeStrFound) {
-                            row.forEach((cellVal) => {
-                                if (cellVal === undefined || cellVal === null) return;
-                                let strVal = String(cellVal).trim();
-
-                                if (!bioIdFound && !isNaN(strVal) && parseInt(strVal) > 0 && parseInt(strVal) < 200) {
-                                    let num = parseInt(strVal);
-                                    if (docentesList.some(d => d.bioId === num)) {
-                                        bioIdFound = num;
-                                    }
-                                }
-
-                                let parsedT = parseTimeValue(cellVal);
-                                if (parsedT && !timeStrFound) {
-                                    timeStrFound = parsedT;
-                                }
-
-                                if ((strVal.includes('-') || strVal.includes('/')) && strVal.length >= 8 && !dateStrFound) {
-                                    if (strVal.includes(' ')) strVal = strVal.split(' ')[0];
-                                    dateStrFound = strVal;
-                                }
-                            });
-                        }
+                        });
 
                         if (bioIdFound && (timeStrFound || dateStrFound)) {
                             const docente = docentesList.find(d => d.bioId === bioIdFound);
                             if (docente) {
                                 let cleanTime = timeStrFound || "07:00:00";
+                                let cleanDate = dateStrFound;
 
-                                let cleanDate = dateStrFound || new Date().toISOString().split('T')[0];
-                                if (cleanDate.includes('/')) {
-                                    let dParts = cleanDate.split('/');
-                                    if (dParts[2] && dParts[2].length === 4) {
-                                        cleanDate = `${dParts[2]}-${String(dParts[1]).padStart(2,'0')}-${String(dParts[0]).padStart(2,'0')}`;
+                                row.forEach((cellVal) => {
+                                    let s = String(cellVal);
+                                    if (s.includes('-') || s.includes('/')) {
+                                        let dP = parseExcelDate(s);
+                                        if (dP) cleanDate = dP;
                                     }
+                                });
+
+                                if (cleanDate) {
+                                    rawMarks.push({
+                                        fileId: fileId,
+                                        bioId: bioIdFound,
+                                        name: docente.name,
+                                        datePart: cleanDate,
+                                        timePart: cleanTime
+                                    });
                                 }
-
-                                let esAtraso = cleanTime > "07:00:00";
-                                let estadoEntrada = esAtraso ? "Atraso" : "A Tiempo";
-
-                                const logItem = {
-                                    id: Date.now() + Math.random(),
-                                    fileId: fileId,
-                                    bioId: bioIdFound,
-                                    name: docente.name,
-                                    datePart: cleanDate,
-                                    timePart: cleanTime,
-                                    datetime: `${cleanDate} ${cleanTime}`,
-                                    estado: estadoEntrada
-                                };
-
-                                fileLogs.push(logItem);
-                                biometricLogs.unshift(logItem);
-
-                                if (esAtraso) {
-                                    atrasosCount++;
-                                }
-                                fileLogsCount++;
                             }
                         }
+                    });
+
+                    // Agrupar por Docente y Fecha para obtener Entrada (mínima hora) y Salida (máxima hora)
+                    let groupedMap = {};
+                    rawMarks.forEach(m => {
+                        let key = `${m.bioId}_${m.datePart}`;
+                        if (!groupedMap[key]) {
+                            groupedMap[key] = {
+                                fileId: m.fileId,
+                                bioId: m.bioId,
+                                name: m.name,
+                                datePart: m.datePart,
+                                times: []
+                            };
+                        }
+                        groupedMap[key].times.push(m.timePart);
+                    });
+
+                    let fileLogsCount = 0;
+                    let atrasosCount = 0;
+
+                    Object.values(groupedMap).forEach(g => {
+                        g.times.sort();
+                        let entrada = g.times[0];
+                        let salida = g.times.length > 1 ? g.times[g.times.length - 1] : "13:00:00";
+
+                        let esAtraso = entrada > "07:00:00";
+                        let estadoEntrada = esAtraso ? "Atraso" : "A Tiempo";
+
+                        const logItem = {
+                            id: Date.now() + Math.random(),
+                            fileId: g.fileId,
+                            bioId: g.bioId,
+                            name: g.name,
+                            datePart: g.datePart,
+                            timePart: entrada,
+                            salidaPart: salida,
+                            datetime: `${g.datePart} ${entrada}`,
+                            estado: estadoEntrada
+                        };
+
+                        biometricLogs.unshift(logItem);
+                        fileLogsCount++;
+                        if (esAtraso) atrasosCount++;
                     });
 
                     uploadedFilesList.unshift({
@@ -864,13 +919,14 @@
 
                     saveData();
                     renderFoldersContainer();
+                    renderMinutosAtrasosTab();
                     applyDateFilter();
                     loadDocenteSheet();
 
                     if (fileLogsCount > 0) {
-                        statusMsg.innerHTML = `✅ ¡Carpeta procesada! Se importaron ${fileLogsCount} marcaciones (${atrasosCount} atrasos detectados desde las 07:01 AM).`;
+                        statusMsg.innerHTML = `✅ ¡Carpeta procesada! Se consolidaron ${fileLogsCount} registros de entrada y salida correctamente.`;
                     } else {
-                        statusMsg.innerHTML = `⚠️ Carpeta creada, pero no se detectaron marcaciones que coincidan con los números de nómina.`;
+                        statusMsg.innerHTML = `⚠️ Carpeta creada, pero verifique que el Excel contenga columnas válidas.`;
                     }
                 } catch (err) {
                     alert("⚠️ Error al leer el archivo Excel.");
@@ -880,7 +936,109 @@
             reader.readAsArrayBuffer(file);
         }
 
-        // GESTIÓN DE ATRASOS MANUALES
+        function calcularMinutosAtraso(horaStr) {
+            if (!horaStr || horaStr <= "07:00:00") return 0;
+            let parts = horaStr.split(':');
+            let h = parseInt(parts[0]);
+            let m = parseInt(parts[1] || 0);
+            let totalMins = (h * 60 + m) - (7 * 60);
+            return totalMins > 0 ? totalMins : 0;
+        }
+
+        // Obtener minutos de permisos justificados para un docente en el periodo activo
+        function obtenerMinutosJustificados(bioId, from, to) {
+            const permisosDoc = salidasList.filter(s => s.bioId === bioId && s.estado === 'Justificado');
+            let totalMinutosJustificados = 0;
+
+            permisosDoc.forEach(p => {
+                if (p.desde && p.hasta) {
+                    let dFecha = p.desde.split('T')[0];
+                    if (dFecha >= from && dFecha <= to) {
+                        let t1 = new Date(p.desde);
+                        let t2 = new Date(p.hasta);
+                        let diffMins = Math.round((t2 - t1) / 60000);
+                        if (diffMins > 0) totalMinutosJustificados += diffMins;
+                    }
+                }
+            });
+            return totalMinutosJustificados;
+        }
+
+        // RENDERIZAR PESTAÑA MINUTOS DE ATRASOS Y PERMISOS
+        function renderMinutosAtrasosTab() {
+            const tbody = document.getElementById('minutosAtrasosBody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+
+            const from = document.getElementById('filterDateFrom').value;
+            const to = document.getElementById('filterDateTo').value;
+
+            docentesList.forEach(d => {
+                const bioLogs = biometricLogs.filter(b => b.bioId === d.bioId && b.datePart >= from && b.datePart <= to);
+                const manualLogs = atrasosManualesList.filter(a => a.bioId === d.bioId && a.fecha >= from && a.fecha <= to);
+                const permisosDoc = salidasList.filter(s => s.bioId === d.bioId);
+
+                let totalAtrasosCount = 0;
+                let totalMinutosAtraso = 0;
+
+                bioLogs.forEach(b => {
+                    if (b.estado === 'Atraso') {
+                        totalAtrasosCount++;
+                        totalMinutosAtraso += calcularMinutosAtraso(b.timePart);
+                    }
+                });
+
+                manualLogs.forEach(m => {
+                    totalAtrasosCount++;
+                    totalMinutosAtraso += calcularMinutosAtraso(m.hora + ":00");
+                });
+
+                let minutosJustificados = obtenerMinutosJustificados(d.bioId, from, to);
+
+                let permisoBadge = `<span class="text-slate-400 text-xs">Sin novedades</span>`;
+                if (permisosDoc.length > 0) {
+                    let p = permisosDoc[0];
+                    if (p.estado === 'Justificado') {
+                        permisoBadge = `<button type="button" onclick="openPermisoModal('${d.name}', '${p.desde}', '${p.motivo}', '${p.tipo}')" class="px-3 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded-full font-bold text-xs inline-flex items-center gap-1.5 transition"><i class="fa-solid fa-circle-check"></i> Justificado (Ver)</button>`;
+                    } else {
+                        permisoBadge = `<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full font-bold text-xs">Injustificado</span>`;
+                    }
+                }
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 border-b border-slate-100">
+                        <td class="p-3 text-center font-bold text-indigo-600">${d.bioId}</td>
+                        <td class="p-3 font-semibold">${d.name}</td>
+                        <td class="p-3 text-center font-bold ${totalAtrasosCount > 0 ? 'text-amber-600' : 'text-slate-400'}">${totalAtrasosCount}</td>
+                        <td class="p-3 text-center font-mono font-bold text-red-600">${totalMinutosAtraso} mins</td>
+                        <td class="p-3 text-center font-mono font-bold text-emerald-600">${minutosJustificados} mins</td>
+                        <td class="p-3 text-center">${permisoBadge}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function openPermisoModal(docenteName, fechaHora, motivo, tipo) {
+            const modal = document.getElementById('permisoModal');
+            const content = document.getElementById('permisoModalContent');
+            let fechaLimpia = fechaHora ? fechaHora.replace('T', ' ') : 'No especificada';
+
+            content.innerHTML = `
+                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 space-y-2 text-slate-700">
+                    <p><strong>Docente:</strong> ${docenteName}</p>
+                    <p><strong>Tipo de Novedad:</strong> <span class="text-emerald-800 font-bold">${tipo}</span></p>
+                    <p><strong>Fecha y Hora:</strong> <span class="font-mono">${fechaLimpia}</span></p>
+                    <p><strong>Motivo / Justificación:</strong> <span class="italic text-slate-900 font-medium">"${motivo}"</span></p>
+                    <p><strong>Estado:</strong> <span class="px-2 py-0.5 bg-emerald-200 text-emerald-900 rounded font-bold text-xs">Justificado</span></p>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function closePermisoModal() {
+            document.getElementById('permisoModal').classList.add('hidden');
+        }
+
         function handleAtrasoManualSubmit(e) {
             e.preventDefault();
             const bioId = parseInt(document.getElementById('atrasoManualDocente').value);
@@ -903,6 +1061,7 @@
 
             saveData();
             renderAtrasosManualesHistorial();
+            renderMinutosAtrasosTab();
             applyDateFilter();
             document.getElementById('atrasoManualMotivo').value = '';
             alert("✅ Atraso manual registrado correctamente.");
@@ -945,10 +1104,12 @@
                 atrasosManualesList = atrasosManualesList.filter(a => a.id !== id);
                 saveData();
                 renderAtrasosManualesHistorial();
+                renderMinutosAtrasosTab();
                 applyDateFilter();
             }
         }
 
+        // RENDERIZAR CARPETAS CON ACORDEÓN DESPLEGABLE HACIA ABAJO Y BOTÓN IMPLEMENTAR CAMBIOS
         function renderFoldersContainer() {
             const container = document.getElementById('foldersContainer');
             const countBadge = document.getElementById('folderCountBadge');
@@ -960,50 +1121,116 @@
 
             if (uploadedFilesList.length === 0) {
                 container.innerHTML = `
-                    <div class="col-span-full p-8 text-center text-slate-400 bg-slate-50 rounded-2xl border border-slate-200">
+                    <div class="p-8 text-center text-slate-400 bg-slate-50 rounded-2xl border border-slate-200">
                         <i class="fa-solid fa-folder-open text-4xl mb-2 text-slate-300"></i>
                         <p class="text-sm font-medium">No hay carpetas de biométrico subidas aún.</p>
-                        <p class="text-xs text-slate-400 mt-1">Sube un Excel arriba para que aparezca aquí como una carpeta editable.</p>
+                        <p class="text-xs text-slate-400 mt-1">Sube un Excel arriba para que aparezca aquí como una carpeta desplegable.</p>
                     </div>
                 `;
                 return;
             }
 
             uploadedFilesList.forEach(folder => {
+                const logs = biometricLogs.filter(b => b.fileId === folder.id);
+
+                let rowsHtml = '';
+                if (logs.length === 0) {
+                    rowsHtml = `<tr><td colspan="7" class="p-4 text-center text-slate-400">No hay registros en esta carpeta.</td></tr>`;
+                } else {
+                    logs.forEach(l => {
+                        let mins = l.estado === 'Atraso' ? calcularMinutosAtraso(l.timePart) : 0;
+                        let badgeColor = l.estado === 'Atraso' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800';
+
+                        rowsHtml += `
+                            <tr class="hover:bg-slate-50 border-b border-slate-100">
+                                <td class="p-3 text-center font-bold text-blue-600">${l.bioId}</td>
+                                <td class="p-3 font-medium">${l.name}</td>
+                                <td class="p-3 text-center font-semibold">${l.datePart}</td>
+                                <td class="p-3 text-center font-mono text-blue-700">${l.timePart}</td>
+                                <td class="p-3 text-center font-mono text-purple-700">${l.salidaPart || '13:00:00'}</td>
+                                <td class="p-3 text-center"><span class="px-2.5 py-1 ${badgeColor} rounded-full text-xs font-bold">${l.estado}</span></td>
+                                <td class="p-3 text-center font-mono font-bold text-red-600">${mins > 0 ? mins + ' mins' : '-'}</td>
+                            </tr>
+                        `;
+                    });
+                }
+
                 container.innerHTML += `
-                    <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition space-y-4 flex flex-col justify-between">
-                        <div class="flex items-start justify-between gap-3">
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition">
+                        <!-- Cabecera de la Carpeta (Click para Desplegar) -->
+                        <div class="p-5 bg-slate-50 border-b border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
                             <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-2xl shadow-inner flex-shrink-0">
-                                    <i class="fa-solid fa-folder-closed"></i>
+                                <div class="w-12 h-12 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center text-2xl shadow-inner flex-shrink-0">
+                                    <i class="fa-solid fa-folder-tree"></i>
                                 </div>
                                 <div>
-                                    <h5 class="font-bold text-slate-800 text-sm truncate max-w-[200px]" title="${folder.name}">${folder.name}</h5>
-                                    <p class="text-xs text-slate-400">Subido: ${folder.uploadDate}</p>
+                                    <h5 class="font-bold text-slate-800 text-sm">${folder.name}</h5>
+                                    <p class="text-xs text-slate-400">Subido: ${folder.uploadDate} | <span class="text-blue-600 font-semibold">${folder.totalRecords} registros</span></p>
                                 </div>
                             </div>
-                            <span class="px-2.5 py-1 bg-blue-50 text-blue-700 font-bold text-xs rounded-full">${folder.totalRecords} marcas</span>
+
+                            <div class="flex items-center gap-2">
+                                <button type="button" onclick="implementarCambiosCarpeta('${folder.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-sm flex items-center gap-1.5">
+                                    <i class="fa-solid fa-check-double"></i> Implementar Cambios
+                                </button>
+                                <button type="button" onclick="openEditFolderModal('${folder.id}', '${folder.name}')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-2 rounded-xl text-xs font-semibold transition">
+                                    <i class="fa-solid fa-pen"></i> Editar
+                                </button>
+                                <button type="button" onclick="deleteFolder('${folder.id}')" class="bg-red-50 hover:bg-red-600 hover:text-white text-red-600 px-3 py-2 rounded-xl text-xs font-semibold transition" title="Borrar">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                                <button type="button" onclick="toggleFolderAccordion('${folder.id}')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2 rounded-xl text-xs font-bold transition">
+                                    <i id="icon-toggle-${folder.id}" class="fa-solid fa-chevron-down"></i> Desplegar
+                                </button>
+                            </div>
                         </div>
 
-                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex justify-between items-center text-xs">
-                            <span class="text-slate-600">Atrasos en archivo:</span>
-                            <span class="font-bold text-amber-600">${folder.atrasosCount} detectados (> 07:00 AM)</span>
-                        </div>
-
-                        <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
-                            <button type="button" onclick="inspectFolder('${folder.id}')" class="flex-1 bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-600 px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-eye"></i> Ver
-                            </button>
-                            <button type="button" onclick="openEditFolderModal('${folder.id}', '${folder.name}')" class="flex-1 bg-amber-50 hover:bg-amber-500 hover:text-white text-amber-700 px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center justify-center gap-1.5">
-                                <i class="fa-solid fa-pen"></i> Editar
-                            </button>
-                            <button type="button" onclick="deleteFolder('${folder.id}')" class="bg-red-50 hover:bg-red-600 hover:text-white text-red-600 px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center justify-center" title="Borrar Carpeta">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
+                        <!-- Contenido Desplegable (Hacia Abajo) -->
+                        <div id="accordion-content-${folder.id}" class="hidden p-4 space-y-3 bg-white">
+                            <div class="overflow-x-auto border border-slate-100 rounded-xl">
+                                <table class="w-full text-left border-collapse text-xs">
+                                    <thead>
+                                        <tr class="bg-slate-100 text-slate-600 uppercase tracking-wider border-b border-slate-200">
+                                            <th class="p-3 text-center">Código</th>
+                                            <th class="p-3">Docente</th>
+                                            <th class="p-3 text-center">Fecha</th>
+                                            <th class="p-3 text-center">Hora Entrada</th>
+                                            <th class="p-3 text-center">Hora Salida</th>
+                                            <th class="p-3 text-center">Estado</th>
+                                            <th class="p-3 text-center">Minutos Atraso</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-100 text-slate-700">
+                                        ${rowsHtml}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 `;
             });
+        }
+
+        function toggleFolderAccordion(id) {
+            const content = document.getElementById(`accordion-content-${id}`);
+            const icon = document.getElementById(`icon-toggle-${id}`);
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+
+        function implementarCambiosCarpeta(folderId) {
+            saveData();
+            renderMinutosAtrasosTab();
+            applyDateFilter();
+            loadDocenteSheet();
+            alert("🚀 ¡Cambios implementados y aplicados correctamente en todos los reportes, fichas y consolidados!");
         }
 
         function openEditFolderModal(id, currentName) {
@@ -1038,46 +1265,14 @@
 
                 saveData();
                 renderFoldersContainer();
+                renderMinutosAtrasosTab();
                 applyDateFilter();
                 loadDocenteSheet();
                 alert("🗑️ Carpeta y registros eliminados correctamente.");
             }
         }
 
-        function inspectFolder(id) {
-            const folder = uploadedFilesList.find(f => f.id === id);
-            if(!folder) return;
-
-            document.getElementById('inspectFolderTitle').innerHTML = `<i class="fa-solid fa-folder-open text-amber-500 mr-2"></i> Contenido de: ${folder.name}`;
-            const tbody = document.getElementById('inspectTableBody');
-            tbody.innerHTML = '';
-
-            const logs = biometricLogs.filter(b => b.fileId === id);
-
-            if(logs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">No hay registros en esta carpeta.</td></tr>`;
-            } else {
-                logs.forEach(l => {
-                    const badge = l.estado === 'Atraso' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800';
-                    tbody.innerHTML += `
-                        <tr class="hover:bg-slate-50 transition border-b border-slate-100">
-                            <td class="p-2.5 text-center font-bold text-blue-600">${l.bioId}</td>
-                            <td class="p-2.5 font-medium">${l.name}</td>
-                            <td class="p-2.5 font-mono">${l.datetime}</td>
-                            <td class="p-2.5 text-center"><span class="px-2 py-0.5 ${badge} rounded-full text-xs font-bold">${l.estado}</span></td>
-                        </tr>
-                    `;
-                });
-            }
-
-            document.getElementById('inspectFolderModal').classList.remove('hidden');
-        }
-
-        function closeInspectFolderModal() {
-            document.getElementById('inspectFolderModal').classList.add('hidden');
-        }
-
-        // MINI GEMINI IA LOGIC - 100% CONECTADO A CÓDIGOS DE BIOMÉTRICO
+        // MINI GEMINI IA LOGIC
         function handleGeminiQuery(e) {
             e.preventDefault();
             const input = document.getElementById('geminiPromptInput');
@@ -1107,37 +1302,19 @@
                 const filteredManualAtrasos = atrasosManualesList.filter(a => a.fecha >= from && a.fecha <= to);
                 const totalAtrasosCount = filteredBioAtrasos.length + filteredManualAtrasos.length;
 
-                // Buscar docente específico por nombre o código biométrico (ej. "3" o "almeida")
                 let docenteMencionado = docentesList.find(d => qLower.includes(d.name.toLowerCase()) || qLower.includes(String(d.bioId)));
 
                 if (docenteMencionado) {
                     const docBioLogs = biometricLogs.filter(b => b.bioId === docenteMencionado.bioId && b.datePart >= from && b.datePart <= to);
-                    const docBioAtrasos = docBioLogs.filter(b => b.estado === 'Atraso').length;
-                    const docManualAtrasos = filteredManualAtrasos.filter(a => a.bioId === docenteMencionado.bioId).length;
-                    const docATiempo = docBioLogs.filter(b => b.estado === 'A Tiempo').length;
+                    let minsAtraso = 0;
+                    docBioLogs.forEach(b => { if (b.estado === 'Atraso') minsAtraso += calcularMinutosAtraso(b.timePart); });
+                    let minsJustificados = obtenerMinutosJustificados(docenteMencionado.bioId, from, to);
 
-                    responseText = `Resumen para <strong>${docenteMencionado.name}</strong> (Código Biométrico: ${docenteMencionado.bioId}) entre ${from} y ${to}:<br>` +
-                        `• <strong>Atrasos Biométricos (> 07:00 AM):</strong> ${docBioAtrasos}<br>` +
-                        `• <strong>Atrasos Manuales:</strong> ${docManualAtrasos}<br>` +
-                        `• <strong>Total Atrasos:</strong> ${docBioAtrasos + docManualAtrasos}<br>` +
-                        `• <strong>Entradas a tiempo:</strong> ${docATiempo}`;
-                } else if (qLower.includes('atraso') || qLower.includes('tarde') || qLower.includes('quien') || qLower.includes('quién')) {
-                    const ranking = docentesList.map(d => {
-                        const bioCount = biometricLogs.filter(b => b.bioId === d.bioId && b.estado === 'Atraso' && b.datePart >= from && b.datePart <= to).length;
-                        const manCount = filteredManualAtrasos.filter(a => a.bioId === d.bioId).length;
-                        return { name: d.name, bioId: d.bioId, count: bioCount + manCount };
-                    }).filter(d => d.count > 0).sort((a,b) => b.count - a.count);
-
-                    if (ranking.length > 0) {
-                        responseText = `En el periodo (${from} al ${to}) hay <strong>${totalAtrasosCount} atrasos totales</strong> (${filteredBioAtrasos.length} biométricos + ${filteredManualAtrasos.length} manuales).<br>Docentes con atrasos registrados:<br>• ` +
-                            ranking.map(d => `<strong>${d.name} (Código ${d.bioId})</strong>: ${d.count} atraso(s)`).join('<br>• ');
-                    } else {
-                        responseText = `No se registran atrasos ni biométricos ni manuales entre ${from} y ${to}. ¡Excelente asistencia!`;
-                    }
-                } else if (qLower.includes('carpeta') || qLower.includes('archivo')) {
-                    responseText = `Actualmente hay <strong>${uploadedFilesList.length} carpeta(s)</strong> de biométrico subidas en el sistema.`;
+                    responseText = `Resumen para <strong>${docenteMencionado.name}</strong> (Código: ${docenteMencionado.bioId}):<br>` +
+                        `• <strong>Minutos de Atraso:</strong> ${minsAtraso} mins<br>` +
+                        `• <strong>Minutos Justificados (Permisos):</strong> ${minsJustificados} mins`;
                 } else {
-                    responseText = `En el periodo (${from} a ${to}) tenemos registrados <strong>${totalDocs} docentes</strong> en nómina, <strong>${totalAtrasosCount} atrasos en total</strong> (${filteredBioAtrasos.length} del biométrico y ${filteredManualAtrasos.length} manuales).`;
+                    responseText = `En el periodo (${from} a ${to}) tenemos registrados <strong>${totalDocs} docentes</strong> y <strong>${totalAtrasosCount} atrasos totales</strong>.`;
                 }
 
                 chatBox.innerHTML += `
@@ -1151,7 +1328,7 @@
         }
 
         function switchTab(tabId) {
-            ['dashboard', 'resumen', 'atrasos-manuales', 'salidas', 'individual', 'biometrico'].forEach(t => {
+            ['dashboard', 'resumen', 'minutos-atrasos', 'atrasos-manuales', 'salidas', 'individual', 'biometrico'].forEach(t => {
                 const el = document.getElementById('tab-' + t);
                 const nav = document.getElementById('nav-' + t);
                 if(el) el.classList.add('hidden');
@@ -1172,6 +1349,7 @@
         function applyDateFilter() {
             renderAtrasosManualesHistorial();
             renderSalidasHistorial();
+            renderMinutosAtrasosTab();
             renderTable();
             updateCharts();
         }
@@ -1249,7 +1427,6 @@
             if(manualDoc) manualDoc.innerHTML = '';
             if(exportDoc) exportDoc.innerHTML = '';
 
-            // Ordenar docentes por código biométrico numérico
             let sortedDocs = [...docentesList].sort((a,b) => a.bioId - b.bioId);
 
             sortedDocs.forEach(d => {
@@ -1293,14 +1470,14 @@
             tbody.innerHTML = '';
 
             if (docBioLogs.length === 0 && docManuals.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">No hay registros de marcaciones ni atrasos manuales para este docente en el rango de fechas.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">No hay registros de marcaciones ni atrasos manuales para este docente en el rango de fechas.</td></tr>`;
                 return;
             }
 
-            // Renderizar Marcaciones Biométricas
             docBioLogs.forEach(log => {
                 const isAtraso = log.estado === 'Atraso';
                 const badgeColor = isAtraso ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800';
+                const mins = isAtraso ? calcularMinutosAtraso(log.timePart) : 0;
 
                 const dObj = new Date(log.datePart + "T00:00:00");
                 const dayName = dObj.toLocaleDateString('es-ES', { weekday: 'long' });
@@ -1309,25 +1486,10 @@
                     <tr>
                         <td class="p-3 font-semibold">${log.datePart}</td>
                         <td class="p-3 capitalize font-medium text-slate-600">${dayName}</td>
-                        <td class="p-3 font-mono font-bold">${log.timePart}</td>
-                        <td class="p-3 text-center"><span class="px-2.5 py-1 ${badgeColor} rounded-full font-bold text-xs">${log.estado} (Biométrico)</span></td>
-                        <td class="p-3 text-xs text-slate-500">Marcación de Huella / Rostro</td>
-                    </tr>
-                `;
-            });
-
-            // Renderizar Atrasos Manuales
-            docManuals.forEach(m => {
-                const dObj = new Date(m.fecha + "T00:00:00");
-                const dayName = dObj.toLocaleDateString('es-ES', { weekday: 'long' });
-
-                tbody.innerHTML += `
-                    <tr class="bg-amber-50/50">
-                        <td class="p-3 font-semibold text-amber-900">${m.fecha}</td>
-                        <td class="p-3 capitalize font-medium text-amber-700">${dayName}</td>
-                        <td class="p-3 font-mono font-bold text-amber-600">${m.hora}</td>
-                        <td class="p-3 text-center"><span class="px-2.5 py-1 bg-amber-200 text-amber-900 rounded-full font-bold text-xs">Atraso Manual (${m.estado})</span></td>
-                        <td class="p-3 text-xs text-amber-800 font-medium">${m.motivo}</td>
+                        <td class="p-3 font-mono font-bold text-blue-700">${log.timePart}</td>
+                        <td class="p-3 font-mono font-bold text-purple-700">${log.salidaPart || '13:00:00'}</td>
+                        <td class="p-3 text-center"><span class="px-2.5 py-1 ${badgeColor} rounded-full font-bold text-xs">${log.estado}</span></td>
+                        <td class="p-3 text-center font-mono font-bold text-red-600">${mins > 0 ? mins + ' mins' : '-'}</td>
                     </tr>
                 `;
             });
@@ -1354,6 +1516,7 @@
             }
 
             saveData();
+            renderMinutosAtrasosTab();
             applyDateFilter();
             loadDocenteSheet();
         }
@@ -1417,6 +1580,7 @@
             if(confirm('⚠️ ¿Desea eliminar este registro?')) {
                 salidasList.splice(index, 1);
                 saveData();
+                renderMinutosAtrasosTab();
                 applyDateFilter();
             }
         }
@@ -1443,6 +1607,7 @@
             saveData();
             populateSelects();
             renderTable();
+            renderMinutosAtrasosTab();
             updateCharts();
             closeAddTeacherModal();
             alert(`✅ Docente ${name} con código ${bioId} agregado.`);
@@ -1454,6 +1619,7 @@
                 saveData();
                 populateSelects();
                 renderTable();
+                renderMinutosAtrasosTab();
                 updateCharts();
             }
         }
@@ -1535,35 +1701,34 @@
         function exportConsolidatedExcel() {
             const from = document.getElementById('filterDateFrom').value;
             const to = document.getElementById('filterDateTo').value;
-
             const currentSalidas = getFilteredSalidas();
 
             const excelData = docentesList.map(d => {
                 const docBioLogs = biometricLogs.filter(b => b.bioId === d.bioId && b.datePart >= from && b.datePart <= to);
                 const docManuals = atrasosManualesList.filter(a => a.bioId === d.bioId && a.fecha >= from && a.fecha <= to);
                 const docSalidas = currentSalidas.filter(s => s.bioId === d.bioId);
-                const atrasosBio = docBioLogs.filter(b => b.estado === 'Atraso').length;
-                const aTiempo = docBioLogs.filter(b => b.estado === 'A Tiempo').length;
 
-                // Resumen de permisos/faltas
+                let totalMinsAtraso = 0;
+                docBioLogs.forEach(b => { if (b.estado === 'Atraso') totalMinsAtraso += calcularMinutosAtraso(b.timePart); });
+                docManuals.forEach(m => { totalMinsAtraso += calcularMinutosAtraso(m.hora + ":00"); });
+
+                let totalMinsJustificados = obtenerMinutosJustificados(d.bioId, from, to);
                 let permisosStr = docSalidas.map(s => `${s.tipo} (${s.estado})`).join('; ') || 'Ninguno';
 
                 return {
                     "Código Biométrico": d.bioId,
                     "Docente": d.name,
                     "Régimen": d.regimen,
-                    "Entradas A Tiempo": aTiempo,
-                    "Atrasos Biométrico": atrasosBio,
-                    "Atrasos Manuales": docManuals.length,
-                    "Total Atrasos": atrasosBio + docManuals.length,
-                    "Permisos / Faltas / Novedades": permisosStr
+                    "Minutos de Atraso": totalMinsAtraso,
+                    "Minutos Justificados": totalMinsJustificados,
+                    "Permisos / Novedades": permisosStr
                 };
             });
 
             const worksheet = XLSX.utils.json_to_sheet(excelData);
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Atrasos Consolidado");
-            XLSX.writeFile(workbook, `Reporte_Atrasos_${from}_al_${to}.xlsx`);
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Consolidado Minutos");
+            XLSX.writeFile(workbook, `Consolidado_Minutos_${from}_al_${to}.xlsx`);
         }
 
         function exportConsolidatedPDF() {
@@ -1576,7 +1741,7 @@
             doc.setFontSize(16);
             doc.text("UNIDAD EDUCATIVA CRISTÓBAL COLÓN", 14, 15);
             doc.setFontSize(11);
-            doc.text(`REPORTE CONSOLIDADO DE ATRASOS Y ASISTENCIA (${from} al ${to})`, 14, 22);
+            doc.text(`REPORTE CONSOLIDADO DE MINUTOS DE ATRASO Y JUSTIFICACIONES (${from} al ${to})`, 14, 22);
 
             const currentSalidas = getFilteredSalidas();
 
@@ -1584,23 +1749,26 @@
                 const docBioLogs = biometricLogs.filter(b => b.bioId === d.bioId && b.datePart >= from && b.datePart <= to);
                 const docManuals = atrasosManualesList.filter(a => a.bioId === d.bioId && a.fecha >= from && a.fecha <= to);
                 const docSalidas = currentSalidas.filter(s => s.bioId === d.bioId);
-                const atrasosBio = docBioLogs.filter(b => b.estado === 'Atraso').length;
-                const aTiempo = docBioLogs.filter(b => b.estado === 'A Tiempo').length;
 
+                let totalMinsAtraso = 0;
+                docBioLogs.forEach(b => { if (b.estado === 'Atraso') totalMinsAtraso += calcularMinutosAtraso(b.timePart); });
+                docManuals.forEach(m => { totalMinsAtraso += calcularMinutosAtraso(m.hora + ":00"); });
+
+                let totalMinsJustificados = obtenerMinutosJustificados(d.bioId, from, to);
                 let permisosStr = docSalidas.map(s => `${s.tipo} [${s.estado}]`).join(', ') || 'Ninguno';
 
-                return [d.bioId, d.name, d.regimen, aTiempo, atrasosBio, docManuals.length, atrasosBio + docManuals.length, permisosStr];
+                return [d.bioId, d.name, d.regimen, `${totalMinsAtraso} mins`, `${totalMinsJustificados} mins`, permisosStr];
             });
 
             doc.autoTable({
                 startY: 30,
-                head: [['Código', 'Apellidos y Nombres', 'Régimen', 'A Tiem.', 'Bio', 'Man', 'Tot. Atr.', 'Permisos / Faltas / Novedades']],
+                head: [['Código', 'Apellidos y Nombres', 'Régimen', 'Minutos Atraso', 'Minutos Justificados', 'Permisos / Novedades']],
                 body: tableRows,
                 theme: 'grid',
                 styles: { fontSize: 8 }
             });
 
-            doc.save(`Consolidado_Atrasos_${from}_al_${to}.pdf`);
+            doc.save(`Consolidado_Minutos_${from}_al_${to}.pdf`);
         }
 
         function exportIndividualExcel() {
@@ -1613,51 +1781,53 @@
 
             const docBioLogs = biometricLogs.filter(b => b.bioId === bioId && b.datePart >= from && b.datePart <= to);
             const docManuals = atrasosManualesList.filter(a => a.bioId === bioId && a.fecha >= from && a.fecha <= to);
-
             const docSalidas = getFilteredSalidas().filter(s => s.bioId === bioId);
 
             let excelData = [];
             docBioLogs.forEach(l => {
+                let mins = l.estado === 'Atraso' ? calcularMinutosAtraso(l.timePart) : 0;
                 excelData.push({
                     "Código Biométrico": l.bioId,
                     "Docente": docente.name,
                     "Fecha": l.datePart,
-                    "Día": new Date(l.datePart + "T00:00:00").toLocaleDateString('es-ES', { weekday: 'long' }),
-                    "Hora Marcación / Novedad": l.timePart,
-                    "Tipo de Registro": "Biométrico",
+                    "Hora Entrada": l.timePart,
+                    "Hora Salida": l.salidaPart || '13:00:00',
                     "Estado": l.estado,
-                    "Permisos / Faltas / Novedades": "Asistencia Normal",
-                    "Observación": "Marcación de Huella / Rostro"
+                    "Minutos de Atraso": mins > 0 ? mins : 0,
+                    "Minutos Justificados": 0
                 });
             });
 
             docManuals.forEach(m => {
+                let mins = calcularMinutosAtraso(m.hora + ":00");
                 excelData.push({
                     "Código Biométrico": m.bioId,
                     "Docente": docente.name,
                     "Fecha": m.fecha,
-                    "Día": new Date(m.fecha + "T00:00:00").toLocaleDateString('es-ES', { weekday: 'long' }),
-                    "Hora Marcación / Novedad": m.hora,
-                    "Tipo de Registro": "Atraso Manual",
-                    "Estado": `Atraso (${m.estado})`,
-                    "Permisos / Faltas / Novedades": "Atraso Registrado",
-                    "Observación": m.motivo
+                    "Hora Entrada": m.hora,
+                    "Hora Salida": "-",
+                    "Estado": `Atraso Manual (${m.estado})`,
+                    "Minutos de Atraso": mins,
+                    "Minutos Justificados": m.estado === 'Justificado' ? mins : 0
                 });
             });
 
             docSalidas.forEach(s => {
                 let fechaDesde = s.desde ? s.desde.replace('T', ' ') : '';
                 let fechaHasta = s.hasta ? s.hasta.replace('T', ' ') : '';
+                let t1 = new Date(s.desde);
+                let t2 = new Date(s.hasta);
+                let diffMins = Math.round((t2 - t1) / 60000);
+
                 excelData.push({
                     "Código Biométrico": s.bioId,
                     "Docente": docente.name,
                     "Fecha": fechaDesde.split(' ')[0],
-                    "Día": "-",
-                    "Hora Marcación / Novedad": `${fechaDesde} al ${fechaHasta}`,
-                    "Tipo de Registro": "Permiso / Novedad",
+                    "Hora Entrada": fechaDesde,
+                    "Hora Salida": fechaHasta,
                     "Estado": s.estado,
-                    "Permisos / Faltas / Novedades": s.tipo,
-                    "Observación": s.motivo + (s.obs ? ` (${s.obs})` : '')
+                    "Minutos de Atraso": 0,
+                    "Minutos Justificados": s.estado === 'Justificado' && diffMins > 0 ? diffMins : 0
                 });
             });
 
@@ -1687,29 +1857,28 @@
             doc.text(`FICHA INDIVIDUAL: CÓDIGO ${docente.bioId} - ${docente.name} (${from} al ${to})`, 14, 22);
 
             const docSalidas = getFilteredSalidas().filter(s => s.bioId === bioId);
-
             let tableRows = [];
 
             docBioLogs.forEach(l => {
-                const dayName = new Date(l.datePart + "T00:00:00").toLocaleDateString('es-ES', { weekday: 'long' });
-                tableRows.push([l.datePart, dayName, l.timePart, l.estado, 'Ninguno', 'Marcación biométrica']);
+                let mins = l.estado === 'Atraso' ? calcularMinutosAtraso(l.timePart) : 0;
+                tableRows.push([l.datePart, l.timePart, l.salidaPart || '13:00:00', l.estado, mins > 0 ? `${mins} mins` : '-', '0 mins']);
             });
 
             docManuals.forEach(m => {
-                const dayName = new Date(m.fecha + "T00:00:00").toLocaleDateString('es-ES', { weekday: 'long' });
-                tableRows.push([m.fecha, dayName, m.hora, `Atraso (${m.estado})`, 'Atraso Manual', m.motivo]);
+                let mins = calcularMinutosAtraso(m.hora + ":00");
+                tableRows.push([m.fecha, m.hora, '-', `Manual (${m.estado})`, `${mins} mins`, m.estado === 'Justificado' ? `${mins} mins` : '0 mins']);
             });
 
             docSalidas.forEach(s => {
                 let fDesde = s.desde ? s.desde.replace('T', ' ') : '';
                 let fHasta = s.hasta ? s.hasta.replace('T', ' ') : '';
-                tableRows.push([fDesde.split(' ')[0], 'Permiso', `${fDesde} a ${fHasta}`, s.estado, s.tipo, s.motivo]);
+                tableRows.push([fDesde.split(' ')[0], fDesde, fHasta, s.estado, '0 mins', 'Justificado']);
             });
 
             doc.autoTable({
                 startY: 30,
-                head: [['Fecha', 'Día / Tipo', 'Hora / Rango', 'Estado', 'Permisos / Faltas / Novedades', 'Observación']],
-                body: tableRows.length ? tableRows : [['-', '-', '-', '-', 'Sin registros en este periodo', '-']],
+                head: [['Fecha', 'Entrada', 'Salida', 'Estado', 'Min. Atraso', 'Min. Justificados']],
+                body: tableRows.length ? tableRows : [['-', '-', '-', '-', 'Sin registros', '-']],
                 theme: 'grid',
                 styles: { fontSize: 8 }
             });
